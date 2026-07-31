@@ -1,0 +1,8 @@
+{
+  "compressions_delta": -0.3267616012328021,
+  "headroom_before_bytes": 0.34387351778656133,
+  "order": 0.4485607509143577,
+  "pageouts_delta": -0.2743036376789319,
+  "swap_used_delta_bytes": null,
+  "thermal_drift_ratio": 0.18351214003387917
+}

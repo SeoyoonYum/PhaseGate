@@ -1,0 +1,20 @@
+{
+  "model": "1.5B",
+  "context": 2048,
+  "output_tokens": 128,
+  "max_workers": 4,
+  "feeders": 16,
+  "queries_per_task": 4096,
+  "retrieval_chunk": 16,
+  "ef_search": 128,
+  "top_k": 10,
+  "normalized_tpot_slo": 1.1,
+  "normalized_ttft_slo": 1.1,
+  "secondary_absolute_tpot_ms": 19.0,
+  "calibration_valid_repeats": 3,
+  "evaluation_valid_repeats": 5,
+  "queue_nonempty_minimum": 0.95,
+  "memory_limit_gb": 6.0,
+  "minimum_headroom_gb": 6.5,
+  "sentinel_tolerance": 0.05
+}

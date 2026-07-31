@@ -1,0 +1,303 @@
+{
+  "run_id": "37644df9ac24456bae4ae8ce59e7c7c0",
+  "run_key": "eval_bandwidth_dw1_c2_ctx2048_slo1.15_r10",
+  "events": [
+    {
+      "timestamp": 718190.957524291,
+      "request_id": null,
+      "phase": "IDLE",
+      "event": "start",
+      "permitted_workers": null
+    },
+    {
+      "timestamp": 718195.773525875,
+      "request_id": null,
+      "phase": "IDLE",
+      "event": "end",
+      "permitted_workers": null
+    },
+    {
+      "timestamp": 718195.773525875,
+      "request_id": "c00-r000",
+      "phase": "PREFILL",
+      "event": "start",
+      "permitted_workers": 4
+    },
+    {
+      "timestamp": 718197.913957166,
+      "request_id": "c00-r000",
+      "phase": "PREFILL",
+      "event": "end",
+      "permitted_workers": null
+    },
+    {
+      "timestamp": 718197.913957166,
+      "request_id": "c00-r000",
+      "phase": "DECODE",
+      "event": "start",
+      "permitted_workers": 1
+    },
+    {
+      "timestamp": 718199.630426208,
+      "request_id": "c00-r000",
+      "phase": "DECODE",
+      "event": "end",
+      "permitted_workers": null
+    },
+    {
+      "timestamp": 718199.630426208,
+      "request_id": null,
+      "phase": "IDLE",
+      "event": "start",
+      "permitted_workers": 4
+    },
+    {
+      "timestamp": 718199.652532916,
+      "request_id": null,
+      "phase": "IDLE",
+      "event": "end",
+      "permitted_workers": null
+    },
+    {
+      "timestamp": 718199.652532916,
+      "request_id": "c01-r000",
+      "phase": "PREFILL",
+      "event": "start",
+      "permitted_workers": 4
+    },
+    {
+      "timestamp": 718204.374158375,
+      "request_id": "c01-r000",
+      "phase": "PREFILL",
+      "event": "end",
+      "permitted_workers": null
+    },
+    {
+      "timestamp": 718204.374158375,
+      "request_id": "c01-r000",
+      "phase": "DECODE",
+      "event": "start",
+      "permitted_workers": 1
+    },
+    {
+      "timestamp": 718206.204103541,
+      "request_id": "c01-r000",
+      "phase": "DECODE",
+      "event": "end",
+      "permitted_workers": null
+    },
+    {
+      "timestamp": 718206.204103541,
+      "request_id": null,
+      "phase": "IDLE",
+      "event": "start",
+      "permitted_workers": 4
+    },
+    {
+      "timestamp": 718206.21534225,
+      "request_id": null,
+      "phase": "IDLE",
+      "event": "end",
+      "permitted_workers": null
+    },
+    {
+      "timestamp": 718206.21534225,
+      "request_id": "c00-r001",
+      "phase": "PREFILL",
+      "event": "start",
+      "permitted_workers": 4
+    },
+    {
+      "timestamp": 718210.867446875,
+      "request_id": "c00-r001",
+      "phase": "PREFILL",
+      "event": "end",
+      "permitted_workers": null
+    },
+    {
+      "timestamp": 718210.867446875,
+      "request_id": "c00-r001",
+      "phase": "DECODE",
+      "event": "start",
+      "permitted_workers": 1
+    },
+    {
+      "timestamp": 718212.767699166,
+      "request_id": "c00-r001",
+      "phase": "DECODE",
+      "event": "end",
+      "permitted_workers": null
+    },
+    {
+      "timestamp": 718212.767699166,
+      "request_id": null,
+      "phase": "IDLE",
+      "event": "start",
+      "permitted_workers": 4
+    },
+    {
+      "timestamp": 718212.7809785,
+      "request_id": null,
+      "phase": "IDLE",
+      "event": "end",
+      "permitted_workers": null
+    },
+    {
+      "timestamp": 718212.7809785,
+      "request_id": "c01-r001",
+      "phase": "PREFILL",
+      "event": "start",
+      "permitted_workers": 4
+    },
+    {
+      "timestamp": 718217.327027333,
+      "request_id": "c01-r001",
+      "phase": "PREFILL",
+      "event": "end",
+      "permitted_workers": null
+    },
+    {
+      "timestamp": 718217.327027333,
+      "request_id": "c01-r001",
+      "phase": "DECODE",
+      "event": "start",
+      "permitted_workers": 1
+    },
+    {
+      "timestamp": 718219.238667208,
+      "request_id": "c01-r001",
+      "phase": "DECODE",
+      "event": "end",
+      "permitted_workers": null
+    },
+    {
+      "timestamp": 718219.238667208,
+      "request_id": null,
+      "phase": "IDLE",
+      "event": "start",
+      "permitted_workers": 4
+    },
+    {
+      "timestamp": 718219.250676666,
+      "request_id": null,
+      "phase": "IDLE",
+      "event": "end",
+      "permitted_workers": null
+    },
+    {
+      "timestamp": 718219.250676666,
+      "request_id": "c00-r002",
+      "phase": "PREFILL",
+      "event": "start",
+      "permitted_workers": 4
+    },
+    {
+      "timestamp": 718223.794288375,
+      "request_id": "c00-r002",
+      "phase": "PREFILL",
+      "event": "end",
+      "permitted_workers": null
+    },
+    {
+      "timestamp": 718223.794288375,
+      "request_id": "c00-r002",
+      "phase": "DECODE",
+      "event": "start",
+      "permitted_workers": 1
+    },
+    {
+      "timestamp": 718225.758541541,
+      "request_id": "c00-r002",
+      "phase": "DECODE",
+      "event": "end",
+      "permitted_workers": null
+    },
+    {
+      "timestamp": 718225.758541541,
+      "request_id": null,
+      "phase": "IDLE",
+      "event": "start",
+      "permitted_workers": 4
+    },
+    {
+      "timestamp": 718225.853376541,
+      "request_id": null,
+      "phase": "IDLE",
+      "event": "end",
+      "permitted_workers": null
+    },
+    {
+      "timestamp": 718225.853376541,
+      "request_id": "c01-r002",
+      "phase": "PREFILL",
+      "event": "start",
+      "permitted_workers": 4
+    },
+    {
+      "timestamp": 718229.882829375,
+      "request_id": "c01-r002",
+      "phase": "PREFILL",
+      "event": "end",
+      "permitted_workers": null
+    },
+    {
+      "timestamp": 718229.882829375,
+      "request_id": "c01-r002",
+      "phase": "DECODE",
+      "event": "start",
+      "permitted_workers": 1
+    },
+    {
+      "timestamp": 718231.629767166,
+      "request_id": "c01-r002",
+      "phase": "DECODE",
+      "event": "end",
+      "permitted_workers": null
+    },
+    {
+      "timestamp": 718231.629767166,
+      "request_id": null,
+      "phase": "IDLE",
+      "event": "start",
+      "permitted_workers": 4
+    }
+  ],
+  "retrieval": [
+    {
+      "request_id": "c01-r000",
+      "retrieval_start": 718190.958725291,
+      "retrieval_end": 718195.831238833,
+      "retrieval_worker": 0
+    },
+    {
+      "request_id": "c00-r000",
+      "retrieval_start": 718190.957952791,
+      "retrieval_end": 718195.773019541,
+      "retrieval_worker": 1
+    },
+    {
+      "request_id": "c00-r001",
+      "retrieval_start": 718199.652941375,
+      "retrieval_end": 718205.098868,
+      "retrieval_worker": 0
+    },
+    {
+      "request_id": "c01-r001",
+      "retrieval_start": 718206.215743541,
+      "retrieval_end": 718211.930953416,
+      "retrieval_worker": 0
+    },
+    {
+      "request_id": "c00-r002",
+      "retrieval_start": 718212.781327666,
+      "retrieval_end": 718218.764775375,
+      "retrieval_worker": 0
+    },
+    {
+      "request_id": "c01-r002",
+      "retrieval_start": 718219.251157291,
+      "retrieval_end": 718225.852897166,
+      "retrieval_worker": 0
+    }
+  ]
+}

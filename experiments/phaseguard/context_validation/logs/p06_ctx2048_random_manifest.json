@@ -1,0 +1,39 @@
+{
+  "attempt_id": "35605878fe064b73bd01f0fb4fca21eb",
+  "run_key": "p06_ctx2048_random",
+  "command": "scripts/run_context_pipeline.py --attempt 6 --context 2048 --workload random --requests 12 --idle-seconds 15 --allow-battery",
+  "started": "2026-07-28T22:18:34",
+  "arguments": {
+    "attempt": 6,
+    "context": 2048,
+    "workload": "random",
+    "model": "1.5B",
+    "requests": 12,
+    "concurrency": 4,
+    "output_tokens": 128,
+    "retrieval_queries": 4096,
+    "index": "experiments/phaseguard/index/hnsw_100k_d384.faiss",
+    "ef_search": 128,
+    "idle_seconds": 15.0,
+    "mem_limit_gb": 12,
+    "seed": 20260728,
+    "allow_battery": true,
+    "smoke": false
+  },
+  "environment": {
+    "git_commit": "6b6089c53b8e66f8772b4397a611a2d28be7d741",
+    "hostname": "Seoyoons-MacBook-Air.local",
+    "platform": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+    "python": "3.13.12",
+    "software": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5.1\nBuildVersion:\t\t25F80",
+    "power": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=21954659)\t92%; charging; 1:18 remaining present: true",
+    "dependencies": {
+      "mlx": "0.31.2",
+      "mlx-lm": "0.31.3",
+      "faiss-cpu": "1.14.3",
+      "numpy": "2.4.6",
+      "matplotlib": "3.11.0"
+    }
+  },
+  "power_ok": true
+}

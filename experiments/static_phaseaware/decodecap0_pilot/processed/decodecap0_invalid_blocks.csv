@@ -1,0 +1,2 @@
+run_key,policy,repeat,attempt,invalid_reason,pageout_delta,swap_delta_bytes
+static_decodecap0_pilot_fixed0_r02_a02,fixed0,2,2,memory_clean,1,0

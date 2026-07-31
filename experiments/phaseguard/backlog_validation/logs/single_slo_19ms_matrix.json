@@ -1,0 +1,41 @@
+{
+  "stage": "main",
+  "seed": 20260730,
+  "valid_repeats": 3,
+  "max_attempts": 8,
+  "started": "2026-07-30T21:17:19.053542",
+  "blocks": [
+    {
+      "setting": "cap1",
+      "command": [
+        "/Users/seoyoonyum/Desktop/\u110b\u1167\u11ab\u1100\u116e/kv-uma-research/.venv/bin/python",
+        "/Users/seoyoonyum/Desktop/\u110b\u1167\u11ab\u1100\u116e/kv-uma-research/scripts/run_single_slo_19ms.py",
+        "--mode",
+        "main",
+        "--policy",
+        "phaseguard",
+        "--decode-cap",
+        "1",
+        "--attempt",
+        "6",
+        "--trace-seed",
+        "20260736",
+        "--allow-fanless-pilot",
+        "--llm-requests",
+        "3",
+        "--warmup-s",
+        "0.5",
+        "--sample-ms",
+        "10"
+      ]
+    }
+  ],
+  "finished": "2026-07-30T21:18:44.760000",
+  "valid_counts": {
+    "cap1": 3,
+    "cap2": 3,
+    "cap3": 3,
+    "cap4": 3,
+    "uncoordinated": 3
+  }
+}

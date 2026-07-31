@@ -1,0 +1,73 @@
+{
+  "arguments": {
+    "allow_battery": true,
+    "context": 512,
+    "cooldown": 0.2,
+    "decode_steps": 16,
+    "ef_search": 32,
+    "index": "experiments/phaseguard/index/hnsw_smoke_10k_d384.faiss",
+    "max_workers": 2,
+    "mem_limit_gb": 12.0,
+    "model": "1.5B",
+    "queries_per_task": 32,
+    "repetitions": 1,
+    "seed": 20260728,
+    "smoke": true,
+    "tag": "smoke",
+    "top_k": 10,
+    "workers": "0,1"
+  },
+  "environment": {
+    "dependencies": {
+      "faiss-cpu": "1.14.3",
+      "matplotlib": "3.11.0",
+      "mlx": "0.31.2",
+      "mlx-lm": "0.31.3",
+      "numpy": "2.4.6"
+    },
+    "git_commit": "6b6089c53b8e66f8772b4397a611a2d28be7d741",
+    "hostname": "Seoyoons-MacBook-Air.local",
+    "platform": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+    "power": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=21954659)\t63%; charging; 2:55 remaining present: true",
+    "python": "3.13.12",
+    "software": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5.1\nBuildVersion:\t\t25F80"
+  },
+  "index": {
+    "backend": "faiss-hnsw",
+    "dimensions": 384,
+    "ef_construction": 40,
+    "graph_degree": 16,
+    "index_bytes": 16800442,
+    "seed": 20260728,
+    "vectors": 10000
+  },
+  "kind": "profile",
+  "power_ok": true,
+  "run_id": "434ba8176e184a819b188aeb664508b8",
+  "start_vm": {
+    "anonymous_pages": 301268,
+    "compressions": 349938992,
+    "decompressions": 295740960,
+    "file-backed_pages": 508245,
+    "headroom_bytes": 7272808448,
+    "page_size": 16384,
+    "pageins": 74768380,
+    "pageouts": 1162526,
+    "pages_active": 397891,
+    "pages_copy-on-write": 52927943,
+    "pages_free": 10265,
+    "pages_inactive": 273611,
+    "pages_occupied_by_compressor": 29183,
+    "pages_purgeable": 22010,
+    "pages_purged": 73635649,
+    "pages_reactivated": 326574082,
+    "pages_speculative": 138011,
+    "pages_stored_in_compressor": 188203,
+    "pages_throttled": 0,
+    "pages_wired_down": 158873,
+    "pages_zero_filled": 2465100725,
+    "swapins": 2635939,
+    "swapouts": 4341571,
+    "translation_faults": 2597108194
+  }
+}

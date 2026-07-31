@@ -1,0 +1,57 @@
+{
+  "arguments": {
+    "allow_battery": true,
+    "attempt": 12,
+    "contexts": "2048,4096",
+    "cooldown": 120.0,
+    "decode_tokens": 128,
+    "decode_warmups": 3,
+    "ef_search": 128,
+    "idle_seconds": 60.0,
+    "index": "experiments/phaseguard/index/hnsw_100k_d384.faiss",
+    "max_workers": 4,
+    "mem_limit_gb": 12.0,
+    "min_headroom_gb": 4.0,
+    "model": "1.5B",
+    "phases": "prefill",
+    "prefill_iterations": 5,
+    "prefill_warmups": 3,
+    "queries_per_task": 32,
+    "seed": 20260728,
+    "smoke": false,
+    "top_k": 10,
+    "workloads": "none,random"
+  },
+  "attempt": 12,
+  "attempt_id": "db4a2bf1691a44379b16eee04c8f8227",
+  "command": "scripts/run_context_validation.py --attempt 12 --workloads none,random --phases prefill --prefill-warmups 3 --prefill-iterations 5 --cooldown 120 --idle-seconds 60 --allow-battery",
+  "contexts": [
+    2048,
+    4096
+  ],
+  "environment": {
+    "dependencies": {
+      "faiss-cpu": "1.14.3",
+      "matplotlib": "3.11.0",
+      "mlx": "0.31.2",
+      "mlx-lm": "0.31.3",
+      "numpy": "2.4.6"
+    },
+    "git_commit": "6b6089c53b8e66f8772b4397a611a2d28be7d741",
+    "hostname": "Seoyoons-MacBook-Air.local",
+    "platform": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+    "power": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=21954659)\t88%; charging; 1:34 remaining present: true",
+    "python": "3.13.12",
+    "software": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5.1\nBuildVersion:\t\t25F80"
+  },
+  "phases": [
+    "prefill"
+  ],
+  "power_ok": true,
+  "started": "2026-07-28T21:57:00",
+  "temperature_clock": "unavailable without successful powermetrics access",
+  "workloads": [
+    "none",
+    "random"
+  ]
+}

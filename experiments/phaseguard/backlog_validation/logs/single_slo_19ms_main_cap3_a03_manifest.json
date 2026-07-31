@@ -1,0 +1,53 @@
+{
+  "run_id": "8ea765c89df245b08b0aba8862efbc79",
+  "run_key": "single_slo_19ms_main_cap3_a03",
+  "started": "2026-07-30T20:49:33.524903",
+  "arguments": {
+    "mode": "main",
+    "policy": "phaseguard",
+    "decode_cap": 3,
+    "attempt": 3,
+    "trace_seed": 20260733,
+    "target_tpot_ms": 19.0,
+    "max_workers": 4,
+    "feeders": 16,
+    "queries_per_task": 4096,
+    "chunk": 16,
+    "ef_search": 128,
+    "top_k": 10,
+    "cpu_only_seconds": 5.0,
+    "warmup_s": 0.5,
+    "model": "1.5B",
+    "context": 2048,
+    "output_tokens": 128,
+    "llm_requests": 3,
+    "sample_ms": 10.0,
+    "sentinel_tolerance": 0.05,
+    "sentinel_cooldown": 30.0,
+    "sentinel_attempts": 4,
+    "index": "/Users/seoyoonyum/Desktop/\u110b\u1167\u11ab\u1100\u116e/kv-uma-research/experiments/phaseguard/index/hnsw_100k_d384.faiss",
+    "sentinel_reference": "/Users/seoyoonyum/Desktop/\u110b\u1167\u11ab\u1100\u116e/kv-uma-research/experiments/phaseguard/backlog_validation/logs/single_slo_sentinel_mem6gb.json",
+    "mem_limit_gb": 6.0,
+    "min_headroom_gb": 6.0,
+    "memory_idle_seconds": 30.0,
+    "allow_battery": false,
+    "allow_fanless_pilot": true
+  },
+  "host_model": "MacBook Air",
+  "fan_capable": false,
+  "environment": {
+    "git_commit": "6b6089c53b8e66f8772b4397a611a2d28be7d741",
+    "hostname": "Seoyoons-MacBook-Air.local",
+    "platform": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+    "python": "3.13.12",
+    "software": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5.1\nBuildVersion:\t\t25F80",
+    "power": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=21954659)\t86%; charging; 1:49 remaining present: true",
+    "dependencies": {
+      "mlx": "0.31.2",
+      "mlx-lm": "0.31.3",
+      "faiss-cpu": "1.14.3",
+      "numpy": "2.4.6",
+      "matplotlib": "3.11.0"
+    }
+  }
+}

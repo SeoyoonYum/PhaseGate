@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-06-22T22:22:36",
+  "model": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+  "config": {
+    "model_type": "qwen2",
+    "num_hidden_layers": 24,
+    "hidden_size": 896,
+    "num_attention_heads": 14,
+    "num_key_value_heads": 2,
+    "vocab_size": 151936
+  },
+  "mlx": "0.31.2",
+  "mlx_lm": "0.31.3",
+  "python": "3.13.12",
+  "params": {
+    "ns": [
+      2048
+    ],
+    "intensity": [
+      0,
+      50,
+      100
+    ],
+    "window_s": 3.0,
+    "mb": 96,
+    "cooldown": 8.0,
+    "load_seconds": 4.3
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "stage": "paired_pilot",
+  "pair_index": 1,
+  "valid_repeats": 1,
+  "p95_tpot_ms": 14.603761063772252,
+  "p95_ttft_ms": 2039.396768755978,
+  "tpot_slo_multiplier": 1.1,
+  "ttft_slo_multiplier": 1.1,
+  "run_keys": [
+    "static_paired_pilot_llm-only_r101_a01"
+  ]
+}

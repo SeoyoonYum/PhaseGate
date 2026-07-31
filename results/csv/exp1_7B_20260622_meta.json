@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-06-22T22:20:18",
+  "experiment": "exp1",
+  "model": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+  "config": {
+    "model_type": "qwen2",
+    "num_hidden_layers": 28,
+    "hidden_size": 3584,
+    "num_attention_heads": 28,
+    "num_key_value_heads": 4,
+    "vocab_size": 152064
+  },
+  "mlx": "0.31.2",
+  "mlx_lm": "0.31.3",
+  "python": "3.13.12",
+  "machine": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+  "params": {
+    "ns": "4096,8192",
+    "reps": 5,
+    "warmup": 1,
+    "cooldown": 20.0,
+    "mem_limit_gb": 12.0,
+    "bw_gbps": 120.0,
+    "on_ac": true,
+    "smoke": false
+  },
+  "kv_bytes_per_token": 57344
+}

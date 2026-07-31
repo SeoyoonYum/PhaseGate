@@ -1,0 +1,71 @@
+{
+  "run_id": "4ed4e9aae900489091f2cfa30c480f19",
+  "run_key": "calibration_high_uncoordinated_r99",
+  "started": "2026-07-29T02:39:45.013737",
+  "command": "scripts/run_phasegate_backlog.py --policy uncoordinated --demand high --repeat 99 --split calibration --smoke --allow-fanless-smoke --allow-battery",
+  "arguments": {
+    "policy": "uncoordinated",
+    "demand": "high",
+    "repeat": 99,
+    "split": "calibration",
+    "fixed_workers": 1,
+    "max_workers": 4,
+    "model": "1.5B",
+    "context": 512,
+    "output_tokens": 8,
+    "retrieval_queries": 32,
+    "retrieval_chunk": 4,
+    "ef_search": 128,
+    "top_k": 10,
+    "index": "/Users/seoyoonyum/Desktop/\u110b\u1167\u11ab\u1100\u116e/kv-uma-research/experiments/phaseguard/index/hnsw_100k_d384.faiss",
+    "profile": "/Users/seoyoonyum/Desktop/\u110b\u1167\u11ab\u1100\u116e/kv-uma-research/experiments/phaseguard/processed/profile_primary.csv",
+    "slo": 1.15,
+    "sample_ms": 2.0,
+    "sentinel_reps": 1,
+    "sentinel_tolerance": 0.05,
+    "sentinel_cooldown": 1.0,
+    "sentinel_attempts": 2,
+    "sentinel_reference": "/Users/seoyoonyum/Desktop/\u110b\u1167\u11ab\u1100\u116e/kv-uma-research/experiments/phaseguard/backlog_validation/logs/sentinel_reference_smoke.json",
+    "seed": 20260729,
+    "mem_limit_gb": 12.0,
+    "allow_battery": true,
+    "allow_fanless_smoke": true,
+    "smoke": true
+  },
+  "demand_trace": {
+    "requests": 4,
+    "burst": 3,
+    "burst_spacing_s": 0.01,
+    "interarrival_s": 0.05
+  },
+  "host_model": "MacBook Air",
+  "fan_capable": false,
+  "sentinel": {
+    "reference_ms": 476.0783329838887,
+    "passed": true,
+    "attempts": [
+      {
+        "median_ms": 476.0783329838887,
+        "ratio": 1.0,
+        "values_ms": [
+          476.0783329838887
+        ]
+      }
+    ]
+  },
+  "environment": {
+    "git_commit": "6b6089c53b8e66f8772b4397a611a2d28be7d741",
+    "hostname": "Seoyoons-MacBook-Air.local",
+    "platform": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+    "python": "3.13.12",
+    "software": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5.1\nBuildVersion:\t\t25F80",
+    "power": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=21954659)\t82%; charging; (no estimate) present: true",
+    "dependencies": {
+      "mlx": "0.31.2",
+      "mlx-lm": "0.31.3",
+      "faiss-cpu": "1.14.3",
+      "numpy": "2.4.6",
+      "matplotlib": "3.11.0"
+    }
+  }
+}

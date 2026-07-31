@@ -1,0 +1,12 @@
+{
+  "stage": "decodecap0_pilot",
+  "pair_index": 3,
+  "valid_repeats": 1,
+  "p95_tpot_ms": 14.588973025674932,
+  "p95_ttft_ms": 2091.3279794855043,
+  "tpot_slo_multiplier": 1.1,
+  "ttft_slo_multiplier": 1.1,
+  "run_keys": [
+    "static_decodecap0_pilot_llm-only_r203_a01"
+  ]
+}

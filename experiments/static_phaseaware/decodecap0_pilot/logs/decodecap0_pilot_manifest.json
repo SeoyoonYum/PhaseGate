@@ -1,0 +1,225 @@
+{
+  "started": "2026-07-31T03:44:45.384939",
+  "repeats": 3,
+  "pairs": [
+    {
+      "pair": "fixed0_vs_phasegate1to0",
+      "started": "2026-07-31T03:46:24.744310",
+      "baseline_file": "/Users/seoyoonyum/Desktop/\u110b\u1167\u11ab\u1100\u116e/kv-uma-research/experiments/static_phaseaware/decodecap0_pilot/baseline_pair1.json",
+      "environment_check": {
+        "checked": "2026-07-31T03:46:24.757795",
+        "browser_matches": []
+      },
+      "orders": [
+        [
+          "fixed0",
+          "phasegate1to0"
+        ],
+        [
+          "fixed0",
+          "phasegate1to0"
+        ],
+        [
+          "phasegate1to0",
+          "fixed0"
+        ]
+      ],
+      "clean_pairs": [
+        {
+          "repeat": 0,
+          "attempt": 1,
+          "order": [
+            "fixed0",
+            "phasegate1to0"
+          ],
+          "run_keys": [
+            "static_decodecap0_pilot_fixed0_r00_a01",
+            "static_decodecap0_pilot_phasegate1to0_r00_a01"
+          ],
+          "accepted": true
+        },
+        {
+          "repeat": 1,
+          "attempt": 1,
+          "order": [
+            "fixed0",
+            "phasegate1to0"
+          ],
+          "run_keys": [
+            "static_decodecap0_pilot_fixed0_r01_a01",
+            "static_decodecap0_pilot_phasegate1to0_r01_a01"
+          ],
+          "accepted": true
+        },
+        {
+          "repeat": 2,
+          "attempt": 1,
+          "order": [
+            "phasegate1to0",
+            "fixed0"
+          ],
+          "run_keys": [
+            "static_decodecap0_pilot_phasegate1to0_r02_a01",
+            "static_decodecap0_pilot_fixed0_r02_a01"
+          ],
+          "accepted": true
+        }
+      ],
+      "failed_pair_attempts": [],
+      "finished": "2026-07-31T03:55:56.304308"
+    },
+    {
+      "pair": "fixed0_vs_phasegate2to0",
+      "started": "2026-07-31T03:57:57.091923",
+      "baseline_file": "/Users/seoyoonyum/Desktop/\u110b\u1167\u11ab\u1100\u116e/kv-uma-research/experiments/static_phaseaware/decodecap0_pilot/baseline_pair2.json",
+      "environment_check": {
+        "checked": "2026-07-31T03:57:57.106000",
+        "browser_matches": []
+      },
+      "orders": [
+        [
+          "phasegate2to0",
+          "fixed0"
+        ],
+        [
+          "phasegate2to0",
+          "fixed0"
+        ],
+        [
+          "fixed0",
+          "phasegate2to0"
+        ]
+      ],
+      "clean_pairs": [
+        {
+          "repeat": 0,
+          "attempt": 2,
+          "order": [
+            "phasegate2to0",
+            "fixed0"
+          ],
+          "run_keys": [
+            "static_decodecap0_pilot_phasegate2to0_r00_a02",
+            "static_decodecap0_pilot_fixed0_r00_a02"
+          ],
+          "accepted": true
+        },
+        {
+          "repeat": 1,
+          "attempt": 2,
+          "order": [
+            "phasegate2to0",
+            "fixed0"
+          ],
+          "run_keys": [
+            "static_decodecap0_pilot_phasegate2to0_r01_a02",
+            "static_decodecap0_pilot_fixed0_r01_a02"
+          ],
+          "accepted": true
+        },
+        {
+          "repeat": 2,
+          "attempt": 3,
+          "order": [
+            "fixed0",
+            "phasegate2to0"
+          ],
+          "run_keys": [
+            "static_decodecap0_pilot_fixed0_r02_a03",
+            "static_decodecap0_pilot_phasegate2to0_r02_a03"
+          ],
+          "accepted": true
+        }
+      ],
+      "failed_pair_attempts": [
+        {
+          "repeat": 2,
+          "attempt": 2,
+          "order": [
+            "fixed0",
+            "phasegate2to0"
+          ],
+          "run_keys": [
+            "static_decodecap0_pilot_fixed0_r02_a02",
+            "static_decodecap0_pilot_phasegate2to0_r02_a02"
+          ],
+          "accepted": false
+        }
+      ],
+      "finished": "2026-07-31T04:14:57.481814"
+    },
+    {
+      "pair": "fixed0_vs_phasegate4to0",
+      "started": "2026-07-31T04:16:58.763722",
+      "baseline_file": "/Users/seoyoonyum/Desktop/\u110b\u1167\u11ab\u1100\u116e/kv-uma-research/experiments/static_phaseaware/decodecap0_pilot/baseline_pair3.json",
+      "environment_check": {
+        "checked": "2026-07-31T04:16:58.777786",
+        "browser_matches": []
+      },
+      "orders": [
+        [
+          "phasegate4to0",
+          "fixed0"
+        ],
+        [
+          "phasegate4to0",
+          "fixed0"
+        ],
+        [
+          "fixed0",
+          "phasegate4to0"
+        ]
+      ],
+      "clean_pairs": [
+        {
+          "repeat": 0,
+          "attempt": 3,
+          "order": [
+            "phasegate4to0",
+            "fixed0"
+          ],
+          "run_keys": [
+            "static_decodecap0_pilot_phasegate4to0_r00_a03",
+            "static_decodecap0_pilot_fixed0_r00_a03"
+          ],
+          "accepted": true
+        },
+        {
+          "repeat": 1,
+          "attempt": 3,
+          "order": [
+            "phasegate4to0",
+            "fixed0"
+          ],
+          "run_keys": [
+            "static_decodecap0_pilot_phasegate4to0_r01_a03",
+            "static_decodecap0_pilot_fixed0_r01_a03"
+          ],
+          "accepted": true
+        },
+        {
+          "repeat": 2,
+          "attempt": 4,
+          "order": [
+            "fixed0",
+            "phasegate4to0"
+          ],
+          "run_keys": [
+            "static_decodecap0_pilot_fixed0_r02_a04",
+            "static_decodecap0_pilot_phasegate4to0_r02_a04"
+          ],
+          "accepted": true
+        }
+      ],
+      "failed_pair_attempts": [],
+      "finished": "2026-07-31T04:30:13.527097"
+    }
+  ],
+  "fresh_process_per_policy": true,
+  "memory_limit_gb": 6.0,
+  "environment_check": {
+    "checked": "2026-07-31T03:44:45.401509",
+    "browser_matches": []
+  },
+  "finished": "2026-07-31T04:30:13.527342"
+}

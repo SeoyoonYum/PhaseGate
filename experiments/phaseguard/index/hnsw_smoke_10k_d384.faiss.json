@@ -1,0 +1,9 @@
+{
+  "backend": "faiss-hnsw",
+  "dimensions": 384,
+  "ef_construction": 40,
+  "graph_degree": 16,
+  "index_bytes": 16800442,
+  "seed": 20260728,
+  "vectors": 10000
+}

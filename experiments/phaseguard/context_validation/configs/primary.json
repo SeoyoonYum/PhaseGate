@@ -1,0 +1,21 @@
+{
+  "model": "1.5B",
+  "model_id": "mlx-community/Qwen2.5-1.5B-Instruct-4bit",
+  "contexts": [2048, 4096],
+  "workloads": ["none", "hnsw1", "hnsw4", "random"],
+  "phases": ["prefill", "decode"],
+  "prefill_warmups": 3,
+  "prefill_iterations": 20,
+  "decode_warmups": 3,
+  "decode_tokens": 128,
+  "target_clean_attempts": 5,
+  "maximum_attempts": 8,
+  "idle_baseline_seconds": 30,
+  "cooldown_seconds": 10,
+  "minimum_headroom_gb": 4,
+  "index": "experiments/phaseguard/index/hnsw_100k_d384.faiss",
+  "hnsw": {"vectors": 100000, "dimensions": 384, "M": 32, "ef_search": 128, "top_k": 10},
+  "random": {"threads": 1, "working_set_mb": 96, "duty_percent": 100},
+  "seed": 20260728,
+  "mlx_memory_limit_gb": 12
+}

@@ -1,0 +1,5 @@
+policy,clean_blocks,median_normalized_p95_tpot,median_normalized_p95_ttft,joint_slo_pass_count,median_total_retrieval_qps,median_additional_qps_vs_fixed0,all_decode_admission_zero,feasible,thermal_risk_negative_qps_slope_all
+fixed0,9,1.0376952018439598,1.012547370514315,9,41.908111461325284,0.0,True,True,True
+phasegate1to0,3,1.0260090697960527,1.0309625778799236,3,527.4874245935514,483.69157139132824,True,True,True
+phasegate2to0,3,0.9870636880717369,1.0478146321688822,3,886.0689193135022,845.3228516238668,True,True,True
+phasegate4to0,3,1.0352073632349534,1.0600822592110055,3,1259.467443759669,1218.7227956675808,True,True,True

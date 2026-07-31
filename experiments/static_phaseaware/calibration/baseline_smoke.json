@@ -1,0 +1,12 @@
+{
+  "stage": "calibration",
+  "smoke": true,
+  "valid_repeats": 1,
+  "p95_tpot_ms": 14.48712164536118,
+  "p95_ttft_ms": 542.8943755337968,
+  "tpot_slo_multiplier": 1.1,
+  "ttft_slo_multiplier": 1.1,
+  "run_keys": [
+    "static_calibration_smoke_llm-only_r00_a04"
+  ]
+}

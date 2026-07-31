@@ -1,0 +1,18 @@
+{
+  "model": "mlx-community/Qwen2.5-1.5B-Instruct-4bit",
+  "context": 2048,
+  "output_tokens": 128,
+  "retrieval_queries": 4096,
+  "retrieval_chunk": 16,
+  "max_workers": 4,
+  "ef_search": 128,
+  "sentinel_tolerance": 0.05,
+  "demand": {
+    "low": {"requests": 8, "arrivals_per_decode": 1},
+    "medium": {"requests": 12, "arrivals_per_decode": 2},
+    "high": {"requests": 16, "arrivals_per_decode": 4}
+  },
+  "calibration_repeats": 3,
+  "evaluation_repeats": 3,
+  "evaluation_policies": ["serialized", "best-fixed-k", "uncoordinated", "static0", "phaseguard"]
+}

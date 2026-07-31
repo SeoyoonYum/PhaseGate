@@ -1,0 +1,24 @@
+{
+  "model": "1.5B",
+  "model_id": "mlx-community/Qwen2.5-1.5B-Instruct-4bit",
+  "context": 2048,
+  "output_tokens": 128,
+  "concurrency": [2, 4],
+  "requests_per_client_primary": 2,
+  "retrieval": {
+    "backend": "faiss-hnsw",
+    "vectors": 100000,
+    "dimensions": 384,
+    "graph_degree": 32,
+    "ef_construction": 80,
+    "ef_search": 128,
+    "top_k": 10,
+    "queries_per_request": 4096,
+    "max_workers": 4
+  },
+  "profile_repetitions": 3,
+  "evaluation_repetitions_primary": 3,
+  "slo_multipliers": [1.05, 1.10, 1.15, 1.20],
+  "seed": 20260728,
+  "mlx_memory_limit_gb": 12.0
+}

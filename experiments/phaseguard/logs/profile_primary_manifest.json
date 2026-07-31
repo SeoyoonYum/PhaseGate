@@ -1,0 +1,73 @@
+{
+  "arguments": {
+    "allow_battery": true,
+    "context": 2048,
+    "cooldown": 2.0,
+    "decode_steps": 128,
+    "ef_search": 128,
+    "index": "experiments/phaseguard/index/hnsw_100k_d384.faiss",
+    "max_workers": 4,
+    "mem_limit_gb": 12.0,
+    "model": "1.5B",
+    "queries_per_task": 32,
+    "repetitions": 3,
+    "seed": 20260728,
+    "smoke": false,
+    "tag": "primary",
+    "top_k": 10,
+    "workers": "0,1,2,4"
+  },
+  "environment": {
+    "dependencies": {
+      "faiss-cpu": "1.14.3",
+      "matplotlib": "3.11.0",
+      "mlx": "0.31.2",
+      "mlx-lm": "0.31.3",
+      "numpy": "2.4.6"
+    },
+    "git_commit": "6b6089c53b8e66f8772b4397a611a2d28be7d741",
+    "hostname": "Seoyoons-MacBook-Air.local",
+    "platform": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+    "power": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=21954659)\t63%; charging; 3:25 remaining present: true",
+    "python": "3.13.12",
+    "software": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5.1\nBuildVersion:\t\t25F80"
+  },
+  "index": {
+    "backend": "faiss-hnsw",
+    "dimensions": 384,
+    "ef_construction": 80,
+    "graph_degree": 32,
+    "index_bytes": 180820834,
+    "seed": 20260728,
+    "vectors": 100000
+  },
+  "kind": "profile",
+  "power_ok": true,
+  "run_id": "5b43f508d220457c96e7adeb39f5dac2",
+  "start_vm": {
+    "anonymous_pages": 288318,
+    "compressions": 349938992,
+    "decompressions": 295742624,
+    "file-backed_pages": 451322,
+    "headroom_bytes": 7913062400,
+    "page_size": 16384,
+    "pageins": 74881286,
+    "pageouts": 1162811,
+    "pages_active": 336337,
+    "pages_copy-on-write": 52978672,
+    "pages_free": 76966,
+    "pages_inactive": 381989,
+    "pages_occupied_by_compressor": 28685,
+    "pages_purgeable": 2706,
+    "pages_purged": 73654857,
+    "pages_reactivated": 326574296,
+    "pages_speculative": 21314,
+    "pages_stored_in_compressor": 186414,
+    "pages_throttled": 0,
+    "pages_wired_down": 162368,
+    "pages_zero_filled": 2467707061,
+    "swapins": 2636014,
+    "swapouts": 4341571,
+    "translation_faults": 2598626802
+  }
+}

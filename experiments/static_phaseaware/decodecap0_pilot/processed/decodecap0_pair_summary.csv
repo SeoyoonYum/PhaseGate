@@ -1,0 +1,10 @@
+comparison,repeat,attempt,order,fixed0_qps,phasegate_qps,additional_qps,fixed0_joint_slo,phasegate_joint_slo,fixed0_decode_admitted,phasegate_decode_admitted
+fixed0_vs_phasegate1to0,0,1,fixed0 then phasegate1to0,45.25472347066853,526.86246221355,481.60773874288145,True,True,0,0
+fixed0_vs_phasegate1to0,1,1,fixed0 then phasegate1to0,42.653941574221534,527.8170411949435,485.16309962072194,True,True,0,0
+fixed0_vs_phasegate1to0,2,1,phasegate1to0 then fixed0,43.79585320222314,527.4874245935514,483.69157139132824,True,True,0,0
+fixed0_vs_phasegate2to0,0,2,phasegate2to0 then fixed0,39.43210163230257,886.0689193135022,846.6368176811997,True,True,0,0
+fixed0_vs_phasegate2to0,1,2,phasegate2to0 then fixed0,41.908111461325284,887.230963085192,845.3228516238668,True,True,0,0
+fixed0_vs_phasegate2to0,2,3,fixed0 then phasegate2to0,44.99219842332687,870.6515722622387,825.6593738389118,True,True,0,0
+fixed0_vs_phasegate4to0,0,3,phasegate4to0 then fixed0,41.88282834290983,1257.089471052826,1215.2066427099162,True,True,0,0
+fixed0_vs_phasegate4to0,1,3,phasegate4to0 then fixed0,40.74464809208833,1259.467443759669,1218.7227956675808,True,True,0,0
+fixed0_vs_phasegate4to0,2,4,fixed0 then phasegate4to0,40.710940238332725,1268.6632815743717,1227.952341336039,True,True,0,0

@@ -29,7 +29,11 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <pthread/qos.h>
+#include <signal.h>
 #include <time.h>
+
+static volatile sig_atomic_t stop_requested = 0;
+static void request_stop(int sig) { (void)sig; stop_requested = 1; }
 
 typedef struct {
     long n;            /* elements per array */
@@ -67,7 +71,7 @@ static void *worker(void *p) {
     double acc = 0.0;
     double t0 = now_s();
     long passes = 0;
-    while (now_s() - t0 < t->seconds) {
+    while (!stop_requested && now_s() - t0 < t->seconds) {
         double p0 = now_s();
         if (mode == 0) {                                   /* stream triad: 2R + 1W */
             for (long i = 0; i < n; i++) a[i] = 0.5 * b[i] + 0.5 * c[i];
@@ -106,6 +110,8 @@ static void *worker(void *p) {
 }
 
 int main(int argc, char **argv) {
+    signal(SIGTERM, request_stop);
+    signal(SIGINT, request_stop);
     double seconds = argc > 1 ? atof(argv[1]) : 3.0;
     int nthreads   = argc > 2 ? atoi(argv[2]) : 1;
     long mb        = argc > 3 ? atol(argv[3]) : 96;

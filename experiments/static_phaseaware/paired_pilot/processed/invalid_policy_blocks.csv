@@ -1,0 +1,17 @@
+run_key,policy,repeat,attempt,invalid_reason,pageout_delta,swap_delta_bytes,pre_sentinel_initial_deviation,post_sentinel_initial_deviation,post_sentinel_recovered_deviation
+static_paired_pilot_fixed1_r00_a01,fixed1,0,1,memory_clean,30,0,0.009761576350634904,0.03500671284343926,0.03500671284343926
+static_paired_pilot_phasegate4to1_r00_a01,phasegate4to1,0,1,within_block_qps_drift_clean,0,0,0.009867907707798107,0.053155871517504893,0.00656332913147506
+static_paired_pilot_phasegate4to1_r00_a02,phasegate4to1,0,2,memory_clean,52,0,0.011798303739681604,0.05955010141730632,0.008521171238460301
+static_paired_pilot_phasegate4to1_r00_a03,phasegate4to1,0,3,memory_clean,53,0,0.011100040096088781,0.07572696995116823,0.009678257415999925
+static_paired_pilot_phasegate4to1_r02_a01,phasegate4to1,2,1,resident_memory_preflight,,,,,
+static_paired_pilot_fixed1_r02_a02,fixed1,2,2,memory_clean,16,0,0.010774066660691473,0.0569511934515079,0.011654574095488757
+static_paired_pilot_phasegate4to1_r02_a02,phasegate4to1,2,2,memory_clean,84,0,0.014923256518562411,0.07344043198440309,0.012672760872940447
+static_paired_pilot_phasegate4to1_r02_a03,phasegate4to1,2,3,memory_clean,50,0,0.01479066833626086,0.07374974574830828,0.013470804579152285
+static_paired_pilot_fixed1_r02_a04,fixed1,2,4,memory_clean,56,0,0.01142627418541875,0.06412737124725965,0.011644737302276775
+static_paired_pilot_phasegate4to1_r02_a04,phasegate4to1,2,4,memory_clean,10,0,0.014050260277294724,0.07484393814001167,0.016555209043596086
+static_paired_pilot_fixed1_r02_a05,fixed1,2,5,memory_clean,46,0,0.015421271226183197,0.0659745424282494,0.014322092658524577
+static_paired_pilot_phasegate4to1_r02_a05,phasegate4to1,2,5,memory_clean,4,0,0.016283074504329642,0.07389034559251506,0.01570429683284935
+static_paired_pilot_fixed1_r02_a06,fixed1,2,6,memory_clean,28,0,0.016069650201356422,0.0698355740149974,0.017350499051616453
+static_paired_pilot_fixed1_r02_a07,fixed1,2,7,memory_clean,31,0,0.016921751370605254,0.06390394267735222,0.011527087245543077
+static_paired_pilot_fixed1_r02_a08,fixed1,2,8,memory_clean,10,0,0.039616769778708205,0.09466059037578689,0.036299412135453846
+static_paired_pilot_phasegate4to2_r01_a01,phasegate4to2,1,1,memory_clean,37,0,0.011920929450614182,0.069121443824683,0.010838368729735981

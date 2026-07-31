@@ -1,0 +1,7 @@
+comparison,repeat,attempt,order,fixed_policy,phasegate_policy,fixed_retrieval_qps,phasegate_retrieval_qps,phasegate_gain,fixed_joint_slo_pass,phasegate_joint_slo_pass,same_joint_slo_pass,qualifying_repeat
+fixed1_vs_phasegate4to1,0,4,fixed1 then phasegate4to1,fixed1,phasegate4to1,786.6128076412001,1507.3282635845299,0.9162264445000896,False,False,False,False
+fixed1_vs_phasegate4to1,1,1,phasegate4to1 then fixed1,fixed1,phasegate4to1,787.3329881089577,1506.7073347179241,0.9136850068187583,False,False,False,False
+fixed1_vs_phasegate4to1,2,9,fixed1 then phasegate4to1,fixed1,phasegate4to1,786.0949542997901,1506.3535296682812,0.9162488213781472,False,False,False,False
+fixed2_vs_phasegate4to2,0,1,fixed2 then phasegate4to2,fixed2,phasegate4to2,1334.065139642458,1687.6115893096428,0.26501438285235346,False,False,False,False
+fixed2_vs_phasegate4to2,1,2,fixed2 then phasegate4to2,fixed2,phasegate4to2,1328.898856500381,1689.294602081537,0.2711987777085221,False,False,False,False
+fixed2_vs_phasegate4to2,2,1,phasegate4to2 then fixed2,fixed2,phasegate4to2,1334.45750815675,1690.4925872856345,0.26680136081715045,False,False,False,False

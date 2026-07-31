@@ -1,0 +1,264 @@
+{
+  "started": "2026-07-31T02:50:04.323631",
+  "environment_check": {
+    "checked": "2026-07-31T02:50:04.323613",
+    "browser_matches": []
+  },
+  "repeats": 3,
+  "pairs": [
+    {
+      "pair": "fixed1_vs_phasegate4to1",
+      "started": "2026-07-31T02:50:04.337984",
+      "baseline_file": "/Users/seoyoonyum/Desktop/\u110b\u1167\u11ab\u1100\u116e/kv-uma-research/experiments/static_phaseaware/paired_pilot/baseline_pair1.json",
+      "environment_check": {
+        "checked": "2026-07-31T02:50:04.336304",
+        "browser_matches": []
+      },
+      "orders": [
+        [
+          "fixed1",
+          "phasegate4to1"
+        ],
+        [
+          "phasegate4to1",
+          "fixed1"
+        ],
+        [
+          "fixed1",
+          "phasegate4to1"
+        ]
+      ],
+      "clean_pairs": [
+        {
+          "repeat": 0,
+          "attempt": 4,
+          "run_keys": [
+            "static_paired_pilot_fixed1_r00_a04",
+            "static_paired_pilot_phasegate4to1_r00_a04"
+          ],
+          "accepted": true,
+          "order": [
+            "fixed1",
+            "phasegate4to1"
+          ]
+        },
+        {
+          "repeat": 1,
+          "attempt": 1,
+          "run_keys": [
+            "static_paired_pilot_fixed1_r01_a01",
+            "static_paired_pilot_phasegate4to1_r01_a01"
+          ],
+          "accepted": true,
+          "order": [
+            "phasegate4to1",
+            "fixed1"
+          ]
+        },
+        {
+          "repeat": 2,
+          "attempt": 9,
+          "order": [
+            "fixed1",
+            "phasegate4to1"
+          ],
+          "run_keys": [
+            "static_paired_pilot_fixed1_r02_a09",
+            "static_paired_pilot_phasegate4to1_r02_a09"
+          ],
+          "accepted": true
+        }
+      ],
+      "failed_pair_attempts": [
+        {
+          "repeat": 2,
+          "attempt": 1,
+          "run_keys": [
+            "static_paired_pilot_fixed1_r02_a01",
+            "static_paired_pilot_phasegate4to1_r02_a01"
+          ],
+          "accepted": false,
+          "order": [
+            "fixed1",
+            "phasegate4to1"
+          ]
+        },
+        {
+          "repeat": 2,
+          "attempt": 2,
+          "run_keys": [
+            "static_paired_pilot_fixed1_r02_a02",
+            "static_paired_pilot_phasegate4to1_r02_a02"
+          ],
+          "accepted": false,
+          "order": [
+            "fixed1",
+            "phasegate4to1"
+          ]
+        },
+        {
+          "repeat": 2,
+          "attempt": 3,
+          "run_keys": [
+            "static_paired_pilot_fixed1_r02_a03",
+            "static_paired_pilot_phasegate4to1_r02_a03"
+          ],
+          "accepted": false,
+          "order": [
+            "fixed1",
+            "phasegate4to1"
+          ]
+        },
+        {
+          "repeat": 2,
+          "attempt": 4,
+          "run_keys": [
+            "static_paired_pilot_fixed1_r02_a04",
+            "static_paired_pilot_phasegate4to1_r02_a04"
+          ],
+          "accepted": false,
+          "order": [
+            "fixed1",
+            "phasegate4to1"
+          ]
+        },
+        {
+          "repeat": 2,
+          "attempt": 5,
+          "run_keys": [
+            "static_paired_pilot_fixed1_r02_a05",
+            "static_paired_pilot_phasegate4to1_r02_a05"
+          ],
+          "accepted": false,
+          "order": [
+            "fixed1",
+            "phasegate4to1"
+          ]
+        },
+        {
+          "repeat": 2,
+          "attempt": 6,
+          "run_keys": [
+            "static_paired_pilot_fixed1_r02_a06",
+            "static_paired_pilot_phasegate4to1_r02_a06"
+          ],
+          "accepted": false,
+          "order": [
+            "fixed1",
+            "phasegate4to1"
+          ]
+        },
+        {
+          "repeat": 2,
+          "attempt": 7,
+          "run_keys": [
+            "static_paired_pilot_fixed1_r02_a07",
+            "static_paired_pilot_phasegate4to1_r02_a07"
+          ],
+          "accepted": false,
+          "order": [
+            "fixed1",
+            "phasegate4to1"
+          ]
+        },
+        {
+          "repeat": 2,
+          "attempt": 8,
+          "run_keys": [
+            "static_paired_pilot_fixed1_r02_a08",
+            "static_paired_pilot_phasegate4to1_r02_a08"
+          ],
+          "accepted": false,
+          "order": [
+            "fixed1",
+            "phasegate4to1"
+          ]
+        }
+      ],
+      "finished": "2026-07-31T02:53:53.500598"
+    },
+    {
+      "pair": "fixed2_vs_phasegate4to2",
+      "started": "2026-07-31T02:55:54.267833",
+      "baseline_file": "/Users/seoyoonyum/Desktop/\u110b\u1167\u11ab\u1100\u116e/kv-uma-research/experiments/static_phaseaware/paired_pilot/baseline_pair2.json",
+      "environment_check": {
+        "checked": "2026-07-31T02:54:23.551095",
+        "browser_matches": []
+      },
+      "orders": [
+        [
+          "fixed2",
+          "phasegate4to2"
+        ],
+        [
+          "fixed2",
+          "phasegate4to2"
+        ],
+        [
+          "phasegate4to2",
+          "fixed2"
+        ]
+      ],
+      "clean_pairs": [
+        {
+          "repeat": 0,
+          "attempt": 1,
+          "order": [
+            "fixed2",
+            "phasegate4to2"
+          ],
+          "run_keys": [
+            "static_paired_pilot_fixed2_r00_a01",
+            "static_paired_pilot_phasegate4to2_r00_a01"
+          ],
+          "accepted": true
+        },
+        {
+          "repeat": 1,
+          "attempt": 2,
+          "order": [
+            "fixed2",
+            "phasegate4to2"
+          ],
+          "run_keys": [
+            "static_paired_pilot_fixed2_r01_a02",
+            "static_paired_pilot_phasegate4to2_r01_a02"
+          ],
+          "accepted": true
+        },
+        {
+          "repeat": 2,
+          "attempt": 1,
+          "order": [
+            "phasegate4to2",
+            "fixed2"
+          ],
+          "run_keys": [
+            "static_paired_pilot_phasegate4to2_r02_a01",
+            "static_paired_pilot_fixed2_r02_a01"
+          ],
+          "accepted": true
+        }
+      ],
+      "failed_pair_attempts": [
+        {
+          "repeat": 1,
+          "attempt": 1,
+          "order": [
+            "fixed2",
+            "phasegate4to2"
+          ],
+          "run_keys": [
+            "static_paired_pilot_fixed2_r01_a01",
+            "static_paired_pilot_phasegate4to2_r01_a01"
+          ],
+          "accepted": false
+        }
+      ],
+      "finished": "2026-07-31T03:13:42.920214"
+    }
+  ],
+  "fresh_process_per_policy": true,
+  "memory_limit_gb": 6.0,
+  "finished": "2026-07-31T03:13:42.920461"
+}

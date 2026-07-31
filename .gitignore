@@ -16,6 +16,9 @@ src/common/stream_load
 data/raw/
 results/logs/
 
+# Reproducible local FAISS/HNSW indexes; rebuild from the documented script.
+experiments/phaseguard/index/*.faiss
+
 # Scratch
 *.tmp
 *.swp

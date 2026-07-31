@@ -73,9 +73,13 @@ class CpuBandwidthLoad:
         if self.running():
             self.proc.terminate()
             try:
-                self.proc.wait(timeout=2)
+                self.raw, _ = self.proc.communicate(timeout=5)
             except Exception:
                 self.proc.kill()
+                self.raw, _ = self.proc.communicate()
+            for line in (self.raw or "").splitlines():
+                if line.startswith("GBPS"):
+                    self.gbps = float(line.split()[1])
         return self.gbps
 
     def __enter__(self):
