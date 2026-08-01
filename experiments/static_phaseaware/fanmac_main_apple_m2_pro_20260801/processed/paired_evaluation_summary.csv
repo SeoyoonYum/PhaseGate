@@ -1,0 +1,3 @@
+comparison,paired_repeats,median_paired_gain,paired_gain_bootstrap_ci_low,paired_gain_bootstrap_ci_high,phasegate_qps_wins,median_tpot_ratio_gate_fixed,median_ttft_ratio_gate_fixed,median_additional_qps
+fixed1_vs_phasegate4to1,5,1.305664518976633,1.2994232951271911,1.3179890951261073,5,0.9901202540479703,1.0061786456526418,1230.8373279816387
+fixed2_vs_phasegate4to2,5,0.38993942112376856,0.38731981943768035,0.391876453750164,5,0.9984019900980393,1.000560544750066,680.9529206128823

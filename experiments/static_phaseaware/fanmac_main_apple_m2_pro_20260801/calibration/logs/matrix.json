@@ -1,0 +1,59 @@
+{
+  "seed": 22260801,
+  "repeats": 3,
+  "orders": [
+    [
+      "fixed1",
+      "fixed3",
+      "phasegate4to3",
+      "phasegate2to1",
+      "phasegate2to0",
+      "phasegate4to2",
+      "phasegate4to1",
+      "fixed4",
+      "phasegate3to0",
+      "phasegate3to2",
+      "phasegate1to0",
+      "fixed2",
+      "phasegate4to0",
+      "fixed0",
+      "phasegate3to1"
+    ],
+    [
+      "phasegate1to0",
+      "phasegate4to1",
+      "fixed2",
+      "fixed1",
+      "phasegate4to0",
+      "fixed0",
+      "phasegate4to2",
+      "fixed3",
+      "phasegate3to2",
+      "fixed4",
+      "phasegate3to0",
+      "phasegate2to1",
+      "phasegate4to3",
+      "phasegate3to1",
+      "phasegate2to0"
+    ],
+    [
+      "fixed0",
+      "phasegate3to1",
+      "phasegate3to2",
+      "phasegate4to1",
+      "phasegate1to0",
+      "fixed4",
+      "fixed2",
+      "fixed3",
+      "phasegate2to0",
+      "phasegate4to2",
+      "phasegate4to0",
+      "phasegate2to1",
+      "phasegate4to3",
+      "fixed1",
+      "phasegate3to0"
+    ]
+  ],
+  "baseline_file": "/Users/m1/kv-uma-research/experiments/static_phaseaware/fanmac_main_apple_m2_pro_20260801/isolated_baseline/baseline.json",
+  "policy_grid_frozen_before_run": true
+}

@@ -1,0 +1,289 @@
+{
+  "frozen_at": "2026-08-01T04:13:43.943022",
+  "git_commit": "6bd573b8f55c60f4e69bbe1b12c1e75491b7b424",
+  "selection_data": "calibration only",
+  "calibration_seed": 22260801,
+  "evaluation_seed": 32260801,
+  "baseline_file": "/Users/m1/kv-uma-research/experiments/static_phaseaware/fanmac_main_apple_m2_pro_20260801/isolated_baseline/baseline.json",
+  "slo_multiplier": 1.1,
+  "tie_rule": "within 3% QPS choose lower total cap, then lower decode cap, then simpler name",
+  "best_fixed": null,
+  "best_phasegate": null,
+  "latency_matched_pairs": [
+    {
+      "fixed": "fixed1",
+      "phasegate": "phasegate4to1",
+      "tpot_ratio": 1.0092489489251968,
+      "ttft_ratio": 1.0104995010312896,
+      "qps_gain": 1.3059155235932058,
+      "passes_calibration_condition": true,
+      "absolute_slo_pass": false
+    },
+    {
+      "fixed": "fixed2",
+      "phasegate": "phasegate4to2",
+      "tpot_ratio": 1.0058737474035302,
+      "ttft_ratio": 1.0069763260397004,
+      "qps_gain": 0.38802667861209805,
+      "passes_calibration_condition": true,
+      "absolute_slo_pass": false
+    }
+  ],
+  "calibration_summary": [
+    {
+      "policy": "fixed0",
+      "policy_arg": "fixed0",
+      "prefill_cap": 0,
+      "decode_cap": 0,
+      "valid_repeats": 3,
+      "median_normalized_p95_tpot": 1.2490484671588957,
+      "median_normalized_p95_ttft": 1.0102343888101568,
+      "joint_slo_pass_count": 0,
+      "strict_feasible": false,
+      "median_retrieval_qps": 63.00035059941693,
+      "run_keys": [
+        "static_calibration_fixed0_r00_a01",
+        "static_calibration_fixed0_r01_a01",
+        "static_calibration_fixed0_r02_a01"
+      ]
+    },
+    {
+      "policy": "fixed1",
+      "policy_arg": "fixed",
+      "prefill_cap": 1,
+      "decode_cap": 1,
+      "valid_repeats": 3,
+      "median_normalized_p95_tpot": 1.2138837568982874,
+      "median_normalized_p95_ttft": 1.0027889068217675,
+      "joint_slo_pass_count": 0,
+      "strict_feasible": false,
+      "median_retrieval_qps": 938.8999290543148,
+      "run_keys": [
+        "static_calibration_fixed1_r00_a02",
+        "static_calibration_fixed1_r01_a01",
+        "static_calibration_fixed1_r02_a01"
+      ]
+    },
+    {
+      "policy": "fixed2",
+      "policy_arg": "fixed",
+      "prefill_cap": 2,
+      "decode_cap": 2,
+      "valid_repeats": 3,
+      "median_normalized_p95_tpot": 1.3917382332317871,
+      "median_normalized_p95_ttft": 1.005575399130327,
+      "joint_slo_pass_count": 0,
+      "strict_feasible": false,
+      "median_retrieval_qps": 1740.8818333817117,
+      "run_keys": [
+        "static_calibration_fixed2_r00_a01",
+        "static_calibration_fixed2_r01_a01",
+        "static_calibration_fixed2_r02_a01"
+      ]
+    },
+    {
+      "policy": "fixed3",
+      "policy_arg": "fixed",
+      "prefill_cap": 3,
+      "decode_cap": 3,
+      "valid_repeats": 3,
+      "median_normalized_p95_tpot": 1.4733169280297367,
+      "median_normalized_p95_ttft": 1.0090651561522355,
+      "joint_slo_pass_count": 0,
+      "strict_feasible": false,
+      "median_retrieval_qps": 2340.507061690372,
+      "run_keys": [
+        "static_calibration_fixed3_r00_a01",
+        "static_calibration_fixed3_r01_a01",
+        "static_calibration_fixed3_r02_a01"
+      ]
+    },
+    {
+      "policy": "fixed4",
+      "policy_arg": "fixed",
+      "prefill_cap": 4,
+      "decode_cap": 4,
+      "valid_repeats": 3,
+      "median_normalized_p95_tpot": 1.6249237562580299,
+      "median_normalized_p95_ttft": 1.0110379599266066,
+      "joint_slo_pass_count": 0,
+      "strict_feasible": false,
+      "median_retrieval_qps": 2869.8968049494274,
+      "run_keys": [
+        "static_calibration_fixed4_r00_a01",
+        "static_calibration_fixed4_r01_a03",
+        "static_calibration_fixed4_r02_a01"
+      ]
+    },
+    {
+      "policy": "phasegate1to0",
+      "policy_arg": "phasegate",
+      "prefill_cap": 1,
+      "decode_cap": 0,
+      "valid_repeats": 3,
+      "median_normalized_p95_tpot": 1.2157428960480154,
+      "median_normalized_p95_ttft": 1.0017713312271663,
+      "joint_slo_pass_count": 0,
+      "strict_feasible": false,
+      "median_retrieval_qps": 623.6029538590038,
+      "run_keys": [
+        "static_calibration_phasegate1to0_r00_a01",
+        "static_calibration_phasegate1to0_r01_a01",
+        "static_calibration_phasegate1to0_r02_a01"
+      ]
+    },
+    {
+      "policy": "phasegate2to0",
+      "policy_arg": "phasegate",
+      "prefill_cap": 2,
+      "decode_cap": 0,
+      "valid_repeats": 3,
+      "median_normalized_p95_tpot": 1.2032948924894789,
+      "median_normalized_p95_ttft": 1.0063669892146203,
+      "joint_slo_pass_count": 0,
+      "strict_feasible": false,
+      "median_retrieval_qps": 1115.248425230079,
+      "run_keys": [
+        "static_calibration_phasegate2to0_r00_a01",
+        "static_calibration_phasegate2to0_r01_a01",
+        "static_calibration_phasegate2to0_r02_a01"
+      ]
+    },
+    {
+      "policy": "phasegate3to0",
+      "policy_arg": "phasegate",
+      "prefill_cap": 3,
+      "decode_cap": 0,
+      "valid_repeats": 3,
+      "median_normalized_p95_tpot": 1.2218865093878482,
+      "median_normalized_p95_ttft": 1.0094184926201595,
+      "joint_slo_pass_count": 0,
+      "strict_feasible": false,
+      "median_retrieval_qps": 1488.7554236039323,
+      "run_keys": [
+        "static_calibration_phasegate3to0_r00_a01",
+        "static_calibration_phasegate3to0_r01_a16",
+        "static_calibration_phasegate3to0_r02_a01"
+      ]
+    },
+    {
+      "policy": "phasegate4to0",
+      "policy_arg": "phasegate",
+      "prefill_cap": 4,
+      "decode_cap": 0,
+      "valid_repeats": 3,
+      "median_normalized_p95_tpot": 1.2081151022334564,
+      "median_normalized_p95_ttft": 1.0126792510922888,
+      "joint_slo_pass_count": 0,
+      "strict_feasible": false,
+      "median_retrieval_qps": 1801.2776705406995,
+      "run_keys": [
+        "static_calibration_phasegate4to0_r00_a02",
+        "static_calibration_phasegate4to0_r01_a01",
+        "static_calibration_phasegate4to0_r02_a01"
+      ]
+    },
+    {
+      "policy": "phasegate2to1",
+      "policy_arg": "phasegate",
+      "prefill_cap": 2,
+      "decode_cap": 1,
+      "valid_repeats": 3,
+      "median_normalized_p95_tpot": 1.1969007825866922,
+      "median_normalized_p95_ttft": 1.0058530754319637,
+      "joint_slo_pass_count": 0,
+      "strict_feasible": false,
+      "median_retrieval_qps": 1486.496115572357,
+      "run_keys": [
+        "static_calibration_phasegate2to1_r00_a01",
+        "static_calibration_phasegate2to1_r01_a01",
+        "static_calibration_phasegate2to1_r02_a01"
+      ]
+    },
+    {
+      "policy": "phasegate3to1",
+      "policy_arg": "phasegate",
+      "prefill_cap": 3,
+      "decode_cap": 1,
+      "valid_repeats": 3,
+      "median_normalized_p95_tpot": 1.2117676699916395,
+      "median_normalized_p95_ttft": 1.0091864893624845,
+      "joint_slo_pass_count": 0,
+      "strict_feasible": false,
+      "median_retrieval_qps": 1849.917351582633,
+      "run_keys": [
+        "static_calibration_phasegate3to1_r00_a01",
+        "static_calibration_phasegate3to1_r01_a17",
+        "static_calibration_phasegate3to1_r02_a01"
+      ]
+    },
+    {
+      "policy": "phasegate4to1",
+      "policy_arg": "phasegate",
+      "prefill_cap": 4,
+      "decode_cap": 1,
+      "valid_repeats": 3,
+      "median_normalized_p95_tpot": 1.2251109057669658,
+      "median_normalized_p95_ttft": 1.0133176899831084,
+      "joint_slo_pass_count": 0,
+      "strict_feasible": false,
+      "median_retrieval_qps": 2165.023921506904,
+      "run_keys": [
+        "static_calibration_phasegate4to1_r00_a01",
+        "static_calibration_phasegate4to1_r01_a01",
+        "static_calibration_phasegate4to1_r02_a01"
+      ]
+    },
+    {
+      "policy": "phasegate3to2",
+      "policy_arg": "phasegate",
+      "prefill_cap": 3,
+      "decode_cap": 2,
+      "valid_repeats": 3,
+      "median_normalized_p95_tpot": 1.3985528520162263,
+      "median_normalized_p95_ttft": 1.0078287545128515,
+      "joint_slo_pass_count": 0,
+      "strict_feasible": false,
+      "median_retrieval_qps": 2115.8202498749847,
+      "run_keys": [
+        "static_calibration_phasegate3to2_r00_a01",
+        "static_calibration_phasegate3to2_r01_a02",
+        "static_calibration_phasegate3to2_r02_a01"
+      ]
+    },
+    {
+      "policy": "phasegate4to2",
+      "policy_arg": "phasegate",
+      "prefill_cap": 4,
+      "decode_cap": 2,
+      "valid_repeats": 3,
+      "median_normalized_p95_tpot": 1.399912952065626,
+      "median_normalized_p95_ttft": 1.012590620972162,
+      "joint_slo_pass_count": 0,
+      "strict_feasible": false,
+      "median_retrieval_qps": 2416.3904290449573,
+      "run_keys": [
+        "static_calibration_phasegate4to2_r00_a01",
+        "static_calibration_phasegate4to2_r01_a01",
+        "static_calibration_phasegate4to2_r02_a01"
+      ]
+    },
+    {
+      "policy": "phasegate4to3",
+      "policy_arg": "phasegate",
+      "prefill_cap": 4,
+      "decode_cap": 3,
+      "valid_repeats": 3,
+      "median_normalized_p95_tpot": 1.4496214954292506,
+      "median_normalized_p95_ttft": 1.0113742748022563,
+      "joint_slo_pass_count": 0,
+      "strict_feasible": false,
+      "median_retrieval_qps": 2660.616551674805,
+      "run_keys": [
+        "static_calibration_phasegate4to3_r00_a03",
+        "static_calibration_phasegate4to3_r01_a01",
+        "static_calibration_phasegate4to3_r02_a01"
+      ]
+    }
+  ]
+}

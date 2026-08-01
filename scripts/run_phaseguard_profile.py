@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
 import random
 import sys
 import threading
@@ -16,6 +17,9 @@ import mlx.core as mx
 import numpy as np
 
 REPO = Path(__file__).resolve().parents[1]
+PROFILE_ROOT = Path(os.environ.get(
+    "PHASEGUARD_PROFILE_ROOT", REPO / "experiments/phaseguard"
+)).resolve()
 sys.path.insert(0, str(REPO / "src"))
 from common import measure, models, thermal  # noqa: E402
 from exp2_contention import build_cache  # noqa: E402
@@ -109,7 +113,9 @@ def write_profile(rows: list[dict[str, object]], path: Path, model_name: str,
                            "repetitions": len(subset)})
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fields); writer.writeheader(); writer.writerows(output)
+        writer = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(output)
 
 
 def main() -> None:
@@ -138,15 +144,15 @@ def main() -> None:
     index = Path(args.index); index = index if index.is_absolute() else REPO / index
     power_ok = thermal.assert_power(args.allow_battery)
     measure.set_mem_limit_gb(args.mem_limit_gb)
-    raw = REPO / "experiments/phaseguard/raw" / f"profile_{args.tag}.jsonl"
-    profile = REPO / "experiments/phaseguard/processed" / f"profile_{args.tag}.csv"
+    raw = PROFILE_ROOT / "raw" / f"profile_{args.tag}.jsonl"
+    profile = PROFILE_ROOT / "processed" / f"profile_{args.tag}.csv"
     rows, complete = load_existing(raw)
     manifest = {"run_id": uuid.uuid4().hex, "kind": "profile", "arguments": vars(args),
                 "environment": environment_metadata(REPO), "power_ok": power_ok,
                 "index": json.loads(index.with_suffix(index.suffix + ".json").read_text()),
                 "start_vm": vm_snapshot()}
-    (REPO / "experiments/phaseguard/logs").mkdir(parents=True, exist_ok=True)
-    (REPO / "experiments/phaseguard/logs" / f"profile_{args.tag}_manifest.json").write_text(
+    (PROFILE_ROOT / "logs").mkdir(parents=True, exist_ok=True)
+    (PROFILE_ROOT / "logs" / f"profile_{args.tag}_manifest.json").write_text(
         json.dumps(manifest, indent=2, sort_keys=True) + "\n")
     print(f"[load] {models.resolve_model_id(args.model)}")
     model, _ = models.load_model(args.model); mx.eval(model.parameters())
@@ -169,6 +175,10 @@ def main() -> None:
             q1 = bg.snapshot() if bg else 0
             if bg: bg.stop()
             after_vm = vm_snapshot()
+            pageouts_delta = after_vm.get("pageouts", 0) - before_vm.get("pageouts", 0)
+            swapouts_delta = after_vm.get("swapouts", 0) - before_vm.get("swapouts", 0)
+            if status == "ok" and (pageouts_delta != 0 or swapouts_delta != 0):
+                status, error = "invalid", "pageout_or_swapout_contamination"
             row = {"run_id": manifest["run_id"], "repeat": rep, "workers": permitted,
                    "phase": phase, "model": args.model, "context": args.context,
                    "ef_search": args.ef_search, "timings_ms": timings,
@@ -177,12 +187,13 @@ def main() -> None:
                    "logical_qps": (q1 - q0) / elapsed if elapsed else 0.0,
                    "elapsed_s": elapsed, "rss_bytes": process_rss_bytes(),
                    "headroom_bytes": after_vm.get("headroom_bytes", 0),
-                   "pageouts_delta": after_vm.get("pageouts", 0) - before_vm.get("pageouts", 0),
+                   "pageouts_delta": pageouts_delta, "swapouts_delta": swapouts_delta,
                    "power_contaminated": not power_ok, "thermal_spread":
                    (max(timings) / float(np.median(timings))) if timings else None,
                    "status": status, "error": error}
             append_jsonl(raw, row); rows.append(row); write_profile(rows, profile, args.model, args.context, "faiss-hnsw")
-            print(f"[{phase}] rep={rep} workers={permitted} p95={row['p95_ms']:.3f}ms qps={row['logical_qps']:.1f}")
+            print(f"[{phase}] rep={rep} workers={permitted} status={status} "
+                  f"p95={row['p95_ms']:.3f}ms qps={row['logical_qps']:.1f}")
             time.sleep(args.cooldown)
     print(f"[out] {raw}\n[out] {profile}")
 

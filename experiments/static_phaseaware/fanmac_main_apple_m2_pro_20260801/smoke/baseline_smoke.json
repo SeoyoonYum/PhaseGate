@@ -1,0 +1,14 @@
+{
+  "stage": "smoke",
+  "smoke": true,
+  "performance_result": false,
+  "valid_repeats": 0,
+  "measured_repeats": 1,
+  "p95_tpot_ms": 8.728183849989364,
+  "p95_ttft_ms": 370.0070124998547,
+  "tpot_slo_multiplier": 1.1,
+  "ttft_slo_multiplier": 1.1,
+  "run_keys": [
+    "static_smoke_smoke_llm-only_r00_a01"
+  ]
+}

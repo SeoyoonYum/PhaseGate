@@ -25,7 +25,9 @@ import mlx.core as mx
 import numpy as np
 
 REPO = Path(__file__).resolve().parents[1]
-ROOT = REPO / "experiments/static_phaseaware"
+ROOT = Path(os.environ.get(
+    "STATIC_PHASEAWARE_ROOT", REPO / "experiments/static_phaseaware"
+)).resolve()
 sys.path.insert(0, str(REPO / "src"))
 from common import measure, models, thermal  # noqa: E402
 from phaseguard.context_validation import (AlwaysBackloggedHNSW, capture_state,
@@ -48,9 +50,21 @@ POLICIES_MINIMAL = (
     ("phasegate4to2", "phasegate", 4, 2),
     ("fixed4", "fixed", 4, 4),
 )
-POLICIES_FULL = POLICIES_MINIMAL + (
-    ("serialization", "serialization", 0, 0),
+POLICIES_FULL = (
+    ("fixed0", "fixed0", 0, 0),
+    ("fixed1", "fixed", 1, 1),
+    ("fixed2", "fixed", 2, 2),
     ("fixed3", "fixed", 3, 3),
+    ("fixed4", "fixed", 4, 4),
+    ("phasegate1to0", "phasegate", 1, 0),
+    ("phasegate2to0", "phasegate", 2, 0),
+    ("phasegate3to0", "phasegate", 3, 0),
+    ("phasegate4to0", "phasegate", 4, 0),
+    ("phasegate2to1", "phasegate", 2, 1),
+    ("phasegate3to1", "phasegate", 3, 1),
+    ("phasegate4to1", "phasegate", 4, 1),
+    ("phasegate3to2", "phasegate", 3, 2),
+    ("phasegate4to2", "phasegate", 4, 2),
     ("phasegate4to3", "phasegate", 4, 3),
 )
 
@@ -353,11 +367,13 @@ def run_block(args: argparse.Namespace) -> None:
 
     tpot_request = [float(row["p95_tpot_ms"]) for row in rows]
     ttft_request = [float(row["ttft_ms"]) for row in rows]
+    prefill_request = [float(row["prefill_ms"]) for row in rows]
     p95_tpot = percentile(tpot_request, 95)
     p95_ttft = percentile(ttft_request, 95)
     tpot_drift = latency_drift_ratio(tpot_request)
     ttft_drift = latency_drift_ratio(ttft_request)
     tpot_slope = linear_slope([float(row["completion"]) for row in rows], tpot_request)
+    ttft_slope = linear_slope([float(row["completion"]) for row in rows], ttft_request)
     delta = state_delta(host_before, host_after)
     prefill_cap, decode_cap = policy_caps(args)
     prefill_samples = [row for row in samples if row["phase"] == GPUPhase.PREFILL.value]
@@ -433,7 +449,12 @@ def run_block(args: argparse.Namespace) -> None:
         "context": args.context, "output_tokens": args.output_tokens,
         "llm_requests": args.llm_requests, "prompt_seed": args.prompt_seed,
         "query_seed": args.query_seed, "duration_s": duration,
-        "p95_tpot_ms": p95_tpot, "p95_ttft_ms": p95_ttft,
+        "p50_tpot_ms": percentile(tpot_request, 50),
+        "p95_tpot_ms": p95_tpot,
+        "p50_ttft_ms": percentile(ttft_request, 50),
+        "p95_ttft_ms": p95_ttft,
+        "prefill_latency_p50_ms": percentile(prefill_request, 50),
+        "prefill_latency_p95_ms": percentile(prefill_request, 95),
         "normalized_p95_tpot": tpot_norm, "normalized_p95_ttft": ttft_norm,
         "tpot_slo_pass": tpot_pass, "ttft_slo_pass": ttft_pass,
         "joint_slo_pass": tpot_pass and ttft_pass, "raw_19ms_tpot_pass": p95_tpot <= 19.0,
@@ -443,6 +464,8 @@ def run_block(args: argparse.Namespace) -> None:
         "total_completed_retrieval_queries": completed_queries,
         "application_goodput_rps": len(rows) / duration,
         "llm_request_throughput_rps": len(rows) / duration,
+        "total_generated_tokens": len(rows) * args.output_tokens,
+        "tokens_per_request": args.output_tokens,
         "retrieval_latency_p50_ms": (
             percentile([value * 1e3 for value in task_latencies], 50) if task_latencies else None),
         "retrieval_latency_p95_ms": (
@@ -485,6 +508,7 @@ def run_block(args: argparse.Namespace) -> None:
         "tpot_within_block_drift_ratio": tpot_drift,
         "ttft_within_block_drift_ratio": ttft_drift,
         "tpot_within_block_slope_ms_per_s": tpot_slope,
+        "ttft_within_block_slope_ms_per_s": ttft_slope,
         "retrieval_qps_first_third": qps_drift["first_qps"],
         "retrieval_qps_last_third": qps_drift["last_qps"],
         "retrieval_qps_within_block_ratio": qps_drift["ratio"],
@@ -546,6 +570,7 @@ def block_command(args: argparse.Namespace, policy: str, prefill: int, decode: i
                "--decode-cap", str(decode), "--fixed-workers", str(decode),
                "--prompt-seed", str(args.seed + repeat * 10_000),
                "--query-seed", str(args.seed + repeat * 10_000 + 5_000),
+               "--model", str(args.model),
                "--context", str(args.context), "--output-tokens", str(args.output_tokens),
                "--llm-requests", str(args.llm_requests), "--sample-ms", str(args.sample_ms),
                "--max-workers", str(args.max_workers), "--feeders", str(args.feeders),
@@ -609,7 +634,9 @@ def orchestrate(args: argparse.Namespace) -> None:
 def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-one", action="store_true")
-    ap.add_argument("--stage", choices=("calibration", "evaluation", "paired_pilot", "decodecap0_pilot"),
+    ap.add_argument("--stage", choices=("smoke", "isolated_baseline", "characterization",
+                                        "calibration", "evaluation", "paired_pilot",
+                                        "decodecap0_pilot"),
                     default="calibration")
     ap.add_argument("--policy", choices=("llm-only", "serialization", "fixed", "fixed0", "phasegate"),
                     default="llm-only")

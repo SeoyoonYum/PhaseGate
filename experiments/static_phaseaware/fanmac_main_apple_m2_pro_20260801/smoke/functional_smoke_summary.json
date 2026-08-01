@@ -1,0 +1,104 @@
+{
+  "purpose": "functional semantics only",
+  "baseline": {
+    "stage": "smoke",
+    "smoke": true,
+    "performance_result": false,
+    "valid_repeats": 0,
+    "measured_repeats": 1,
+    "p95_tpot_ms": 8.728183849989364,
+    "p95_ttft_ms": 370.0070124998547,
+    "tpot_slo_multiplier": 1.1,
+    "ttft_slo_multiplier": 1.1,
+    "run_keys": [
+      "static_smoke_smoke_llm-only_r00_a01"
+    ]
+  },
+  "checks": [
+    {
+      "policy": "fixed0",
+      "passed": true,
+      "prefill_cap": 0,
+      "decode_cap": 0,
+      "prefill_active_mean": 0.19858156028368795,
+      "decode_active_mean": 0.0,
+      "queue_nonempty_fraction": 1.0,
+      "decode_admitted": 0,
+      "transition_to_cap_ms": 4.801666000275873,
+      "overshoot_fraction": 0.0
+    },
+    {
+      "policy": "fixed1",
+      "passed": true,
+      "prefill_cap": 1,
+      "decode_cap": 1,
+      "prefill_active_mean": 1.0,
+      "decode_active_mean": 1.0,
+      "queue_nonempty_fraction": 1.0,
+      "decode_admitted": 272,
+      "transition_to_cap_ms": 2.453749999858701,
+      "overshoot_fraction": 0.0
+    },
+    {
+      "policy": "fixed2",
+      "passed": true,
+      "prefill_cap": 2,
+      "decode_cap": 2,
+      "prefill_active_mean": 2.0,
+      "decode_active_mean": 2.0,
+      "queue_nonempty_fraction": 1.0,
+      "decode_admitted": 640,
+      "transition_to_cap_ms": 5.024874999890017,
+      "overshoot_fraction": 0.0
+    },
+    {
+      "policy": "fixed4",
+      "passed": true,
+      "prefill_cap": 4,
+      "decode_cap": 4,
+      "prefill_active_mean": 3.984126984126984,
+      "decode_active_mean": 4.0,
+      "queue_nonempty_fraction": 1.0,
+      "decode_admitted": 1136,
+      "transition_to_cap_ms": 4.423458000019309,
+      "overshoot_fraction": 0.0
+    },
+    {
+      "policy": "phasegate4to0",
+      "passed": true,
+      "prefill_cap": 4,
+      "decode_cap": 0,
+      "prefill_active_mean": 3.9916666666666667,
+      "decode_active_mean": 0.0,
+      "queue_nonempty_fraction": 1.0,
+      "decode_admitted": 0,
+      "transition_to_cap_ms": 21.111832999849867,
+      "overshoot_fraction": 0.0
+    },
+    {
+      "policy": "phasegate4to1",
+      "passed": true,
+      "prefill_cap": 4,
+      "decode_cap": 1,
+      "prefill_active_mean": 3.984,
+      "decode_active_mean": 1.2105263157894737,
+      "queue_nonempty_fraction": 1.0,
+      "decode_admitted": 272,
+      "transition_to_cap_ms": 17.510915999991994,
+      "overshoot_fraction": 0.10526315789473684
+    },
+    {
+      "policy": "phasegate4to2",
+      "passed": true,
+      "prefill_cap": 4,
+      "decode_cap": 2,
+      "prefill_active_mean": 3.992,
+      "decode_active_mean": 2.2295081967213113,
+      "queue_nonempty_fraction": 1.0,
+      "decode_admitted": 640,
+      "transition_to_cap_ms": 21.763082999768812,
+      "overshoot_fraction": 0.14754098360655737
+    }
+  ],
+  "all_passed": true
+}

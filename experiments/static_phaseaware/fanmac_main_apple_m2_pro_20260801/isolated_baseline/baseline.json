@@ -1,0 +1,26 @@
+{
+  "stage": "isolated_baseline",
+  "valid_repeats": 5,
+  "repeat_ids": [
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "p95_tpot_ms": 9.026328169975386,
+  "p95_ttft_ms": 1367.8538562497806,
+  "tpot_threshold_ms": 9.928960986972925,
+  "ttft_threshold_ms": 1504.639241874759,
+  "tpot_slo_multiplier": 1.1,
+  "ttft_slo_multiplier": 1.1,
+  "max_run_level_p95_deviation": 0.012128267757522515,
+  "variation_within_5pct": true,
+  "run_keys": [
+    "static_isolated_baseline_llm-only_r05_a01",
+    "static_isolated_baseline_llm-only_r06_a01",
+    "static_isolated_baseline_llm-only_r07_a01",
+    "static_isolated_baseline_llm-only_r08_a01",
+    "static_isolated_baseline_llm-only_r09_a01"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "captured": "2026-08-01T03:46:46.515843",
+  "model_name": "Mac mini",
+  "model_identifier": "Mac14,12",
+  "chip": "Apple M2 Pro",
+  "cpu_cores_total": 10,
+  "performance_cores": 6,
+  "efficiency_cores": 4,
+  "gpu_cores": 16,
+  "unified_memory_bytes": 17179869184,
+  "macos": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5\nBuildVersion:\t\t25F71",
+  "python": "3.12.13",
+  "git_commit": "6bd573b8f55c60f4e69bbe1b12c1e75491b7b424",
+  "model": "1.5B",
+  "quantization": "4bit",
+  "context_length": 2048,
+  "output_length": 128,
+  "hnsw": {
+    "backend": "faiss-hnsw",
+    "dimensions": 384,
+    "ef_construction": 80,
+    "graph_degree": 32,
+    "index_bytes": 180820834,
+    "seed": 20260728,
+    "vectors": 100000
+  },
+  "available_disk": "/dev/disk3s5   460Gi    23Gi   417Gi     6%    436k  4.4G    0%   /System/Volumes/Data",
+  "initial_vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                   205552.\nPages active:                                 359909.\nPages inactive:                               358512.\nPages speculative:                              1727.\nPages throttled:                                   0.\nPages wired down:                              82671.\nPages purgeable:                                1655.\n\"Translation faults\":                       63142384.\nPages copy-on-write:                         5695382.\nPages zero filled:                         106584556.\nPages reactivated:                             45315.\nPages purged:                                  48638.\nFile-backed pages:                            389913.\nAnonymous pages:                              330235.\nPages stored in compressor:                    23577.\nPages occupied by compressor:                   6346.\nDecompressions:                                 6005.\nCompressions:                                  31445.\nPageins:                                      600835.\nPageouts:                                        699.\nSwapins:                                           0.\nSwapouts:                                          0.",
+  "initial_swap": "vm.swapusage: total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+  "initial_memory_pressure": "The system has 17179869184 (1048576 pages with a page size of 16384).\nSystem-wide memory free percentage: 91%",
+  "initial_process_rss": "37056",
+  "runtime_versions": {
+    "python": "3.12.13",
+    "mlx": "0.31.2",
+    "mlx_device": "Device(gpu, 0)",
+    "mlx_lm": "0.31.3",
+    "faiss": "1.14.3"
+  }
+}

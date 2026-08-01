@@ -1,0 +1,59 @@
+{
+  "started_from_frozen_selection": true,
+  "finished": "2026-08-01T05:47:18.703276",
+  "held_out_seed": 32260801,
+  "repeats": 5,
+  "selection_file": "/Users/m1/kv-uma-research/experiments/static_phaseaware/fanmac_main_apple_m2_pro_20260801/frozen_selection.json",
+  "selection_sha256": "a1a02c7f29cb8753d8c68a4efea2b6ccb0724cd3f86b59ee2763f1904d6c715d",
+  "baseline_file": "/Users/m1/kv-uma-research/experiments/static_phaseaware/fanmac_main_apple_m2_pro_20260801/isolated_baseline/baseline.json",
+  "policies": [
+    "llm-only",
+    "fixed4",
+    "fixed1",
+    "phasegate4to1",
+    "fixed2",
+    "phasegate4to2"
+  ],
+  "orders": [
+    [
+      "fixed1",
+      "phasegate4to2",
+      "phasegate4to1",
+      "fixed4",
+      "fixed2",
+      "llm-only"
+    ],
+    [
+      "llm-only",
+      "fixed4",
+      "phasegate4to2",
+      "fixed1",
+      "phasegate4to1",
+      "fixed2"
+    ],
+    [
+      "phasegate4to2",
+      "phasegate4to1",
+      "llm-only",
+      "fixed1",
+      "fixed4",
+      "fixed2"
+    ],
+    [
+      "phasegate4to1",
+      "llm-only",
+      "phasegate4to2",
+      "fixed1",
+      "fixed2",
+      "fixed4"
+    ],
+    [
+      "fixed4",
+      "phasegate4to2",
+      "fixed1",
+      "phasegate4to1",
+      "fixed2",
+      "llm-only"
+    ]
+  ]
+}

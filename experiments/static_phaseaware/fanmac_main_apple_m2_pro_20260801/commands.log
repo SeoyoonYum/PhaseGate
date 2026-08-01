@@ -1,0 +1,18 @@
+2026-08-01T01:36:34.907197 scripts/run_fanmac_main_calibration.py
+2026-08-01T01:37:16.669306 scripts/run_fanmac_main_calibration.py
+2026-08-01T01:52:51.585331 /Users/m1/kv-uma-research/.venv/bin/python /Users/m1/kv-uma-research/scripts/run_phaseguard_profile.py --index /Users/m1/kv-uma-research/experiments/phaseguard/index/hnsw_100k_d384.faiss --model 1.5B --context 2048 --workers 0,1,2,3,4 --max-workers 4 --ef-search 128 --top-k 10 --decode-steps 128 --repetitions 3 --queries-per-task 32 --cooldown 4 --mem-limit-gb 6.0 --seed 21260801 --tag fanmac_main
+2026-08-01T02:59:25.516738 scripts/run_fanmac_main_calibration.py --max-attempts 50
+2026-08-01T02:59:55.539615 /Users/m1/kv-uma-research/.venv/bin/python /Users/m1/kv-uma-research/scripts/run_phaseguard_profile.py --index /Users/m1/kv-uma-research/experiments/phaseguard/index/hnsw_100k_d384.faiss --model 1.5B --context 2048 --workers 0,1,2,3,4 --max-workers 4 --ef-search 128 --top-k 10 --decode-steps 128 --repetitions 3 --queries-per-task 32 --cooldown 4 --mem-limit-gb 6.0 --seed 21260801 --tag fanmac_main
+2026-08-01T03:07:34.892838 scripts/run_fanmac_main_calibration.py --max-attempts 50
+2026-08-01T03:08:04.916360 /Users/m1/kv-uma-research/.venv/bin/python /Users/m1/kv-uma-research/scripts/run_phaseguard_profile.py --index /Users/m1/kv-uma-research/experiments/phaseguard/index/hnsw_100k_d384.faiss --model 1.5B --context 2048 --workers 0,1,2,3,4 --max-workers 4 --ef-search 128 --top-k 10 --decode-steps 128 --repetitions 3 --queries-per-task 32 --cooldown 4 --mem-limit-gb 6.0 --seed 21260801 --tag fanmac_main
+2026-08-01T03:19:54.425396 scripts/run_fanmac_main_calibration.py --max-attempts 50
+2026-08-01T03:20:24.450169 /Users/m1/kv-uma-research/.venv/bin/python /Users/m1/kv-uma-research/scripts/run_phaseguard_profile.py --index /Users/m1/kv-uma-research/experiments/phaseguard/index/hnsw_100k_d384.faiss --model 1.5B --context 2048 --workers 0,1,2,3,4 --max-workers 4 --ef-search 128 --top-k 10 --decode-steps 128 --repetitions 3 --queries-per-task 32 --cooldown 4 --mem-limit-gb 6.0 --seed 21260801 --tag fanmac_main
+2026-08-01T03:30:05.153941 scripts/run_fanmac_main_calibration.py --max-attempts 50
+2026-08-01T03:30:35.177696 /Users/m1/kv-uma-research/.venv/bin/python /Users/m1/kv-uma-research/scripts/run_phaseguard_profile.py --index /Users/m1/kv-uma-research/experiments/phaseguard/index/hnsw_100k_d384.faiss --model 1.5B --context 2048 --workers 0,1,2,3,4 --max-workers 4 --ef-search 128 --top-k 10 --decode-steps 128 --repetitions 3 --queries-per-task 32 --cooldown 4 --mem-limit-gb 6.0 --seed 21260801 --tag fanmac_main
+2026-08-01T03:46:46.714937 scripts/run_fanmac_main_calibration.py --max-attempts 50
+2026-08-01T03:47:16.742027 /Users/m1/kv-uma-research/.venv/bin/python /Users/m1/kv-uma-research/scripts/run_phaseguard_profile.py --index /Users/m1/kv-uma-research/experiments/phaseguard/index/hnsw_100k_d384.faiss --model 1.5B --context 2048 --workers 0,1,2,3,4 --max-workers 4 --ef-search 128 --top-k 10 --decode-steps 128 --repetitions 3 --queries-per-task 32 --cooldown 4 --mem-limit-gb 6.0 --seed 21260801 --tag fanmac_main
+2026-08-01T05:47:18.703684 scripts/run_fanmac_main_evaluation.py --max-attempts 50
+2026-08-01 operator-note: preserved all pageout/swap-invalid attempts and waited for sentinel recovery before replacement blocks
+2026-08-01 operator-note: closed the foreground Spotlight UI during recovery; left protected system update services unchanged
+2026-08-01 operator-note: redirected evaluation driver output to logs/evaluation_driver.log to avoid foreground Terminal rendering interference
+2026-08-01 scripts/analyze_fanmac_main.py

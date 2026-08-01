@@ -1,0 +1,73 @@
+{
+  "arguments": {
+    "allow_battery": false,
+    "context": 2048,
+    "cooldown": 4.0,
+    "decode_steps": 128,
+    "ef_search": 128,
+    "index": "/Users/m1/kv-uma-research/experiments/phaseguard/index/hnsw_100k_d384.faiss",
+    "max_workers": 4,
+    "mem_limit_gb": 6.0,
+    "model": "1.5B",
+    "queries_per_task": 32,
+    "repetitions": 3,
+    "seed": 21260801,
+    "smoke": false,
+    "tag": "fanmac_main",
+    "top_k": 10,
+    "workers": "0,1,2,3,4"
+  },
+  "environment": {
+    "dependencies": {
+      "faiss-cpu": "1.14.3",
+      "matplotlib": "3.11.0",
+      "mlx": "0.31.2",
+      "mlx-lm": "0.31.3",
+      "numpy": "2.4.6"
+    },
+    "git_commit": "6bd573b8f55c60f4e69bbe1b12c1e75491b7b424",
+    "hostname": "ce782d63-62f6-41f0-b4d9-75cb2eef0929",
+    "platform": "macOS-26.5-arm64-arm-64bit",
+    "power": "Now drawing from 'AC Power'",
+    "python": "3.12.13",
+    "software": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5\nBuildVersion:\t\t25F71"
+  },
+  "index": {
+    "backend": "faiss-hnsw",
+    "dimensions": 384,
+    "ef_construction": 80,
+    "graph_degree": 32,
+    "index_bytes": 180820834,
+    "seed": 20260728,
+    "vectors": 100000
+  },
+  "kind": "profile",
+  "power_ok": true,
+  "run_id": "d6f57176ab56456fad2cabab6e53af87",
+  "start_vm": {
+    "anonymous_pages": 335766,
+    "compressions": 31445,
+    "decompressions": 6014,
+    "file-backed_pages": 390485,
+    "headroom_bytes": 9234432000,
+    "page_size": 16384,
+    "pageins": 600910,
+    "pageouts": 699,
+    "pages_active": 363584,
+    "pages_copy-on-write": 5698577,
+    "pages_free": 199451,
+    "pages_inactive": 360431,
+    "pages_occupied_by_compressor": 6344,
+    "pages_purgeable": 1507,
+    "pages_purged": 48702,
+    "pages_reactivated": 45338,
+    "pages_speculative": 2236,
+    "pages_stored_in_compressor": 23568,
+    "pages_throttled": 0,
+    "pages_wired_down": 82804,
+    "pages_zero_filled": 106601836,
+    "swapins": 0,
+    "swapouts": 0,
+    "translation_faults": 63179943
+  }
+}
