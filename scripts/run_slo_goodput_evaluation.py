@@ -73,6 +73,7 @@ def main() -> None:
                                                    if name != "llm-only"]
     args = namespace(pilot, user, "evaluation", int(selected["evaluation_seed_base"]),
                      250, baseline_path)
+    (campaign / "evaluation/logs").mkdir(parents=True, exist_ok=True)
     orders = []
     for repeat in range(user.repeats):
         order = list(items)

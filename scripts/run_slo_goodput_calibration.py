@@ -136,6 +136,7 @@ def baseline(pilot, user, campaign: Path) -> Path:
 def calibration(pilot, user, campaign: Path, baseline_path: Path) -> None:
     args = namespace(pilot, user, "calibration",
                      CAMPAIGN_SEEDS["calibration_prompt_trace"], 100, baseline_path)
+    (campaign / "calibration/logs").mkdir(parents=True, exist_ok=True)
     orders = []
     for repeat in range(3):
         order = list(CALIBRATION_POLICIES)
