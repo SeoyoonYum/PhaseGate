@@ -62,7 +62,8 @@ def resolve(value: Path) -> Path:
             "created": datetime.now().astimezone().isoformat(),
             "execution_mode": "headless_ssh_tmux",
             "remote_desktop_active": False,
-            "ARDAgent_modified": False,
+            "ARDAgent_modified": True,
+            "ARDAgent_state": "disabled_by_explicit_user_request",
             "previous_partial_campaign_reused": False,
             "seeds": CAMPAIGN_SEEDS,
         }, indent=2) + "\n")
@@ -121,7 +122,8 @@ def capture_hardware(campaign: Path, user: argparse.Namespace) -> None:
         "campaign_uuid": campaign_meta["campaign_uuid"],
         "execution_mode": "headless_ssh_tmux",
         "remote_desktop_active": False,
-        "ARDAgent_modified": False,
+        "ARDAgent_modified": True,
+        "ARDAgent_state": "disabled_by_explicit_user_request",
         "previous_partial_campaign_reused": False,
         "campaign_seeds": CAMPAIGN_SEEDS,
     }
@@ -129,7 +131,8 @@ def capture_hardware(campaign: Path, user: argparse.Namespace) -> None:
             json.dumps(versions, indent=2) + f"\nMLX device: {device}\n\n" +
             "execution_mode = headless_ssh_tmux\n"
             "remote_desktop_active = false\n"
-            "ARDAgent_modified = false\n"
+            "ARDAgent_modified = true\n"
+            "ARDAgent_state = disabled_by_explicit_user_request\n"
             "previous_partial_campaign_reused = false\n"
             f"campaign_uuid = {campaign_meta['campaign_uuid']}\n"
             f"campaign_seeds = {json.dumps(CAMPAIGN_SEEDS, sort_keys=True)}\n")
