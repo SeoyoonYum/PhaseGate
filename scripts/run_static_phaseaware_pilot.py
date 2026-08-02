@@ -7,6 +7,7 @@ is an internal/publicly useful single-block mode used by both matrix runners.
 from __future__ import annotations
 
 import argparse
+import gzip
 import json
 import os
 import random
@@ -147,24 +148,93 @@ def zero_snapshot() -> dict[str, int]:
 
 
 def execute_gpu_trace(model: Any, monitor: PhaseMonitor, requests: int, context: int,
-                      output_tokens: int, prompt_seed: int) -> list[dict[str, Any]]:
-    gpu = GPUWorker(model, context, output_tokens, monitor, prompt_seed=prompt_seed)
+                      output_tokens: int, prompt_seed: int, token_logging: bool,
+                      closed_loop_arrivals: bool) -> list[dict[str, Any]]:
+    gpu = GPUWorker(model, context, output_tokens, monitor, prompt_seed=prompt_seed,
+                    token_timestamp_logging=token_logging)
     gpu.start()
     tickets: list[GPUTicket] = []
     for sequence in range(requests):
         now = time.perf_counter()
+        now_ns = time.monotonic_ns() if token_logging else None
         empty = {"submitted": now, "started": now, "ended": now,
                  "queries": 0, "worker_id": -1}
-        ticket = GPUTicket(f"static-{sequence:03d}", sequence, now, empty, now)
+        ticket = GPUTicket(f"static-{sequence:03d}", sequence, now, empty, now,
+                           arrival_ns=now_ns, ready_for_gpu_ns=now_ns)
         tickets.append(ticket)
         gpu.submit(ticket)
+        if closed_loop_arrivals:
+            if not ticket.done.wait(timeout=3600):
+                raise TimeoutError(ticket.request_id)
+            if ticket.error:
+                raise ticket.error
     for ticket in tickets:
+        if closed_loop_arrivals:
+            continue
         if not ticket.done.wait(timeout=3600):
             raise TimeoutError(ticket.request_id)
         if ticket.error:
             raise ticket.error
     gpu.close()
     return [dict(ticket.result) for ticket in tickets if ticket.result is not None]
+
+
+def token_schema_valid(rows: list[dict[str, Any]], output_tokens: int,
+                       logging_enabled: bool) -> bool:
+    if len(rows) == 0:
+        return False
+    for row in rows:
+        if int(len(row.get("tpot_intervals_ms", []))) != output_tokens - 1:
+            return False
+        if not logging_enabled:
+            continue
+        tokens = [int(value) for value in row.get("token_ready_ns", [])]
+        ordered = [int(row[key]) for key in (
+            "request_arrival_ns", "gpu_queue_start_ns", "prefill_start_ns",
+            "prefill_end_ns", "decode_start_ns")]
+        ordered += tokens
+        ordered += [int(row["decode_end_ns"]), int(row["request_complete_ns"])]
+        if len(tokens) != output_tokens or any(b < a for a, b in zip(ordered, ordered[1:])):
+            return False
+    return True
+
+
+def flush_token_records(rows: list[dict[str, Any]], args: argparse.Namespace,
+                        run_id: str, run_key: str, label: str) -> None:
+    if not args.token_timestamp_logging:
+        return
+    path = ROOT / "raw/token_timestamps.jsonl.gz"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with gzip.open(path, "at", encoding="utf-8", compresslevel=6) as handle:
+        for row in rows:
+            record = {key: row[key] for key in (
+                "request_arrival_ns", "gpu_queue_start_ns", "prefill_start_ns",
+                "prefill_end_ns", "decode_start_ns", "token_ready_ns", "decode_end_ns",
+                "request_complete_ns")}
+            record.update({"run_id": run_id, "run_key": run_key, "request_id": row["request_id"],
+                           "trace_id": f"prompt-seed-{args.prompt_seed}",
+                           "repeat_id": args.repeat, "policy_id": label, "stage": args.stage,
+                           "attempt": args.attempt, "expected_tokens": args.output_tokens})
+            handle.write(json.dumps(record, separators=(",", ":")) + "\n")
+
+
+def quarter_ratio(values: list[float]) -> float:
+    width = max(1, len(values) // 4)
+    first = percentile(values[:width], 95)
+    last = percentile(values[-width:], 95)
+    return last / first if first else float("inf")
+
+
+def quarter_counter_rate_ratio(samples: list[dict[str, Any]], key: str) -> float:
+    if len(samples) < 8:
+        return 1.0
+    width = max(2, len(samples) // 4)
+    def rate(window: list[dict[str, Any]]) -> float:
+        elapsed = float(window[-1]["timestamp"]) - float(window[0]["timestamp"])
+        delta = int(window[-1][key]) - int(window[0][key])
+        return delta / elapsed if elapsed > 0 and delta >= 0 else 0.0
+    first, last = rate(samples[:width]), rate(samples[-width:])
+    return last / first if first else (1.0 if last == 0 else float("inf"))
 
 
 def policy_caps(args: argparse.Namespace) -> tuple[int, int]:
@@ -180,6 +250,8 @@ def policy_caps(args: argparse.Namespace) -> tuple[int, int]:
 
 
 def policy_name(args: argparse.Namespace) -> str:
+    if args.run_label:
+        return args.run_label
     if args.policy == "fixed":
         return f"fixed{args.fixed_workers}"
     if args.policy == "phasegate":
@@ -348,7 +420,8 @@ def run_block(args: argparse.Namespace) -> None:
         sampler.start()
         started = time.perf_counter()
         rows = execute_gpu_trace(model, monitor, args.llm_requests, args.context,
-                                 args.output_tokens, args.prompt_seed)
+                                 args.output_tokens, args.prompt_seed,
+                                 args.token_timestamp_logging, args.closed_loop_arrivals)
         duration = time.perf_counter() - started
         stop.set()
         sampler.join(timeout=10)
@@ -365,8 +438,10 @@ def run_block(args: argparse.Namespace) -> None:
                                     args.sentinel_tolerance, args.sentinel_cooldown,
                                     args.sentinel_attempts, args.sentinel_reps)
 
-    tpot_request = [float(row["p95_tpot_ms"]) for row in rows]
-    ttft_request = [float(row["ttft_ms"]) for row in rows]
+    tpot_request = [float(row["mean_tpot_ms"] if args.primary_request_tpot == "mean"
+                          else row["p95_tpot_ms"]) for row in rows]
+    ttft_request = [float(row["user_visible_ttft_ms"] if args.ttft_origin == "request_arrival"
+                          else row["ttft_ms"]) for row in rows]
     prefill_request = [float(row["prefill_ms"]) for row in rows]
     p95_tpot = percentile(tpot_request, 95)
     p95_ttft = percentile(ttft_request, 95)
@@ -391,6 +466,9 @@ def run_block(args: argparse.Namespace) -> None:
                         "decode_cap_overshoot_worker_max": 0.0,
                         "decode_cap_applied_fraction": 1.0})
     qps_drift = counter_rate_drift(samples, "completed_queries")
+    tpot_quarter_ratio = quarter_ratio(tpot_request)
+    ttft_quarter_ratio = quarter_ratio(ttft_request)
+    qps_quarter_ratio = quarter_counter_rate_ratio(samples, "completed_queries")
     prefill_applied = (float(np.mean(
         [int(row["permitted_workers"]) == prefill_cap for row in prefill_samples]
     )) if prefill_samples and manager is not None else 1.0)
@@ -400,10 +478,10 @@ def run_block(args: argparse.Namespace) -> None:
     ])) if manager is not None else 0.0)
     active_log_present = bool(prefill_samples and decode_samples)
     cap_applied = prefill_applied >= .95 and transition["decode_cap_applied_fraction"] >= .95
-    drift_clean = (
-        abs(tpot_drift - 1.0) <= args.within_block_drift_tolerance
-        and abs(ttft_drift - 1.0) <= args.within_block_drift_tolerance
-    )
+    drift_clean = (abs(tpot_quarter_ratio - 1.0) <= args.within_block_drift_tolerance
+                   and abs(ttft_quarter_ratio - 1.0) <= args.within_block_drift_tolerance)
+    qps_drift_clean = (args.policy == "llm-only"
+                       or abs(qps_quarter_ratio - 1.0) <= args.within_block_qps_drift_tolerance)
     memory_clean = int(delta["pageouts_delta"]) == 0 and int(delta["swap_used_delta_bytes"] or 0) == 0
     cpu_disabled_during_llm = prefill_cap == 0 and decode_cap == 0
     enough_progress = (
@@ -414,11 +492,19 @@ def run_block(args: argparse.Namespace) -> None:
         manager is None or decode_cap != 0
         or int(phase_counter_delta(samples, "DECODE", "admitted_queries")) == 0
     )
+    timestamps_valid = token_schema_valid(rows, args.output_tokens,
+                                          args.token_timestamp_logging)
+    request_count_exact = len(rows) == args.llm_requests
     validity = {
         "queue_saturated": args.policy == "llm-only" or queue_fraction >= .95,
         "memory_clean": memory_clean,
         "sentinel_clean": bool(sentinel_before["passed"] and sentinel_after["passed"]),
         "within_block_drift_clean": drift_clean,
+        "within_block_qps_drift_clean": qps_drift_clean,
+        "request_count_exact": request_count_exact,
+        "token_count_exact": request_count_exact and all(
+            len(row.get("tpot_intervals_ms", [])) == args.output_tokens - 1 for row in rows),
+        "token_timestamps_valid": timestamps_valid,
         "active_worker_log_present": active_log_present,
         "policy_cap_applied": args.policy == "llm-only" or cap_applied,
         "steady_duration_sufficient": duration >= args.min_duration_s,
@@ -438,6 +524,14 @@ def run_block(args: argparse.Namespace) -> None:
     tpot_pass = tpot_norm <= 1.10
     ttft_pass = ttft_norm <= 1.10
 
+    all_gaps = [float(value) for request in rows
+                for value in request.get("tpot_intervals_ms", [])]
+    transition_gaps = [float(request["prefill_to_first_token_gap_ms"]) for request in rows]
+    first_four_gaps = [float(value) for request in rows
+                       for value in request.get("first_4_inter_token_gaps_ms", [])]
+    per_request_max = [float(request["max_tpot_ms"]) for request in rows]
+    isolated_median_itg = None if baseline is None else baseline.get("median_inter_token_gap_ms")
+
     row = {
         "run_id": run_id, "run_key": run_key,
         "status": "valid" if all(validity.values()) else "invalid",
@@ -455,6 +549,25 @@ def run_block(args: argparse.Namespace) -> None:
         "p95_ttft_ms": p95_ttft,
         "prefill_latency_p50_ms": percentile(prefill_request, 50),
         "prefill_latency_p95_ms": percentile(prefill_request, 95),
+        "primary_request_tpot_metric": args.primary_request_tpot,
+        "ttft_origin": args.ttft_origin,
+        "token_timestamp_logging": args.token_timestamp_logging,
+        "token_timestamp_count": len(rows) * args.output_tokens if timestamps_valid else 0,
+        "inter_token_gap_count": len(all_gaps),
+        "p95_inter_token_gap_ms": percentile(all_gaps, 95),
+        "p99_inter_token_gap_ms": percentile(all_gaps, 99),
+        "max_inter_token_gap_ms": max(all_gaps),
+        "p95_transition_gap_ms": percentile(transition_gaps, 95),
+        "p99_transition_gap_ms": percentile(transition_gaps, 99),
+        "p95_first_four_decode_gap_ms": percentile(first_four_gaps, 95),
+        "p99_first_four_decode_gap_ms": percentile(first_four_gaps, 99),
+        "per_request_max_gap_p50_ms": percentile(per_request_max, 50),
+        "per_request_max_gap_p95_ms": percentile(per_request_max, 95),
+        "per_request_max_gap_p99_ms": percentile(per_request_max, 99),
+        "gap_fraction_over_2x_isolated_median": (None if isolated_median_itg is None else
+            float(np.mean(np.asarray(all_gaps) > 2 * float(isolated_median_itg)))),
+        "gap_fraction_over_3x_isolated_median": (None if isolated_median_itg is None else
+            float(np.mean(np.asarray(all_gaps) > 3 * float(isolated_median_itg)))),
         "normalized_p95_tpot": tpot_norm, "normalized_p95_ttft": ttft_norm,
         "tpot_slo_pass": tpot_pass, "ttft_slo_pass": ttft_pass,
         "joint_slo_pass": tpot_pass and ttft_pass, "raw_19ms_tpot_pass": p95_tpot <= 19.0,
@@ -507,6 +620,9 @@ def run_block(args: argparse.Namespace) -> None:
         "peak_mlx_memory_mb": measure.peak_mb(),
         "tpot_within_block_drift_ratio": tpot_drift,
         "ttft_within_block_drift_ratio": ttft_drift,
+        "tpot_first_last_quarter_p95_ratio": tpot_quarter_ratio,
+        "ttft_first_last_quarter_p95_ratio": ttft_quarter_ratio,
+        "retrieval_qps_first_last_quarter_ratio": qps_quarter_ratio,
         "tpot_within_block_slope_ms_per_s": tpot_slope,
         "ttft_within_block_slope_ms_per_s": ttft_slope,
         "retrieval_qps_first_third": qps_drift["first_qps"],
@@ -525,9 +641,18 @@ def run_block(args: argparse.Namespace) -> None:
         "worker_cap_changes": 0 if controller is None else controller.changes,
         "sample_count": len(samples), **delta,
     }
+    flush_started = time.perf_counter()
+    flush_token_records(rows, args, run_id, run_key, label)
+    token_flush_s = time.perf_counter() - flush_started if args.token_timestamp_logging else 0.0
+    row["token_log_flush_ms"] = token_flush_s * 1e3
+    row["wall_clock_with_logging_s"] = duration + token_flush_s
     append_jsonl(output, row)
+    compact_rows = [{key: value for key, value in request.items()
+                     if key not in {"token_ready_ns", "inter_token_gaps_ms",
+                                    "token_timestamps", "tpot_intervals_ms"}}
+                    for request in rows]
     append_jsonl(request_path(args.stage, args.smoke), {
-        "run_id": run_id, "run_key": run_key, "requests": rows})
+        "run_id": run_id, "run_key": run_key, "requests": compact_rows})
     timeline_dir = ROOT / args.stage / "raw" / ("smoke_timelines" if args.smoke else "timelines")
     timeline_dir.mkdir(parents=True, exist_ok=True)
     (timeline_dir / f"{run_key}.json").write_text(json.dumps({
@@ -590,6 +715,14 @@ def block_command(args: argparse.Namespace, policy: str, prefill: int, decode: i
                "--min-duration-s", str(args.min_duration_s),
                "--min-completed-queries", str(args.min_completed_queries),
                "--rss-sample-stride", str(args.rss_sample_stride)]
+    if args.run_label:
+        command += ["--run-label", args.run_label]
+    command += ["--primary-request-tpot", args.primary_request_tpot,
+                "--ttft-origin", args.ttft_origin]
+    if args.closed_loop_arrivals:
+        command.append("--closed-loop-arrivals")
+    if not args.token_timestamp_logging:
+        command.append("--no-token-timestamp-logging")
     if args.smoke:
         command.append("--smoke")
     if args.allow_fanless_pilot:
@@ -635,11 +768,13 @@ def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-one", action="store_true")
     ap.add_argument("--stage", choices=("smoke", "isolated_baseline", "characterization",
+                                        "token_logging_overhead", "baseline_revalidation",
                                         "calibration", "evaluation", "paired_pilot",
                                         "decodecap0_pilot"),
                     default="calibration")
     ap.add_argument("--policy", choices=("llm-only", "serialization", "fixed", "fixed0", "phasegate"),
                     default="llm-only")
+    ap.add_argument("--run-label")
     ap.add_argument("--fixed-workers", type=int, default=1)
     ap.add_argument("--prefill-cap", type=int, default=4)
     ap.add_argument("--decode-cap", type=int, default=1)
@@ -678,6 +813,12 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--min-duration-s", type=float, default=5.0)
     ap.add_argument("--min-completed-queries", type=int, default=1000)
     ap.add_argument("--baseline-file", type=Path)
+    ap.add_argument("--token-timestamp-logging", action=argparse.BooleanOptionalAction,
+                    default=True)
+    ap.add_argument("--closed-loop-arrivals", action="store_true")
+    ap.add_argument("--primary-request-tpot", choices=("mean", "p95"), default="p95")
+    ap.add_argument("--ttft-origin", choices=("prefill_start", "request_arrival"),
+                    default="prefill_start")
     ap.add_argument("--allow-battery", action="store_true")
     ap.add_argument("--allow-fanless-pilot", action="store_true")
     ap.add_argument("--smoke", action="store_true")

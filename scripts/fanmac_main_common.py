@@ -181,7 +181,17 @@ def ensure_block(pilot: Any, args: argparse.Namespace, item: tuple[str, str, int
     label, policy, prefill, decode = item
     args.smoke = smoke
     while True:
-        rows = [row for row in rows_for(pilot, args.stage, smoke)
+        stage_rows = rows_for(pilot, args.stage, smoke)
+        policy_rows = [row for row in stage_rows if row.get("policy") == label]
+        recent = sorted(policy_rows, key=lambda row: (int(row.get("repeat", -1)),
+                                                       int(row.get("attempt", -1))))[-2:]
+        if len(recent) == 2 and all(pageout_delta(row) > 0 for row in recent):
+            capture_pageout_halt(pilot, args.stage, label, recent)
+            raise RuntimeError(
+                f"halted {label}: two consecutive pageout-invalid attempts; "
+                "inspect the saved memory/process snapshot before resuming"
+            )
+        rows = [row for row in stage_rows
                 if row.get("policy") == label and int(row.get("repeat", -1)) == repeat]
         accepted = [row for row in rows if row.get("status") == "valid"]
         measured = [row for row in rows if "p95_tpot_ms" in row]
@@ -192,6 +202,34 @@ def ensure_block(pilot: Any, args: argparse.Namespace, item: tuple[str, str, int
             raise RuntimeError(f"could not obtain valid {stage_label(args.stage)} {label} repeat {repeat}")
         command = pilot.block_command(args, policy, prefill, decode, repeat, attempt)
         subprocess.run(command, cwd=REPO, check=True, env=os.environ.copy())
+
+
+def pageout_delta(row: dict[str, Any]) -> int:
+    values = [row.get("pageouts_delta")]
+    for key in ("preload_memory_preflight", "resident_memory_preflight"):
+        nested = row.get(key)
+        if isinstance(nested, dict):
+            values.append(nested.get("pageouts_delta"))
+    return max((int(value) for value in values if value is not None), default=0)
+
+
+def capture_pageout_halt(pilot: Any, stage: str, label: str,
+                         recent: list[dict[str, Any]]) -> None:
+    log_dir = pilot.ROOT / stage / "logs"
+    log_dir.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now().astimezone().strftime("%Y%m%dT%H%M%S%z")
+    commands = (["date"], ["sysctl", "vm.swapusage"], ["memory_pressure"], ["vm_stat"],
+                ["ps", "-axo", "pid,ppid,rss,vsz,%mem,etime,command"])
+    sections = ["Pageout retry halt", f"policy={label}",
+                "recent=" + json.dumps([{key: row.get(key) for key in
+                    ("run_key", "repeat", "attempt", "invalid_reason", "pageouts_delta")}
+                    for row in recent], default=str)]
+    for command in commands:
+        sections += ["", "$ " + " ".join(command), command_output(command)]
+    sections += ["", "$ process contamination scan",
+                 command_output(["pgrep", "-fl",
+                    "run_.*calibration|run_.*evaluation|run_static_phaseaware|phaseguard-cpu|python"])]
+    (log_dir / f"pageout_halt_{label}_{stamp}.txt").write_text("\n".join(sections) + "\n")
 
 
 def stage_label(stage: str) -> str:
