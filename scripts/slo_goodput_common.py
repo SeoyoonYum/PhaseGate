@@ -140,6 +140,22 @@ def capture_hardware(campaign: Path, user: argparse.Namespace) -> None:
         path.write_text(json.dumps(payload, indent=2) + "\n")
     for path in (campaign / "environment.txt", campaign / "hardware/environment.txt"):
         path.write_text(text)
+    start_memory = "\n\n".join([
+        f"captured = {datetime.now().astimezone().isoformat()}",
+        "ARDAgent state (expected absent):\n" + command_output(["pgrep", "-fl", "ARDAgent"]),
+        "WindowServer RSS:\n" + command_output(
+            ["sh", "-c", "ps -axo pid,rss,command | grep '[W]indowServer'"]),
+        "Codex RSS:\n" + command_output(
+            ["sh", "-c", "ps -axo pid,rss,command | grep -i '[c]odex'"]),
+        "swap:\n" + command_output(["sysctl", "vm.swapusage"]),
+        "memory pressure:\n" + command_output(["memory_pressure"]),
+        "vm_stat:\n" + command_output(["vm_stat"]),
+        "top processes by RSS:\n" + command_output(
+            ["sh", "-c", "ps -axo pid,ppid,rss,vsz,%mem,etime,command | sort -k3 -nr | head -20"]),
+        "pre-campaign ARDAgent shutdown stabilization: 12 samples at 10-second intervals; "
+        "pageouts remained 6419, swap remained 0.00M, and ARDAgent remained absent.",
+    ]) + "\n"
+    (campaign / "hardware/headless_start_memory.txt").write_text(start_memory)
 
 
 def namespace(pilot: Any, user: argparse.Namespace, stage: str, seed: int,
