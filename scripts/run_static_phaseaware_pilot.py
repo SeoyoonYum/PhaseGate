@@ -32,7 +32,7 @@ ROOT = Path(os.environ.get(
 sys.path.insert(0, str(REPO / "src"))
 from common import measure, models, thermal  # noqa: E402
 from phaseguard.context_validation import (AlwaysBackloggedHNSW, capture_state,
-    state_delta, total_rss_bytes)  # noqa: E402
+    state_delta, total_physical_footprint_bytes, total_rss_bytes)  # noqa: E402
 from phaseguard.cpu_task_manager import CPUTaskManager  # noqa: E402
 from phaseguard.metrics import append_jsonl, environment_metadata, percentile  # noqa: E402
 from phaseguard.phase_monitor import GPUPhase, PhaseMonitor  # noqa: E402
@@ -378,6 +378,7 @@ def run_block(args: argparse.Namespace) -> None:
                          "preload_memory_preflight": preload,
                          "resident_memory_preflight": resident})
             return
+        resident_physical_footprint = total_physical_footprint_bytes(pids)
 
         monitor = PhaseMonitor()
         controller = None
@@ -425,6 +426,7 @@ def run_block(args: argparse.Namespace) -> None:
         duration = time.perf_counter() - started
         stop.set()
         sampler.join(timeout=10)
+        measured_physical_footprint = total_physical_footprint_bytes(pids)
         host_after = capture_state(pids)
         q1 = manager.demand_snapshot() if manager is not None else zero_snapshot()
         l1 = load.snapshot() if load is not None else l0
@@ -617,6 +619,8 @@ def run_block(args: argparse.Namespace) -> None:
         **transition,
         "resident_memory_bytes": int(delta["experiment_rss_after_bytes"]),
         "peak_resident_memory_bytes": max([int(row["rss_bytes"]) for row in samples], default=0),
+        "resident_physical_footprint_bytes": resident_physical_footprint,
+        "measured_physical_footprint_bytes": measured_physical_footprint,
         "peak_mlx_memory_mb": measure.peak_mb(),
         "tpot_within_block_drift_ratio": tpot_drift,
         "ttft_within_block_drift_ratio": ttft_drift,
@@ -636,6 +640,7 @@ def run_block(args: argparse.Namespace) -> None:
         "sentinel_after_initial_deviation": sentinel_after["attempts"][0]["deviation"],
         "power_clean": power_clean, "host_model": host_model, "fan_capable": fan_capable,
         "memory_limit_gb": args.mem_limit_gb, "preload_memory_preflight": preload,
+        "retrieval_architecture": (None if manager is None else manager.retrieval_architecture),
         "resident_memory_preflight": resident, "validity": validity,
         "scheduler_overhead_ms": 0.0 if controller is None else controller.overhead_s * 1e3,
         "worker_cap_changes": 0 if controller is None else controller.changes,

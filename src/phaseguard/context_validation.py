@@ -63,6 +63,21 @@ def total_rss_bytes(pids: list[int]) -> int:
     return total
 
 
+def total_physical_footprint_bytes(pids: list[int]) -> int | None:
+    """Return summed macOS phys_footprint for the experiment process tree."""
+    total = 0
+    for pid in sorted(set([os.getpid(), *pids])):
+        raw = subprocess.run(
+            ["footprint", "-p", str(pid), "-f", "bytes", "--noCategories"],
+            capture_output=True, text=True, timeout=90,
+        ).stdout
+        match = re.search(r"phys_footprint:\s*([0-9]+)\s+B", raw)
+        if not match:
+            return None
+        total += int(match.group(1))
+    return total
+
+
 def capture_state(pids: list[int]) -> HostState:
     total, used, free = swap_usage()
     return HostState(time.time(), vm_snapshot(), total, used, free,
