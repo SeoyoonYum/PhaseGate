@@ -20,20 +20,20 @@ import numpy as np
 from fanmac_main_common import (CALIBRATION_POLICIES, SMOKE_POLICIES, INDEX, REPO,
                                 assert_environment, configure_root, ensure_block)
 
-CAMPAIGN_NAME = "fanmac_slo_goodput_tail_apple_m2_pro_20260802_headless_restart"
+CAMPAIGN_NAME = "fanmac_slo_goodput_tail_apple_m2_pro_20260803_headless_single_index_restart"
 DEFAULT_CAMPAIGN = REPO / "experiments/static_phaseaware" / CAMPAIGN_NAME
 SLO_DIRS = ("hardware", "smoke", "token_logging_overhead", "isolated_baseline",
             "calibration", "baseline_revalidation", "selection", "evaluation", "raw",
             "processed", "figures", "logs")
 CAMPAIGN_SEEDS = {
-    "smoke_prompt_trace": 720_260_801,
-    "logging_prompt_trace": 730_260_801,
-    "baseline_prompt_trace": 740_260_801,
-    "calibration_prompt_trace": 750_260_801,
-    "calibration_policy_order": 760_260_801,
-    "revalidation_prompt_trace": 770_260_801,
-    "evaluation_prompt_trace": 780_260_801,
-    "evaluation_policy_order": 790_260_801,
+    "smoke_prompt_trace": 840_263_001,
+    "logging_prompt_trace": 840_263_101,
+    "baseline_prompt_trace": 840_263_201,
+    "calibration_prompt_trace": 840_263_301,
+    "calibration_policy_order": 840_263_401,
+    "revalidation_prompt_trace": 840_263_501,
+    "evaluation_prompt_trace": 840_263_601,
+    "evaluation_policy_order": 840_263_701,
 }
 
 
@@ -42,7 +42,7 @@ def add_args(ap: argparse.ArgumentParser) -> None:
     ap.add_argument("--model", default="1.5B")
     ap.add_argument("--context", type=int, default=2048)
     ap.add_argument("--output-tokens", type=int, default=128)
-    ap.add_argument("--mem-limit-gb", type=float, default=6.0)
+    ap.add_argument("--mem-limit-gb", type=float, default=5.5)
     ap.add_argument("--min-headroom-gb", type=float, default=6.5)
     ap.add_argument("--memory-idle-seconds", type=float, default=30.0)
     ap.add_argument("--sentinel-cooldown", type=float, default=30.0)
@@ -65,6 +65,9 @@ def resolve(value: Path) -> Path:
             "ARDAgent_modified": True,
             "ARDAgent_state": "disabled_by_explicit_user_request",
             "previous_partial_campaign_reused": False,
+            "retrieval_architecture": "single_index_process_thread_pool",
+            "faiss_internal_threads_per_query": 1,
+            "mlx_memory_limit_gb": 5.5,
             "seeds": CAMPAIGN_SEEDS,
         }, indent=2) + "\n")
     return path
@@ -125,6 +128,9 @@ def capture_hardware(campaign: Path, user: argparse.Namespace) -> None:
         "ARDAgent_modified": True,
         "ARDAgent_state": "disabled_by_explicit_user_request",
         "previous_partial_campaign_reused": False,
+        "retrieval_architecture": "single_index_process_thread_pool",
+        "faiss_internal_threads_per_query": 1,
+        "mlx_memory_limit_gb": user.mem_limit_gb,
         "campaign_seeds": CAMPAIGN_SEEDS,
     }
     text = (hardware + "\n\n" + software + "\n\nRuntime versions:\n" +
@@ -134,6 +140,9 @@ def capture_hardware(campaign: Path, user: argparse.Namespace) -> None:
             "ARDAgent_modified = true\n"
             "ARDAgent_state = disabled_by_explicit_user_request\n"
             "previous_partial_campaign_reused = false\n"
+            "retrieval_architecture = single_index_process_thread_pool\n"
+            "faiss_internal_threads_per_query = 1\n"
+            f"mlx_memory_limit_gb = {user.mem_limit_gb}\n"
             f"campaign_uuid = {campaign_meta['campaign_uuid']}\n"
             f"campaign_seeds = {json.dumps(CAMPAIGN_SEEDS, sort_keys=True)}\n")
     for path in (campaign / "hardware.json", campaign / "hardware/hardware.json"):
@@ -152,8 +161,9 @@ def capture_hardware(campaign: Path, user: argparse.Namespace) -> None:
         "vm_stat:\n" + command_output(["vm_stat"]),
         "top processes by RSS:\n" + command_output(
             ["sh", "-c", "ps -axo pid,ppid,rss,vsz,%mem,etime,command | sort -k3 -nr | head -20"]),
-        "pre-campaign ARDAgent shutdown stabilization: 12 samples at 10-second intervals; "
-        "pageouts remained 6419, swap remained 0.00M, and ARDAgent remained absent.",
+        "Pre-campaign single-index full-size preflight passed at a frozen 5.5 GB MLX "
+        "limit; both Fixed-2 and PhaseGate 4→3 had zero pageout and zero swap growth. "
+        "ARDAgent remained absent by explicit user request.",
     ]) + "\n"
     (campaign / "hardware/headless_start_memory.txt").write_text(start_memory)
 
