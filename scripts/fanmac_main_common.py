@@ -7,6 +7,7 @@ import json
 import os
 import random
 import re
+import signal
 import subprocess
 import sys
 import time
@@ -195,13 +196,86 @@ def ensure_block(pilot: Any, args: argparse.Namespace, item: tuple[str, str, int
                 if row.get("policy") == label and int(row.get("repeat", -1)) == repeat]
         accepted = [row for row in rows if row.get("status") == "valid"]
         measured = [row for row in rows if "p95_tpot_ms" in row]
-        if accepted or (smoke and measured):
+        if accepted or (smoke and measured and pageout_delta(measured[-1]) == 0):
             return (accepted or measured)[-1]
+        if measured and pageout_delta(measured[-1]) > 0:
+            recover_after_pageout(pilot, args.stage, label, measured[-1])
         attempt = pilot.max_attempt(args.stage, smoke, label, repeat) + 1
         if attempt > args.max_attempts:
             raise RuntimeError(f"could not obtain valid {stage_label(args.stage)} {label} repeat {repeat}")
         command = pilot.block_command(args, policy, prefill, decode, repeat, attempt)
         subprocess.run(command, cwd=REPO, check=True, env=os.environ.copy())
+
+
+def _pageouts() -> int:
+    raw = command_output(["vm_stat"])
+    match = re.search(r"(?m)^Pageouts:\s*(\d+)", raw)
+    return int(match.group(1)) if match else -1
+
+
+def _swap_used_bytes() -> int | None:
+    raw = command_output(["sysctl", "vm.swapusage"])
+    match = re.search(r"used\s*=\s*([0-9.]+)([BKMG])", raw, re.I)
+    if not match:
+        return None
+    scale = {"B": 1, "K": 1024, "M": 1024**2, "G": 1024**3}
+    return int(float(match.group(1)) * scale[match.group(2).upper()])
+
+
+def _stale_experiment_pids() -> list[tuple[int, str]]:
+    raw = command_output(["ps", "-axo", "pid=,command="])
+    stale: list[tuple[int, str]] = []
+    for line in raw.splitlines():
+        fields = line.strip().split(maxsplit=1)
+        if len(fields) != 2 or not fields[0].isdigit():
+            continue
+        pid, command = int(fields[0]), fields[1]
+        if pid == os.getpid():
+            continue
+        if "run_static_phaseaware_pilot.py" in command or "phaseguard-faiss-index-owner" in command:
+            stale.append((pid, command))
+    return stale
+
+
+def recover_after_pageout(pilot: Any, stage: str, label: str, failed: dict[str, Any]) -> None:
+    """Clean stale workers and require a quiet 30-second recovery before one retry."""
+    log_dir = pilot.ROOT / stage / "logs"
+    log_dir.mkdir(parents=True, exist_ok=True)
+    before_pageouts, before_swap = _pageouts(), _swap_used_bytes()
+    stale_before = _stale_experiment_pids()
+    terminated: list[int] = []
+    for pid, _ in stale_before:
+        try:
+            os.kill(pid, signal.SIGTERM)
+            terminated.append(pid)
+        except ProcessLookupError:
+            pass
+    deadline = time.monotonic() + 10
+    while _stale_experiment_pids() and time.monotonic() < deadline:
+        time.sleep(.2)
+    time.sleep(30)
+    after_pageouts, after_swap = _pageouts(), _swap_used_bytes()
+    stale_after = _stale_experiment_pids()
+    pressure = command_output(["memory_pressure", "-Q"])
+    recovery = {
+        "failed_run_key": failed.get("run_key"), "policy": label,
+        "failed_pageouts": pageout_delta(failed), "terminated_pids": terminated,
+        "stale_before": stale_before, "stale_after": stale_after,
+        "idle_seconds": 30, "pageouts_before": before_pageouts,
+        "pageouts_after": after_pageouts,
+        "pageout_delta_during_recovery": after_pageouts - before_pageouts,
+        "swap_before_bytes": before_swap, "swap_after_bytes": after_swap,
+        "memory_pressure": pressure,
+        "process_snapshot": command_output(
+            ["ps", "-axo", "pid,ppid,rss,vsz,%mem,etime,command"]),
+    }
+    stamp = datetime.now().astimezone().strftime("%Y%m%dT%H%M%S%z")
+    (log_dir / f"pageout_recovery_{label}_{stamp}.json").write_text(
+        json.dumps(recovery, indent=2) + "\n")
+    swap_grew = (before_swap is not None and after_swap is not None and after_swap > before_swap)
+    if stale_after or recovery["pageout_delta_during_recovery"] > 0 or swap_grew:
+        raise RuntimeError(
+            f"pageout recovery failed for {label}; see {log_dir / f'pageout_recovery_{label}_{stamp}.json'}")
 
 
 def pageout_delta(row: dict[str, Any]) -> int:

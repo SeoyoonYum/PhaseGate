@@ -20,20 +20,20 @@ import numpy as np
 from fanmac_main_common import (CALIBRATION_POLICIES, SMOKE_POLICIES, INDEX, REPO,
                                 assert_environment, configure_root, ensure_block)
 
-CAMPAIGN_NAME = "fanmac_slo_goodput_tail_apple_m2_pro_20260803_headless_single_index_restart"
+CAMPAIGN_NAME = "fanmac_slo_goodput_tail_apple_m2_pro_20260803_headless_single_index_main"
 DEFAULT_CAMPAIGN = REPO / "experiments/static_phaseaware" / CAMPAIGN_NAME
 SLO_DIRS = ("hardware", "smoke", "token_logging_overhead", "isolated_baseline",
             "calibration", "baseline_revalidation", "selection", "evaluation", "raw",
             "processed", "figures", "logs")
 CAMPAIGN_SEEDS = {
-    "smoke_prompt_trace": 840_263_001,
-    "logging_prompt_trace": 840_263_101,
-    "baseline_prompt_trace": 840_263_201,
-    "calibration_prompt_trace": 840_263_301,
-    "calibration_policy_order": 840_263_401,
-    "revalidation_prompt_trace": 840_263_501,
-    "evaluation_prompt_trace": 840_263_601,
-    "evaluation_policy_order": 840_263_701,
+    "smoke_prompt_trace": 850_263_001,
+    "logging_prompt_trace": 850_263_101,
+    "baseline_prompt_trace": 850_263_201,
+    "calibration_prompt_trace": 850_263_301,
+    "calibration_policy_order": 850_263_401,
+    "revalidation_prompt_trace": 850_263_501,
+    "evaluation_prompt_trace": 850_263_601,
+    "evaluation_policy_order": 850_263_701,
 }
 
 
