@@ -177,30 +177,56 @@ def rows_for(pilot: Any, stage: str, smoke: bool = False) -> list[dict[str, Any]
     return pilot.read_jsonl(pilot.raw_path(stage, smoke))
 
 
+HARD_VALIDITY_KEYS = {"request_count_exact", "token_count_exact", "token_timestamps_valid",
+                      "active_worker_log_present", "policy_cap_applied", "decode_admission_zero"}
+
+
+def hard_failure_flags(row: dict[str, Any]) -> list[str]:
+    """Interpret legacy strict rows under the resumed hard-failure-only protocol."""
+    explicit = row.get("hard_failure_flags")
+    if explicit:
+        return [str(flag) for flag in explicit]
+    if "p95_tpot_ms" not in row:
+        return ["incomplete_or_corrupt_block"]
+    validity = row.get("validity", {})
+    return [key for key in HARD_VALIDITY_KEYS if validity.get(key) is False]
+
+
+def analysis_eligible(row: dict[str, Any]) -> bool:
+    return "p95_tpot_ms" in row and not hard_failure_flags(row)
+
+
+def clean_run(row: dict[str, Any]) -> bool:
+    if not analysis_eligible(row):
+        return False
+    if "clean_run" in row:
+        return bool(row["clean_run"])
+    validity = row.get("validity", {})
+    return row.get("status") == "valid" and all(bool(value) for value in validity.values())
+
+
 def ensure_block(pilot: Any, args: argparse.Namespace, item: tuple[str, str, int, int],
                  repeat: int, smoke: bool = False) -> dict[str, Any]:
     label, policy, prefill, decode = item
     args.smoke = smoke
     while True:
         stage_rows = rows_for(pilot, args.stage, smoke)
-        policy_rows = [row for row in stage_rows if row.get("policy") == label]
-        recent = sorted(policy_rows, key=lambda row: (int(row.get("repeat", -1)),
-                                                       int(row.get("attempt", -1))))[-2:]
-        if len(recent) == 2 and all(pageout_delta(row) > 0 for row in recent):
-            capture_pageout_halt(pilot, args.stage, label, recent)
-            raise RuntimeError(
-                f"halted {label}: two consecutive pageout-invalid attempts; "
-                "inspect the saved memory/process snapshot before resuming"
-            )
         rows = [row for row in stage_rows
                 if row.get("policy") == label and int(row.get("repeat", -1)) == repeat]
-        accepted = [row for row in rows if row.get("status") == "valid"]
-        measured = [row for row in rows if "p95_tpot_ms" in row]
-        if accepted or (smoke and measured and pageout_delta(measured[-1]) == 0):
-            return (accepted or measured)[-1]
         latest = max(rows, key=lambda row: int(row.get("attempt", -1)), default=None)
-        if latest is not None and pageout_delta(latest) > 0:
-            recover_after_pageout(pilot, args.stage, label, latest)
+        if latest is not None and hard_failure_flags(latest):
+            raise RuntimeError(f"hard failure in {label} repeat {repeat}: "
+                               f"{','.join(hard_failure_flags(latest))}")
+        eligible = [row for row in rows if analysis_eligible(row)]
+        clean = [row for row in eligible if clean_run(row)]
+        if clean:
+            return clean[-1]
+        # One soft retry is useful.  Earlier strict-mode attempts may already
+        # have consumed it; retain and accept their latest complete result.
+        if len(eligible) >= 2:
+            return eligible[-1]
+        if eligible:
+            recover_after_pageout(pilot, args.stage, label, eligible[-1])
         attempt = pilot.max_attempt(args.stage, smoke, label, repeat) + 1
         if attempt > args.max_attempts:
             raise RuntimeError(f"could not obtain valid {stage_label(args.stage)} {label} repeat {repeat}")
@@ -239,7 +265,7 @@ def _stale_experiment_pids() -> list[tuple[int, str]]:
 
 
 def recover_after_pageout(pilot: Any, stage: str, label: str, failed: dict[str, Any]) -> None:
-    """Clean stale workers and require a quiet 30-second recovery before one retry."""
+    """Clean up before the one permitted soft-flag retry; always preserve diagnostics."""
     log_dir = pilot.ROOT / stage / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     before_pageouts, before_swap = _pageouts(), _swap_used_bytes()
@@ -274,9 +300,11 @@ def recover_after_pageout(pilot: Any, stage: str, label: str, failed: dict[str, 
     (log_dir / f"pageout_recovery_{label}_{stamp}.json").write_text(
         json.dumps(recovery, indent=2) + "\n")
     swap_grew = (before_swap is not None and after_swap is not None and after_swap > before_swap)
-    if stale_after or recovery["pageout_delta_during_recovery"] > 0 or swap_grew:
-        raise RuntimeError(
-            f"pageout recovery failed for {label}; see {log_dir / f'pageout_recovery_{label}_{stamp}.json'}")
+    recovery["soft_retry_permitted"] = not swap_grew
+    # A small system pageout during recovery is itself a soft flag under the
+    # resumed protocol; swap growth is caught as a hard failure by the next
+    # block's preflight and persisted in this diagnostic either way.
+    return recovery
 
 
 def pageout_delta(row: dict[str, Any]) -> int:

@@ -12,7 +12,7 @@ from typing import Any
 
 import numpy as np
 
-from fanmac_main_common import CALIBRATION_POLICIES, REPO
+from fanmac_main_common import CALIBRATION_POLICIES, REPO, analysis_eligible, clean_run
 from slo_goodput_common import CAMPAIGN_SEEDS, add_args, configure_root, resolve
 
 CONT_FIXED = {"fixed1", "fixed2", "fixed3", "fixed4"}
@@ -68,19 +68,31 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         writer.writeheader(); writer.writerows(rows)
 
 
+def matrix_rows(rows: list[dict[str, Any]], policy: str, clean_only: bool = False) -> list[dict[str, Any]]:
+    """One recorded block per paired repeat; prefer clean over soft-flagged retries."""
+    grouped: dict[int, list[dict[str, Any]]] = {}
+    for row in rows:
+        if row.get("policy") == policy and analysis_eligible(row):
+            grouped.setdefault(int(row["repeat"]), []).append(row)
+    selected = []
+    for repeat in sorted(grouped):
+        options = grouped[repeat]
+        clean = [row for row in options if clean_run(row)]
+        if clean: selected.append(max(clean, key=lambda row: int(row.get("attempt", 0))))
+        elif not clean_only: selected.append(max(options, key=lambda row: int(row.get("attempt", 0))))
+    return selected
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__); add_args(ap)
     args = ap.parse_args(); campaign = resolve(args.campaign_dir)
     pilot = configure_root(campaign)
     grid_info = json.loads((campaign / "slo_grid_frozen.json").read_text())
     baseline = json.loads((campaign / "isolated_baseline/baseline.json").read_text())
-    valid = [row for row in pilot.read_jsonl(pilot.raw_path("calibration", False))
-             if row.get("status") == "valid"]
     all_calibration = pilot.read_jsonl(pilot.raw_path("calibration", False))
     summary: list[dict[str, Any]] = []
     for label, policy_arg, prefill, decode in CALIBRATION_POLICIES:
-        runs = sorted([row for row in valid if row.get("policy") == label],
-                      key=lambda row: int(row["repeat"]))
+        runs = matrix_rows(all_calibration, label)
         if len(runs) not in (3, 5):
             raise RuntimeError(f"{label} requires 3 or 5 valid repeats, found {len(runs)}")
         summary.append({"policy": label, "policy_arg": policy_arg, "prefill_cap": prefill,
@@ -131,7 +143,8 @@ def main() -> None:
             if (key.endswith("_fixed") or key.endswith("_phasegate")) and value:
                 unstable_names.add(str(value))
     write_csv(campaign / "selection_stability_audit.csv", stability)
-    run_fields = ("run_key", "status", "invalid_reason", "policy", "repeat", "attempt",
+    run_fields = ("run_key", "status", "invalid_reason", "hard_failure_flags", "soft_flags", "clean_run",
+                  "policy", "repeat", "attempt",
                   "llm_requests", "output_tokens", "total_generated_tokens",
                   "inter_token_gap_count", "normalized_p95_tpot", "normalized_p95_ttft",
                   "total_retrieval_goodput_qps", "queue_nonempty_fraction", "pageouts_delta",

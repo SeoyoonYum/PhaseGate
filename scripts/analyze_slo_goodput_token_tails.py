@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from slo_goodput_common import add_args, configure_root, resolve, write_csv
+from fanmac_main_common import analysis_eligible, clean_run
 
 BOOTSTRAP_SEED = 820260801
 
@@ -24,11 +25,19 @@ def median(rows: list[dict[str, Any]], key: str) -> float:
     return float(np.median([float(row[key]) for row in rows]))
 
 
-def valid_by_policy(rows: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
-    grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
+def valid_by_policy(rows: list[dict[str, Any]], clean_only: bool = False) -> dict[str, list[dict[str, Any]]]:
+    """Keep one paired block per repeat, preferring a clean retry when present."""
+    by_repeat: dict[tuple[str, int], list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
-        if row.get("status") == "valid":
-            grouped[str(row["policy"])].append(row)
+        if analysis_eligible(row):
+            by_repeat[(str(row["policy"]), int(row["repeat"]))].append(row)
+    grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for (policy, _), options in by_repeat.items():
+        clean = [row for row in options if clean_run(row)]
+        if clean:
+            grouped[policy].append(max(clean, key=lambda row: int(row.get("attempt", 0))))
+        elif not clean_only:
+            grouped[policy].append(max(options, key=lambda row: int(row.get("attempt", 0))))
     return grouped
 
 
@@ -89,13 +98,27 @@ def main() -> None:
     eval_all = pilot.read_jsonl(pilot.raw_path("evaluation", False))
     cal_all = pilot.read_jsonl(pilot.raw_path("calibration", False))
     groups = valid_by_policy(eval_all)
+    clean_groups = valid_by_policy(eval_all, clean_only=True)
     requests = request_records(campaign); tokens = token_records(campaign)
 
-    invalid = [r for stage in ("smoke", "token_logging_overhead", "isolated_baseline",
-               "calibration", "baseline_revalidation", "evaluation")
-               for r in pilot.read_jsonl(pilot.raw_path(stage, stage == "smoke"))
-               if r.get("status") != "valid"]
+    all_attempts = [r for stage in ("smoke", "token_logging_overhead", "isolated_baseline",
+                    "calibration", "baseline_revalidation", "evaluation")
+                    for r in pilot.read_jsonl(pilot.raw_path(stage, stage == "smoke"))]
+    invalid = [r for r in all_attempts if not analysis_eligible(r)]
+    soft_attempts = [r for r in all_attempts if analysis_eligible(r) and not clean_run(r)]
     write_csv(campaign / "invalid_runs.csv", invalid)
+    write_csv(campaign / "soft_flag_runs.csv", soft_attempts)
+    flags = []
+    for stage in sorted({str(r.get("stage")) for r in all_attempts}):
+        for policy in sorted({str(r.get("policy")) for r in all_attempts if str(r.get("stage")) == stage}):
+            rows = [r for r in all_attempts if str(r.get("stage")) == stage and str(r.get("policy")) == policy]
+            soft = [r for r in rows if analysis_eligible(r) and not clean_run(r)]
+            flag_types = sorted({flag for r in soft for flag in r.get("soft_flags", [])}
+                                | {str(r.get("invalid_reason")) for r in soft if r.get("invalid_reason")})
+            flags.append({"stage": stage, "policy": policy, "attempts": len(rows),
+                          "hard_failures": sum(not analysis_eligible(r) for r in rows),
+                          "soft_flagged_attempts": len(soft), "soft_flag_types": ";".join(flag_types)})
+    write_csv(campaign / "run_flag_summary.csv", flags)
 
     summary = []
     for policy, rows in sorted(groups.items()):
@@ -112,6 +135,22 @@ def main() -> None:
             "swap_invalid_attempts": sum(int(r.get("swap_used_delta_bytes") or 0) > 0 for r in eval_all
                                           if r.get("policy") == policy)})
     write_csv(campaign / "evaluation_summary_by_policy.csv", summary)
+
+    sensitivity = []
+    for policy in sorted(set(groups) | set(clean_groups)):
+        inclusive, clean = groups.get(policy, []), clean_groups.get(policy, [])
+        sensitivity.append({"policy": policy, "inclusive_repeats": len(inclusive),
+                            "clean_repeats": len(clean),
+                            "inclusive_median_qps": (median(inclusive, "total_retrieval_goodput_qps")
+                                                     if inclusive else None),
+                            "clean_median_qps": (median(clean, "total_retrieval_goodput_qps")
+                                                 if clean else None),
+                            "inclusive_rank": None, "clean_rank": None})
+    for key in ("inclusive", "clean"):
+        ranked = sorted([row for row in sensitivity if row[f"{key}_median_qps"] is not None],
+                        key=lambda row: float(row[f"{key}_median_qps"]), reverse=True)
+        for rank, row in enumerate(ranked, 1): row[f"{key}_rank"] = rank
+    write_csv(campaign / "clean_run_sensitivity.csv", sensitivity)
 
     slo_rows, paired_rows = [], []
     for selection in frozen["selection_by_slo"]:
@@ -226,6 +265,12 @@ def main() -> None:
 
     primary_row = next(r for r in slo_rows if float(r["B"]) == primary)
     pgains = [float(r["paired_gain"]) for r in paired_rows if float(r["B"]) == primary]
+    primary_fixed, primary_gate = (primary_row["continuous_fixed"], primary_row["continuous_phasegate"])
+    clean_fixed = {int(r["repeat"]): r for r in clean_groups.get(primary_fixed or "", [])}
+    clean_gate = {int(r["repeat"]): r for r in clean_groups.get(primary_gate or "", [])}
+    clean_pgains = [float(clean_gate[repeat]["total_retrieval_goodput_qps"]) /
+                    float(clean_fixed[repeat]["total_retrieval_goodput_qps"]) - 1
+                    for repeat in sorted(set(clean_fixed) & set(clean_gate))]
     ci = boot_ci(pgains) if pgains else (float("nan"), float("nan"))
     report = ["> At the tightest predeclared joint TPOT/TTFT SLO admitting both continuous families, " +
         ("the frozen PhaseGate achieved higher held-out retrieval goodput." if pgains and np.median(pgains) > 0
@@ -238,6 +283,9 @@ def main() -> None:
         f"- Median retrieval QPS: {primary_row['fixed_qps']} / {primary_row['gate_qps']}",
         f"- Median paired gain (10,000 run-level bootstrap 95% CI): {np.median(pgains) if pgains else None} "
         f"({ci[0]}, {ci[1]})", f"- PhaseGate wins: {sum(x > 0 for x in pgains)}/{len(pgains)}", "",
+        f"- Clean-run sensitivity paired gain: {np.median(clean_pgains) if clean_pgains else None} "
+        f"from {len(clean_pgains)} paired clean repeats; direction agrees with inclusive analysis: "
+        f"{(bool(pgains and clean_pgains and np.sign(np.median(pgains)) == np.sign(np.median(clean_pgains)))).__str__().lower()}",
         "All conclusions above use only the fresh held-out evaluation. Individual requests and tokens were not "
         "treated as independent experimental repetitions. Sensitivity rows reuse policy runs and are correlated."]
     (campaign / "SLO_GOODPUT_TOKEN_TAIL_REPORT.md").write_text("\n".join(report) + "\n")

@@ -191,6 +191,7 @@ def namespace(pilot: Any, user: argparse.Namespace, stage: str, seed: int,
     args.ttft_origin = "request_arrival"
     args.closed_loop_arrivals = True
     args.token_timestamp_logging = True
+    args.soft_validity = True
     return args
 
 

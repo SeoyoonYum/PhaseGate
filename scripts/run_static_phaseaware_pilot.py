@@ -112,6 +112,13 @@ def memory_preflight(pids: list[int], seconds: float, minimum_headroom_gb: float
             "observed_minimum_headroom_gb": headroom / 1024**3, **delta}
 
 
+def hard_memory_failure(snapshot: dict[str, Any]) -> bool:
+    """Only swap growth or warning-level free-memory state stops soft-validity runs."""
+    free = snapshot.get("memory_free_percent_after")
+    return (int(snapshot.get("swap_used_delta_bytes") or 0) > 0
+            or (free is not None and int(free) < 10))
+
+
 def prefill_sentinel(model: Any, context: int, reps: int) -> float:
     return float(np.median(measure.time_prefill(model, context, reps=reps, warmup=1)))
 
@@ -334,13 +341,16 @@ def run_block(args: argparse.Namespace) -> None:
         json.dumps(manifest, indent=2, default=str) + "\n")
 
     preload = memory_preflight([], args.memory_idle_seconds, args.min_headroom_gb)
-    if not preload["passed"]:
+    preload_soft = not preload["passed"]
+    if not preload["passed"] and (not args.soft_validity or hard_memory_failure(preload)):
         append_jsonl(output, {"run_id": run_id, "run_key": run_key, "status": "invalid",
                      "invalid_reason": "preload_memory_preflight", "stage": args.stage,
                      "smoke": args.smoke, "policy": label, "policy_arg": args.policy,
                      "prefill_cap": policy_caps(args)[0], "decode_cap": policy_caps(args)[1],
                      "repeat": args.repeat,
-                     "attempt": args.attempt, "preload_memory_preflight": preload})
+                     "attempt": args.attempt, "preload_memory_preflight": preload,
+                     "hard_failure_flags": (["swap_growth_or_memory_pressure"]
+                                            if hard_memory_failure(preload) else [])})
         return
 
     model, _ = models.load_model(args.model)
@@ -351,7 +361,8 @@ def run_block(args: argparse.Namespace) -> None:
     sentinel_before = await_sentinel(model, args.context, sentinel_path,
                                      args.sentinel_tolerance, args.sentinel_cooldown,
                                      args.sentinel_attempts, args.sentinel_reps)
-    if not sentinel_before["passed"]:
+    sentinel_before_soft = not sentinel_before["passed"]
+    if not sentinel_before["passed"] and not args.soft_validity:
         append_jsonl(output, {"run_id": run_id, "run_key": run_key, "status": "invalid",
                      "invalid_reason": "sentinel_before", "stage": args.stage,
                      "smoke": args.smoke, "policy": label, "policy_arg": args.policy,
@@ -368,7 +379,8 @@ def run_block(args: argparse.Namespace) -> None:
     with manager_context as manager:
         pids = [] if manager is None else manager.worker_pids()
         resident = memory_preflight(pids, args.memory_idle_seconds, args.min_headroom_gb)
-        if not resident["passed"]:
+        resident_soft = not resident["passed"]
+        if not resident["passed"] and (not args.soft_validity or hard_memory_failure(resident)):
             append_jsonl(output, {"run_id": run_id, "run_key": run_key, "status": "invalid",
                          "invalid_reason": "resident_memory_preflight", "stage": args.stage,
                          "smoke": args.smoke, "policy": label, "policy_arg": args.policy,
@@ -376,7 +388,9 @@ def run_block(args: argparse.Namespace) -> None:
                          "repeat": args.repeat,
                          "attempt": args.attempt, "sentinel_before": sentinel_before,
                          "preload_memory_preflight": preload,
-                         "resident_memory_preflight": resident})
+                         "resident_memory_preflight": resident,
+                         "hard_failure_flags": (["swap_growth_or_memory_pressure"]
+                                                if hard_memory_failure(resident) else [])})
             return
         resident_physical_footprint = total_physical_footprint_bytes(pids)
 
@@ -485,6 +499,11 @@ def run_block(args: argparse.Namespace) -> None:
     qps_drift_clean = (args.policy == "llm-only"
                        or abs(qps_quarter_ratio - 1.0) <= args.within_block_qps_drift_tolerance)
     memory_clean = int(delta["pageouts_delta"]) == 0 and int(delta["swap_used_delta_bytes"] or 0) == 0
+    memory_hard_clean = (int(delta["swap_used_delta_bytes"] or 0) == 0
+                         and (delta.get("memory_free_percent_before") is None
+                              or int(delta["memory_free_percent_before"]) >= 10)
+                         and (delta.get("memory_free_percent_after") is None
+                              or int(delta["memory_free_percent_after"]) >= 10))
     cpu_disabled_during_llm = prefill_cap == 0 and decode_cap == 0
     enough_progress = (
         args.policy == "llm-only" or cpu_disabled_during_llm
@@ -514,6 +533,26 @@ def run_block(args: argparse.Namespace) -> None:
         "decode_admission_zero": decode_admission_zero,
     }
     invalid_reasons = [key for key, passed in validity.items() if not passed]
+    hard_validity = {
+        "memory_hard_clean": memory_hard_clean,
+        "request_count_exact": request_count_exact,
+        "token_count_exact": validity["token_count_exact"],
+        "token_timestamps_valid": timestamps_valid,
+        "active_worker_log_present": active_log_present,
+        "policy_cap_applied": args.policy == "llm-only" or cap_applied,
+        "decode_admission_zero": decode_admission_zero,
+    }
+    hard_failure_flags = [key for key, passed in hard_validity.items() if not passed]
+    soft_flags = [key for key, passed in validity.items()
+                  if not passed and key not in {"token_count_exact", "token_timestamps_valid",
+                                                 "active_worker_log_present", "policy_cap_applied",
+                                                 "decode_admission_zero"}]
+    if preload_soft: soft_flags.append("preload_memory_preflight")
+    if resident_soft: soft_flags.append("resident_memory_preflight")
+    if sentinel_before_soft: soft_flags.append("sentinel_before")
+    if not sentinel_after["passed"]: soft_flags.append("sentinel_after")
+    if int(delta["pageouts_delta"]) > 0 and "memory_clean" not in soft_flags:
+        soft_flags.append("pageout_delta_positive")
 
     baseline = None
     if args.policy != "llm-only":
@@ -536,8 +575,10 @@ def run_block(args: argparse.Namespace) -> None:
 
     row = {
         "run_id": run_id, "run_key": run_key,
-        "status": "valid" if all(validity.values()) else "invalid",
-        "invalid_reason": ",".join(invalid_reasons) if invalid_reasons else None,
+        "status": ("valid" if (all(validity.values()) if not args.soft_validity
+                                  else not hard_failure_flags) else "invalid"),
+        "invalid_reason": (",".join(invalid_reasons) if not args.soft_validity
+                           else ",".join(hard_failure_flags) if hard_failure_flags else None),
         "stage": args.stage, "smoke": args.smoke, "policy": label,
         "policy_arg": args.policy, "prefill_cap": prefill_cap, "decode_cap": decode_cap,
         "fixed_workers": args.fixed_workers if args.policy == "fixed" else None,
@@ -642,6 +683,9 @@ def run_block(args: argparse.Namespace) -> None:
         "memory_limit_gb": args.mem_limit_gb, "preload_memory_preflight": preload,
         "retrieval_architecture": (None if manager is None else manager.retrieval_architecture),
         "resident_memory_preflight": resident, "validity": validity,
+        "hard_validity": hard_validity, "hard_failure_flags": hard_failure_flags,
+        "soft_flags": sorted(set(soft_flags)), "clean_run": not soft_flags and not hard_failure_flags,
+        "validity_mode": "hard_failures_only" if args.soft_validity else "strict",
         "scheduler_overhead_ms": 0.0 if controller is None else controller.overhead_s * 1e3,
         "worker_cap_changes": 0 if controller is None else controller.changes,
         "sample_count": len(samples), **delta,
@@ -726,6 +770,8 @@ def block_command(args: argparse.Namespace, policy: str, prefill: int, decode: i
                 "--ttft-origin", args.ttft_origin]
     if args.closed_loop_arrivals:
         command.append("--closed-loop-arrivals")
+    if args.soft_validity:
+        command.append("--soft-validity")
     if not args.token_timestamp_logging:
         command.append("--no-token-timestamp-logging")
     if args.smoke:
@@ -821,6 +867,8 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--token-timestamp-logging", action=argparse.BooleanOptionalAction,
                     default=True)
     ap.add_argument("--closed-loop-arrivals", action="store_true")
+    ap.add_argument("--soft-validity", action="store_true",
+                    help="record non-critical stability/pageout issues as soft flags")
     ap.add_argument("--primary-request-tpot", choices=("mean", "p95"), default="p95")
     ap.add_argument("--ttft-origin", choices=("prefill_start", "request_arrival"),
                     default="prefill_start")

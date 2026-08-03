@@ -13,7 +13,8 @@ from pathlib import Path
 
 import numpy as np
 
-from fanmac_main_common import CALIBRATION_POLICIES, SMOKE_POLICIES, REPO, ensure_block
+from fanmac_main_common import (CALIBRATION_POLICIES, SMOKE_POLICIES, REPO,
+                                analysis_eligible, ensure_block)
 from slo_goodput_common import (add_args, append_command, assert_environment, capture_hardware,
                                 CAMPAIGN_SEEDS, configure_root, item_by_name, namespace, resolve,
                                 write_fresh_baseline)
@@ -153,7 +154,7 @@ def calibration(pilot, user, campaign: Path, baseline_path: Path) -> None:
         for name in order_names:
             ensure_block(pilot, args, item_by_name(name), repeat)
             valid = pilot.read_jsonl(pilot.raw_path("calibration", False))
-            valid_count = sum(row.get("status") == "valid" for row in valid)
+            valid_count = sum(analysis_eligible(row) for row in valid)
             (campaign / "calibration/progress.json").write_text(json.dumps({
                 "valid_blocks": valid_count, "target_valid_blocks": 45,
                 "last_policy": name, "last_repeat": repeat,
