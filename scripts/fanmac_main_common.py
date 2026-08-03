@@ -198,8 +198,9 @@ def ensure_block(pilot: Any, args: argparse.Namespace, item: tuple[str, str, int
         measured = [row for row in rows if "p95_tpot_ms" in row]
         if accepted or (smoke and measured and pageout_delta(measured[-1]) == 0):
             return (accepted or measured)[-1]
-        if measured and pageout_delta(measured[-1]) > 0:
-            recover_after_pageout(pilot, args.stage, label, measured[-1])
+        latest = max(rows, key=lambda row: int(row.get("attempt", -1)), default=None)
+        if latest is not None and pageout_delta(latest) > 0:
+            recover_after_pageout(pilot, args.stage, label, latest)
         attempt = pilot.max_attempt(args.stage, smoke, label, repeat) + 1
         if attempt > args.max_attempts:
             raise RuntimeError(f"could not obtain valid {stage_label(args.stage)} {label} repeat {repeat}")
