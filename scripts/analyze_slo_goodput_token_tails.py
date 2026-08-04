@@ -271,8 +271,23 @@ def main() -> None:
     clean_pgains = [float(clean_gate[repeat]["total_retrieval_goodput_qps"]) /
                     float(clean_fixed[repeat]["total_retrieval_goodput_qps"]) - 1
                     for repeat in sorted(set(clean_fixed) & set(clean_gate))]
+    clean_sensitivity = {
+        "primary_budget": primary,
+        "fixed_policy": primary_fixed,
+        "phasegate_policy": primary_gate,
+        "inclusive_paired_repeats": len(pgains),
+        "inclusive_median_paired_gain": float(np.median(pgains)) if pgains else None,
+        "clean_paired_repeats": len(clean_pgains),
+        "clean_median_paired_gain": float(np.median(clean_pgains)) if clean_pgains else None,
+        "conclusion": ("direction_agrees" if pgains and clean_pgains and
+                       np.sign(np.median(pgains)) == np.sign(np.median(clean_pgains))
+                       else "indeterminate_no_paired_clean_primary_repeats" if not clean_pgains
+                       else "direction_differs"),
+    }
+    write_csv(campaign / "clean_primary_sensitivity.csv", [clean_sensitivity])
     ci = boot_ci(pgains) if pgains else (float("nan"), float("nan"))
-    report = ["> At the tightest predeclared joint TPOT/TTFT SLO admitting both continuous families, " +
+    report = ["> In the inclusive non-hard-failure analysis, at the tightest predeclared joint TPOT/TTFT SLO " +
+        "admitting both continuous families, " +
         ("the frozen PhaseGate achieved higher held-out retrieval goodput." if pgains and np.median(pgains) > 0
          else "the frozen PhaseGate did not establish higher held-out retrieval goodput."), "",
         "# SLO Goodput and Token-Tail Report", "", f"- Frozen SLO grid: {frozen['frozen_slo_grid']}",
@@ -284,8 +299,9 @@ def main() -> None:
         f"- Median paired gain (10,000 run-level bootstrap 95% CI): {np.median(pgains) if pgains else None} "
         f"({ci[0]}, {ci[1]})", f"- PhaseGate wins: {sum(x > 0 for x in pgains)}/{len(pgains)}", "",
         f"- Clean-run sensitivity paired gain: {np.median(clean_pgains) if clean_pgains else None} "
-        f"from {len(clean_pgains)} paired clean repeats; direction agrees with inclusive analysis: "
-        f"{(bool(pgains and clean_pgains and np.sign(np.median(pgains)) == np.sign(np.median(clean_pgains)))).__str__().lower()}",
+        f"from {len(clean_pgains)} paired clean repeats; conclusion: {clean_sensitivity['conclusion']}.",
+        "- Clean-run caveat: a zero paired-clean count means soft-flag exclusion cannot independently "
+        "confirm or overturn the inclusive primary direction.",
         "All conclusions above use only the fresh held-out evaluation. Individual requests and tokens were not "
         "treated as independent experimental repetitions. Sensitivity rows reuse policy runs and are correlated."]
     (campaign / "SLO_GOODPUT_TOKEN_TAIL_REPORT.md").write_text("\n".join(report) + "\n")
