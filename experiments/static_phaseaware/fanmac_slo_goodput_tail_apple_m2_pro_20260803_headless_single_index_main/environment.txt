@@ -1,0 +1,72 @@
+Hardware:
+
+    Hardware Overview:
+
+      Model Name: Mac mini
+      Model Identifier: Mac14,12
+      Model Number: MNH73FN/A
+      Chip: Apple M2 Pro
+      Total Number of Cores: 10 (6 Performance and 4 Efficiency)
+      Memory: 16 GB
+      System Firmware Version: 18000.120.36
+      OS Loader Version: 18000.120.36
+      Serial Number (system): [redacted]
+      Hardware UUID: [redacted]
+      Provisioning UDID: [redacted]
+      Activation Lock Status: Disabled
+
+Graphics/Displays:
+
+    Apple M2 Pro:
+
+      Chipset Model: Apple M2 Pro
+      Type: GPU
+      Bus: Built-In
+      Total Number of Cores: 16
+      Vendor: Apple (0x106b)
+      Metal Support: Metal 4
+      Displays:
+        AOC28E850.HDR:
+          Resolution: 1920 x 1080 (1080p FHD - Full High Definition)
+          UI Looks like: 1920 x 1080 @ 120.00Hz
+          Main Display: Yes
+          Mirror: Off
+          Online: Yes
+          Rotation: Supported
+
+2026-08-03 02:19:46.449 system_profiler[30302:5100373] hw.cpufamily: 0xda33d83d
+
+Software:
+
+    System Software Overview:
+
+      System Version: macOS 26.5 (25F71)
+      Kernel Version: Darwin 25.5.0
+      Boot Volume: Macintosh HD
+      Boot Mode: Normal
+      Computer Name: [redacted]
+      User Name: [redacted]
+      Secure Virtual Memory: Enabled
+      System Integrity Protection: Enabled
+      Time since boot: 2 days, 1 hour, 33 minutes
+
+Runtime versions:
+{
+  "mlx": "0.31.2",
+  "mlx-lm": "0.31.3",
+  "faiss-cpu": "1.14.3",
+  "numpy": "2.4.6",
+  "matplotlib": "3.11.0"
+}
+MLX device: Device(gpu, 0)
+
+execution_mode = headless_ssh_tmux
+remote_desktop_active = false
+ARDAgent_modified = true
+ARDAgent_state = disabled_by_explicit_user_request
+previous_partial_campaign_reused = false
+retrieval_architecture = single_index_process_thread_pool
+faiss_internal_threads_per_query = 1
+mlx_memory_limit_gb = 5.5
+campaign_uuid = bf5613e5-1fa3-4b7b-bc6f-6a49d7ef395a
+campaign_seeds = {"baseline_prompt_trace": 850263201, "calibration_policy_order": 850263401, "calibration_prompt_trace": 850263301, "evaluation_policy_order": 850263701, "evaluation_prompt_trace": 850263601, "logging_prompt_trace": 850263101, "revalidation_prompt_trace": 850263501, "smoke_prompt_trace": 850263001}

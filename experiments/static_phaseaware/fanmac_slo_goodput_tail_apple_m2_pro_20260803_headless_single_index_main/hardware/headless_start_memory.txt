@@ -1,0 +1,93 @@
+captured = 2026-08-03T02:19:48.952119+02:00
+
+ARDAgent state (expected absent):
+
+
+WindowServer RSS:
+168 107024 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer -daemon
+
+Codex RSS:
+5363 285520 codex
+ 5823  28736 /Users/m1/.local/bin/codex-code-mode-host
+
+swap:
+vm.swapusage: total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)
+
+memory pressure:
+The system has 17179869184 (1048576 pages with a page size of 16384).
+
+Stats: 
+Pages free: 177118 
+Pages purgeable: 1758 
+Pages purged: 718367 
+
+Swap I/O:
+Swapins: 0 
+Swapouts: 0 
+
+Page Q counts:
+Pages active: 365954 
+Pages inactive: 364439 
+Pages speculative: 801 
+Pages throttled: 0 
+Pages wired down: 84171 
+
+Compressor Stats:
+Pages used by compressor: 22311 
+Pages decompressed: 48834 
+Pages compressed: 415429 
+
+File I/O:
+Pageins: 2591512 
+Pageouts: 6632 
+
+System-wide memory free percentage: 89%
+
+vm_stat:
+Mach Virtual Memory Statistics: (page size of 16384 bytes)
+Pages free:                                   177025.
+Pages active:                                 365955.
+Pages inactive:                               364439.
+Pages speculative:                               801.
+Pages throttled:                                   0.
+Pages wired down:                              84171.
+Pages purgeable:                                1758.
+"Translation faults":                      544157060.
+Pages copy-on-write:                        99954812.
+Pages zero filled:                         738708891.
+Pages reactivated:                            150974.
+Pages purged:                                 718367.
+File-backed pages:                            414865.
+Anonymous pages:                              316330.
+Pages stored in compressor:                    84204.
+Pages occupied by compressor:                  22311.
+Decompressions:                                48834.
+Compressions:                                 415429.
+Pageins:                                     2591513.
+Pageouts:                                       6632.
+Swapins:                                           0.
+Swapouts:                                          0.
+
+top processes by RSS:
+5363  5340 285520 435876400  1.7    15:21:27 codex
+  527     1 215376 441449712  1.3 02-01:26:29 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/corespotlightd
+  664     1 206832 435575344  1.2 02-01:26:27 /System/Library/PrivateFrameworks/MediaAnalysis.framework/Versions/A/mediaanalysisd
+  829     1 151888 435881568  0.9 02-01:26:18 /System/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal
+24229     1 142512 435865136  0.8    13:59:24 /System/Library/CoreServices/Spotlight.app/Contents/MacOS/Spotlight
+  168     1 107024 435687232  0.6 02-01:32:49 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer -daemon
+  185     1 105328 435487296  0.6 02-01:32:49 /usr/libexec/mobileassetd
+  650     1  90880 435948272  0.5 02-01:26:28 /usr/libexec/spotlightknowledged.updater -u
+  607     1  83392 435625120  0.5 02-01:26:28 /System/Library/CoreServices/NotificationCenter.app/Contents/MacOS/NotificationCenter
+  550     1  80736 435638656  0.5 02-01:26:29 /System/Library/CoreServices/ControlCenter.app/Contents/MacOS/ControlCenter
+  553     1  80320 435633888  0.5 02-01:26:29 /System/Library/CoreServices/Finder.app/Contents/MacOS/Finder
+  465     1  77808 436059280  0.5 02-01:28:43 /usr/sbin/spindump
+  330     1  74528 439879456  0.4 02-01:32:47 /System/Library/CoreServices/Software Update.app/Contents/Resources/softwareupdated
+  170     1  73408 435382192  0.4 02-01:32:49 /usr/sbin/coreaudiod
+  659     1  70640 435435616  0.4 02-01:26:27 /usr/libexec/duetexpertd
+  238     1  69056 435368816  0.4 02-01:32:49 /usr/libexec/syspolicyd
+  597     1  66256 435390848  0.4 02-01:26:29 /System/Library/PrivateFrameworks/ChronoCore.framework/Support/chronod
+   90     1  66144 435497488  0.4 02-01:32:50 /usr/libexec/logd
+  690     1  64512 439829056  0.4 02-01:26:27 /System/Library/PrivateFrameworks/AppleMediaServicesUI.framework/amsengagementd
+  756     1  64208 435575792  0.4 02-01:26:24 /System/Applications/Weather.app/Contents/PlugIns/WeatherWidget.appex/Contents/MacOS/WeatherWidget -LaunchArguments eyJlbmhhbmNlZFNlY3VyaXR5IjpmYWxzZSwidHlwZSI6MSwic2VydmljZU5hbWUiOiJjb20uYXBwbGUud2VhdGhlci53aWRnZXQifQ==
+
+Pre-campaign single-index full-size preflight passed at a frozen 5.5 GB MLX limit; both Fixed-2 and PhaseGate 4→3 had zero pageout and zero swap growth. ARDAgent remained absent by explicit user request.

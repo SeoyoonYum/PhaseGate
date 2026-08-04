@@ -1,0 +1,9 @@
+B,continuous_fixed,continuous_phasegate,decode_zero_phasegate,fixed0_feasible
+1.1,fixed1,phasegate4to1,,False
+1.15,fixed2,phasegate4to2,phasegate4to0,True
+1.2,fixed3,phasegate4to3,phasegate4to0,True
+1.25,fixed3,phasegate4to3,phasegate4to0,True
+1.3,fixed4,phasegate4to3,phasegate4to0,True
+1.35,fixed4,phasegate4to3,phasegate4to0,True
+1.4,fixed4,phasegate4to3,phasegate4to0,True
+1.45,fixed4,phasegate4to3,phasegate4to0,True

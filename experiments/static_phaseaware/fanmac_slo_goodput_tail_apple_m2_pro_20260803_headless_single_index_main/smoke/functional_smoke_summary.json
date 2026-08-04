@@ -1,0 +1,78 @@
+{
+  "purpose": "functional semantics and token schema only",
+  "checks": [
+    {
+      "policy": "fixed0",
+      "passed": true,
+      "tokens_per_request": 16,
+      "token_timestamp_count": 48,
+      "prefill_active_mean": 0.12878787878787878,
+      "decode_active_mean": 0.0,
+      "decode_admitted": 0,
+      "queue_nonempty_fraction": 1.0
+    },
+    {
+      "policy": "fixed1",
+      "passed": true,
+      "tokens_per_request": 16,
+      "token_timestamp_count": 48,
+      "prefill_active_mean": 1.0,
+      "decode_active_mean": 1.0,
+      "decode_admitted": 304,
+      "queue_nonempty_fraction": 1.0
+    },
+    {
+      "policy": "fixed2",
+      "passed": true,
+      "tokens_per_request": 16,
+      "token_timestamp_count": 48,
+      "prefill_active_mean": 2.0,
+      "decode_active_mean": 2.0,
+      "decode_admitted": 608,
+      "queue_nonempty_fraction": 1.0
+    },
+    {
+      "policy": "fixed4",
+      "passed": true,
+      "tokens_per_request": 16,
+      "token_timestamp_count": 48,
+      "prefill_active_mean": 4.0,
+      "decode_active_mean": 4.0,
+      "decode_admitted": 1072,
+      "queue_nonempty_fraction": 1.0
+    },
+    {
+      "policy": "phasegate4to0",
+      "passed": true,
+      "tokens_per_request": 16,
+      "token_timestamp_count": 48,
+      "prefill_active_mean": 4.0,
+      "decode_active_mean": 0.3333333333333333,
+      "decode_admitted": 0,
+      "queue_nonempty_fraction": 1.0
+    },
+    {
+      "policy": "phasegate4to1",
+      "passed": true,
+      "tokens_per_request": 16,
+      "token_timestamp_count": 48,
+      "prefill_active_mean": 3.991596638655462,
+      "decode_active_mean": 1.1636363636363636,
+      "decode_admitted": 304,
+      "queue_nonempty_fraction": 1.0
+    },
+    {
+      "policy": "phasegate4to2",
+      "passed": true,
+      "tokens_per_request": 16,
+      "token_timestamp_count": 48,
+      "prefill_active_mean": 3.9916666666666667,
+      "decode_active_mean": 2.0350877192982457,
+      "decode_admitted": 560,
+      "queue_nonempty_fraction": 1.0
+    }
+  ],
+  "all_passed": true,
+  "per_token_synchronous_io": false,
+  "persistence": "one gzip JSONL batch flush after each policy block"
+}

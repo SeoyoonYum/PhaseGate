@@ -1,0 +1,90 @@
+{
+  "source": "/Users/m1/kv-uma-research/experiments/static_phaseaware/fanmac_main_apple_m2_pro_20260801/calibration_runs.csv",
+  "source_campaign_commit": "ff1c4e8af36df40b0ac6b744fbf9162ded5f7857",
+  "audit_commit": "8ba6cbb3eb0d8e948f6ceef6898b753076022451",
+  "frozen_at": "2026-08-03T02:19:46.291235+02:00",
+  "extracted": {
+    "fixed1": {
+      "valid_runs": 3,
+      "normalized_tpot": [
+        1.2138837568982874,
+        1.1962935394776881,
+        1.2408760399940626
+      ],
+      "normalized_ttft": [
+        1.005985355754518,
+        1.0027889068217675,
+        0.9995690622593458
+      ],
+      "tpot_median": 1.2138837568982874,
+      "tpot_max": 1.2408760399940626,
+      "ttft_median": 1.0027889068217675,
+      "ttft_max": 1.005985355754518
+    },
+    "phasegate4to1": {
+      "valid_runs": 3,
+      "normalized_tpot": [
+        1.2251109057669658,
+        1.2279525894692929,
+        1.2102290211386357
+      ],
+      "normalized_ttft": [
+        1.014754222871042,
+        1.0133176899831084,
+        1.0098123388974722
+      ],
+      "tpot_median": 1.2251109057669658,
+      "tpot_max": 1.2279525894692929,
+      "ttft_median": 1.0133176899831084,
+      "ttft_max": 1.014754222871042
+    },
+    "fixed2": {
+      "valid_runs": 3,
+      "normalized_tpot": [
+        1.3917382332317871,
+        1.3961197197172,
+        1.3881779389362365
+      ],
+      "normalized_ttft": [
+        1.0122081527014042,
+        1.005575399130327,
+        1.0047228319167658
+      ],
+      "tpot_median": 1.3917382332317871,
+      "tpot_max": 1.3961197197172,
+      "ttft_median": 1.005575399130327,
+      "ttft_max": 1.0122081527014042
+    },
+    "phasegate4to2": {
+      "valid_runs": 3,
+      "normalized_tpot": [
+        1.3973568091632822,
+        1.399912952065626,
+        1.4136210681716466
+      ],
+      "normalized_ttft": [
+        1.0217027969141266,
+        1.0114586952977138,
+        1.012590620972162
+      ],
+      "tpot_median": 1.399912952065626,
+      "tpot_max": 1.4136210681716466,
+      "ttft_median": 1.012590620972162,
+      "ttft_max": 1.0217027969141266
+    }
+  },
+  "relevant_max": 1.4136210681716466,
+  "B_max": 1.45,
+  "frozen_slo_grid": [
+    1.1,
+    1.15,
+    1.2,
+    1.25,
+    1.3,
+    1.35,
+    1.4,
+    1.45
+  ],
+  "frozen_before_new_calibration": true,
+  "frozen_before_new_evaluation": true
+}

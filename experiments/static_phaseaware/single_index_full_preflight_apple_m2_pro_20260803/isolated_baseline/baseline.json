@@ -1,0 +1,12 @@
+{
+  "stage": "isolated_baseline",
+  "smoke": false,
+  "valid_repeats": 1,
+  "p95_tpot_ms": 8.585833803937007,
+  "p95_ttft_ms": 1355.4865122,
+  "tpot_slo_multiplier": 1.1,
+  "ttft_slo_multiplier": 1.1,
+  "run_keys": [
+    "static_isolated_baseline_llm-only_r00_a01"
+  ]
+}

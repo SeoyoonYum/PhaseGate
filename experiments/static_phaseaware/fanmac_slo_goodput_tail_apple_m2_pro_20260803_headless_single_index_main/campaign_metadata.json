@@ -1,0 +1,22 @@
+{
+  "campaign_uuid": "bf5613e5-1fa3-4b7b-bc6f-6a49d7ef395a",
+  "created": "2026-08-03T02:19:46.182173+02:00",
+  "execution_mode": "headless_ssh_tmux",
+  "remote_desktop_active": false,
+  "ARDAgent_modified": true,
+  "ARDAgent_state": "disabled_by_explicit_user_request",
+  "previous_partial_campaign_reused": false,
+  "retrieval_architecture": "single_index_process_thread_pool",
+  "faiss_internal_threads_per_query": 1,
+  "mlx_memory_limit_gb": 5.5,
+  "seeds": {
+    "smoke_prompt_trace": 850263001,
+    "logging_prompt_trace": 850263101,
+    "baseline_prompt_trace": 850263201,
+    "calibration_prompt_trace": 850263301,
+    "calibration_policy_order": 850263401,
+    "revalidation_prompt_trace": 850263501,
+    "evaluation_prompt_trace": 850263601,
+    "evaluation_policy_order": 850263701
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "prompt_seed_base": 850263301,
+  "query_seed_offset": 5000,
+  "policy_order_seed_base": 850263401,
+  "repeats": 3,
+  "orders": [
+    [
+      "phasegate3to1",
+      "phasegate3to0",
+      "fixed3",
+      "phasegate4to2",
+      "phasegate4to0",
+      "phasegate2to1",
+      "phasegate4to3",
+      "fixed0",
+      "phasegate1to0",
+      "fixed4",
+      "phasegate2to0",
+      "fixed1",
+      "fixed2",
+      "phasegate3to2",
+      "phasegate4to1"
+    ],
+    [
+      "fixed1",
+      "phasegate3to2",
+      "phasegate4to3",
+      "fixed2",
+      "fixed0",
+      "phasegate2to0",
+      "phasegate4to2",
+      "phasegate1to0",
+      "phasegate3to1",
+      "phasegate4to0",
+      "fixed4",
+      "phasegate3to0",
+      "phasegate2to1",
+      "phasegate4to1",
+      "fixed3"
+    ],
+    [
+      "fixed0",
+      "phasegate2to1",
+      "phasegate3to1",
+      "phasegate4to0",
+      "phasegate3to0",
+      "phasegate4to1",
+      "fixed1",
+      "phasegate2to0",
+      "phasegate1to0",
+      "fixed3",
+      "phasegate3to2",
+      "phasegate4to3",
+      "phasegate4to2",
+      "fixed4",
+      "fixed2"
+    ]
+  ],
+  "requests_per_block": 100,
+  "tokens_per_request": 128,
+  "policy_grid_frozen_before_run": true
+}

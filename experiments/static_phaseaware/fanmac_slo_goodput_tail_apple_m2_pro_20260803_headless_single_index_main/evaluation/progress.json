@@ -1,0 +1,15 @@
+{
+  "completed_paired_repeats": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "target_paired_repeats": 7,
+  "policies_per_repeat": 10,
+  "updated": "2026-08-04T16:23:38.991073+02:00",
+  "resume_source": "evaluation/raw/runs.jsonl"
+}

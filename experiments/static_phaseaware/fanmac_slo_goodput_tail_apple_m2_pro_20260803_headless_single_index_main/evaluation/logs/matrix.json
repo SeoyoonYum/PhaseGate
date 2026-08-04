@@ -1,0 +1,113 @@
+{
+  "started_from_frozen_selection": true,
+  "started": "2026-08-03T13:42:30.282014+02:00",
+  "held_out_seed_base": 850263601,
+  "query_seed_offset": 5000,
+  "policy_order_seed_base": 850263701,
+  "repeats": 7,
+  "requests_per_block": 250,
+  "tokens_per_request": 128,
+  "selection_file": "/Users/m1/kv-uma-research/experiments/static_phaseaware/fanmac_slo_goodput_tail_apple_m2_pro_20260803_headless_single_index_main/frozen_slo_selection.json",
+  "selection_sha256": "67048ec82f8611f0abda1df5ffe50f1da13a9e027b7c1bf1e752c048d8e25a8a",
+  "baseline_file": "/Users/m1/kv-uma-research/experiments/static_phaseaware/fanmac_slo_goodput_tail_apple_m2_pro_20260803_headless_single_index_main/isolated_baseline/baseline.json",
+  "policies": [
+    "llm-only",
+    "fixed0",
+    "fixed1",
+    "fixed2",
+    "fixed3",
+    "fixed4",
+    "phasegate4to0",
+    "phasegate4to1",
+    "phasegate4to2",
+    "phasegate4to3"
+  ],
+  "orders": [
+    [
+      "fixed3",
+      "fixed0",
+      "phasegate4to0",
+      "phasegate4to1",
+      "fixed2",
+      "fixed1",
+      "phasegate4to2",
+      "llm-only",
+      "fixed4",
+      "phasegate4to3"
+    ],
+    [
+      "phasegate4to1",
+      "phasegate4to3",
+      "fixed4",
+      "fixed1",
+      "phasegate4to2",
+      "phasegate4to0",
+      "fixed0",
+      "fixed2",
+      "llm-only",
+      "fixed3"
+    ],
+    [
+      "fixed0",
+      "phasegate4to0",
+      "fixed3",
+      "phasegate4to1",
+      "fixed1",
+      "phasegate4to2",
+      "fixed4",
+      "llm-only",
+      "fixed2",
+      "phasegate4to3"
+    ],
+    [
+      "phasegate4to3",
+      "fixed1",
+      "phasegate4to1",
+      "fixed2",
+      "llm-only",
+      "fixed3",
+      "fixed0",
+      "phasegate4to2",
+      "fixed4",
+      "phasegate4to0"
+    ],
+    [
+      "phasegate4to2",
+      "fixed1",
+      "fixed4",
+      "phasegate4to1",
+      "fixed3",
+      "phasegate4to0",
+      "llm-only",
+      "fixed2",
+      "fixed0",
+      "phasegate4to3"
+    ],
+    [
+      "phasegate4to2",
+      "fixed1",
+      "fixed2",
+      "phasegate4to1",
+      "phasegate4to0",
+      "fixed3",
+      "phasegate4to3",
+      "fixed4",
+      "llm-only",
+      "fixed0"
+    ],
+    [
+      "phasegate4to0",
+      "fixed2",
+      "llm-only",
+      "fixed1",
+      "phasegate4to3",
+      "fixed0",
+      "fixed3",
+      "phasegate4to2",
+      "fixed4",
+      "phasegate4to1"
+    ]
+  ],
+  "traces_predeclared": true,
+  "finished": "2026-08-04T16:23:38.991467+02:00"
+}

@@ -1,0 +1,91 @@
+Sun Aug  2 11:29:14 CEST 2026
+vm.swapusage: total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)
+The system has 17179869184 (1048576 pages with a page size of 16384).
+
+Stats: 
+Pages free: 242143 
+Pages purgeable: 5144 
+Pages purged: 484571 
+
+Swap I/O:
+Swapins: 0 
+Swapouts: 0 
+
+Page Q counts:
+Pages active: 302968 
+Pages inactive: 357984 
+Pages speculative: 10208 
+Pages throttled: 0 
+Pages wired down: 79306 
+
+Compressor Stats:
+Pages used by compressor: 22168 
+Pages decompressed: 34917 
+Pages compressed: 400636 
+
+File I/O:
+Pageins: 2268994 
+Pageouts: 6419 
+
+System-wide memory free percentage: 89%
+Mach Virtual Memory Statistics: (page size of 16384 bytes)
+Pages free:                                   242110.
+Pages active:                                 302969.
+Pages inactive:                               357984.
+Pages speculative:                             10208.
+Pages throttled:                                   0.
+Pages wired down:                              79306.
+Pages purgeable:                                5144.
+"Translation faults":                      425704452.
+Pages copy-on-write:                        78410367.
+Pages zero filled:                         533132525.
+Pages reactivated:                            139968.
+Pages purged:                                 484571.
+File-backed pages:                            388943.
+Anonymous pages:                              282218.
+Pages stored in compressor:                    86961.
+Pages occupied by compressor:                  22168.
+Decompressions:                                34917.
+Compressions:                                 400636.
+Pageins:                                     2268995.
+Pageouts:                                       6419.
+Swapins:                                           0.
+Swapouts:                                          0.
+ 5363  5340 206560 435858224  1.2       30:53 codex
+  664     1 206496 435575344  1.2 01-10:35:53 /System/Library/PrivateFrameworks/MediaAnalysis.framework/Versions/A/mediaanalysisd
+  527     1 175664 443608320  1.0 01-10:35:55 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/corespotlightd
+  829     1 151968 435881568  0.9 01-10:35:44 /System/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal
+  330     1 116096 439879456  0.7 01-10:42:13 /System/Library/CoreServices/Software Update.app/Contents/Resources/softwareupdated
+  168     1 108144 435684464  0.6 01-10:42:15 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer -daemon
+  650     1  89376 435947760  0.5 01-10:35:54 /usr/libexec/spotlightknowledged.updater -u
+  607     1  83712 435626912  0.5 01-10:35:54 /System/Library/CoreServices/NotificationCenter.app/Contents/MacOS/NotificationCenter
+  185     1  81216 435470816  0.5 01-10:42:15 /usr/libexec/mobileassetd
+  550     1  80816 435639216  0.5 01-10:35:55 /System/Library/CoreServices/ControlCenter.app/Contents/MacOS/ControlCenter
+  553     1  80272 435633328  0.5 01-10:35:55 /System/Library/CoreServices/Finder.app/Contents/MacOS/Finder
+  465     1  76720 436059280  0.5 01-10:38:09 /usr/sbin/spindump
+  170     1  73424 435382752  0.4 01-10:42:15 /usr/sbin/coreaudiod
+  659     1  68736 435435616  0.4 01-10:35:53 /usr/libexec/duetexpertd
+  238     1  67984 435368816  0.4 01-10:42:15 /usr/libexec/syspolicyd
+  597     1  66112 435390848  0.4 01-10:35:55 /System/Library/PrivateFrameworks/ChronoCore.framework/Support/chronod
+  666     1  65152 435365520  0.4 01-10:35:53 /System/Library/CoreServices/Dock.app/Contents/XPCServices/com.apple.dock.extra.xpc/Contents/MacOS/com.apple.dock.extra
+  756     1  64112 435576432  0.4 01-10:35:50 /System/Applications/Weather.app/Contents/PlugIns/WeatherWidget.appex/Contents/MacOS/WeatherWidget -LaunchArguments eyJlbmhhbmNlZFNlY3VyaXR5IjpmYWxzZSwidHlwZSI6MSwic2VydmljZU5hbWUiOiJjb20uYXBwbGUud2VhdGhlci53aWRnZXQifQ==
+   90     1  62304 435494880  0.4 01-10:42:16 /usr/libexec/logd
+  560     1  59632 435561648  0.4 01-10:35:55 /System/Library/CoreServices/AccessibilityUIServer.app/Contents/MacOS/AccessibilityUIServer
+7434 /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/MacOS/ARDAgent
+168 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer -daemon
+{"status":"valid","invalid_reason":null,"llm_requests":20,"total_generated_tokens":2560,"tokens_per_request":128,"queue_nonempty_fraction":1.0,"total_retrieval_goodput_qps":2650.001475654245,"p95_tpot_ms":10.553812437007874,"p95_ttft_ms":1366.77767675,"peak_resident_memory_bytes":2167472128,"pageouts_delta":0,"swap_used_delta_bytes":0,"memory_free_percent_before":89,"memory_free_percent_after":84,"validity":{"active_worker_log_present":true,"completion_count_sufficient":true,"decode_admission_zero":true,"memory_clean":true,"policy_cap_applied":true,"queue_saturated":true,"request_count_exact":true,"sentinel_clean":true,"steady_duration_sufficient":true,"token_count_exact":true,"token_timestamps_valid":true,"within_block_drift_clean":true,"within_block_qps_drift_clean":true}}
+experiments/static_phaseaware/headless_quick_preflight/after_rdp_close.txt
+experiments/static_phaseaware/headless_quick_preflight/before_rdp_close.txt
+experiments/static_phaseaware/headless_quick_preflight/calibration/logs/sentinel_ctx2048_mem6.json
+experiments/static_phaseaware/headless_quick_preflight/calibration/logs/static_calibration_phasegate4to3_quick20_r00_a01_manifest.json
+experiments/static_phaseaware/headless_quick_preflight/calibration/raw/requests.jsonl
+experiments/static_phaseaware/headless_quick_preflight/calibration/raw/runs.jsonl
+experiments/static_phaseaware/headless_quick_preflight/calibration/raw/timelines/static_calibration_phasegate4to3_quick20_r00_a01.json
+experiments/static_phaseaware/headless_quick_preflight/idle_memory_timeseries.csv
+experiments/static_phaseaware/headless_quick_preflight/idle_memory_timeseries_pre_ard_termination_attempt.csv
+experiments/static_phaseaware/headless_quick_preflight/load_warmup_check.json
+experiments/static_phaseaware/headless_quick_preflight/phasegate4to3_quick20_monitor.log
+experiments/static_phaseaware/headless_quick_preflight/raw/token_timestamps.jsonl.gz
+?? experiments/static_phaseaware/headless_quick_preflight/
+?? scripts/run_headless_load_check.py
+

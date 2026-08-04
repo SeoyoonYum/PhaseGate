@@ -1,0 +1,198 @@
+{
+  "captured": "2026-08-03T01:35:08.897932+02:00",
+  "index": "/Users/m1/kv-uma-research/experiments/phaseguard/index/hnsw_100k_d384.faiss",
+  "index_bytes": 180820834,
+  "faiss_internal_threads_per_query": 1,
+  "fixed_query_equivalence": {
+    "query_count": 256,
+    "top_k": 10,
+    "old_vs_shared_ids_exact": true,
+    "old_vs_concurrent_ids_exact": true,
+    "old_vs_shared_distances_close": true,
+    "old_vs_concurrent_distances_close": true,
+    "maximum_absolute_distance_difference": 0.0
+  },
+  "manager_equivalence_and_accounting": {
+    "architecture": "single_index_process_thread_pool",
+    "owner_pid_count": 1,
+    "logical_worker_count": 4,
+    "manager_query_count_match": true,
+    "manager_checksum_absolute_difference": 0.0,
+    "submitted_task_ids_unique": true,
+    "completed_request_ids_unique": true,
+    "completed_request_ids_exact": true,
+    "expected_accounting_queries": 8192,
+    "accounted_queries": 8192,
+    "no_query_loss_or_duplicate_completion": true,
+    "result_errors": []
+  },
+  "concurrency": {
+    "fixed_caps": [
+      {
+        "cap": 0,
+        "samples": 1949,
+        "active_mean": 0.0,
+        "active_p95": 0.0,
+        "active_max": 0,
+        "queue_nonempty_fraction": 1.0,
+        "retrieval_qps": 0.0,
+        "transition_convergence_ms": 11.224833986489102,
+        "cap_never_exceeded_after_convergence": true
+      },
+      {
+        "cap": 1,
+        "samples": 1984,
+        "active_mean": 0.9994959677419355,
+        "active_p95": 1.0,
+        "active_max": 1,
+        "queue_nonempty_fraction": 1.0,
+        "retrieval_qps": 1023.7307871233653,
+        "transition_convergence_ms": 0.013999990187585354,
+        "cap_never_exceeded_after_convergence": true
+      },
+      {
+        "cap": 2,
+        "samples": 2118,
+        "active_mean": 1.9976392823418319,
+        "active_p95": 2.0,
+        "active_max": 2,
+        "queue_nonempty_fraction": 1.0,
+        "retrieval_qps": 2047.8374808860658,
+        "transition_convergence_ms": 0.0043330073822289705,
+        "cap_never_exceeded_after_convergence": true
+      },
+      {
+        "cap": 3,
+        "samples": 1983,
+        "active_mean": 2.9979828542612204,
+        "active_p95": 3.0,
+        "active_max": 3,
+        "queue_nonempty_fraction": 1.0,
+        "retrieval_qps": 2729.729535066309,
+        "transition_convergence_ms": 0.0030840164981782436,
+        "cap_never_exceeded_after_convergence": true
+      },
+      {
+        "cap": 4,
+        "samples": 1964,
+        "active_mean": 3.994908350305499,
+        "active_p95": 4.0,
+        "active_max": 4,
+        "queue_nonempty_fraction": 1.0,
+        "retrieval_qps": 3411.9920417406943,
+        "transition_convergence_ms": 0.002834014594554901,
+        "cap_never_exceeded_after_convergence": true
+      }
+    ],
+    "phasegate_caps": [
+      {
+        "policy": "4to0",
+        "prefill": {
+          "cap": 4,
+          "samples": 655,
+          "active_mean": 3.996946564885496,
+          "active_p95": 4.0,
+          "active_max": 4,
+          "queue_nonempty_fraction": 1.0,
+          "retrieval_qps": 3068.9212337034814,
+          "transition_convergence_ms": 0.005207984941080213,
+          "cap_never_exceeded_after_convergence": true
+        },
+        "decode": {
+          "cap": 0,
+          "samples": 650,
+          "active_mean": 0.0,
+          "active_p95": 0.0,
+          "active_max": 0,
+          "queue_nonempty_fraction": 1.0,
+          "retrieval_qps": 0.0,
+          "transition_convergence_ms": 11.09237500349991,
+          "cap_never_exceeded_after_convergence": true
+        }
+      },
+      {
+        "policy": "4to1",
+        "prefill": {
+          "cap": 4,
+          "samples": 655,
+          "active_mean": 3.996946564885496,
+          "active_p95": 4.0,
+          "active_max": 4,
+          "queue_nonempty_fraction": 1.0,
+          "retrieval_qps": 3069.5228950114847,
+          "transition_convergence_ms": 0.014124991139397025,
+          "cap_never_exceeded_after_convergence": true
+        },
+        "decode": {
+          "cap": 1,
+          "samples": 662,
+          "active_mean": 0.9969788519637462,
+          "active_p95": 1.0,
+          "active_max": 1,
+          "queue_nonempty_fraction": 1.0,
+          "retrieval_qps": 1023.1943194017715,
+          "transition_convergence_ms": 14.12529099616222,
+          "cap_never_exceeded_after_convergence": true
+        }
+      },
+      {
+        "policy": "4to2",
+        "prefill": {
+          "cap": 4,
+          "samples": 655,
+          "active_mean": 3.998473282442748,
+          "active_p95": 4.0,
+          "active_max": 4,
+          "queue_nonempty_fraction": 1.0,
+          "retrieval_qps": 4095.7984539503473,
+          "transition_convergence_ms": 0.0024999899324029684,
+          "cap_never_exceeded_after_convergence": true
+        },
+        "decode": {
+          "cap": 2,
+          "samples": 661,
+          "active_mean": 2.0,
+          "active_p95": 2.0,
+          "active_max": 2,
+          "queue_nonempty_fraction": 1.0,
+          "retrieval_qps": 2046.6465710272164,
+          "transition_convergence_ms": 14.825332997133955,
+          "cap_never_exceeded_after_convergence": true
+        }
+      },
+      {
+        "policy": "4to3",
+        "prefill": {
+          "cap": 4,
+          "samples": 655,
+          "active_mean": 3.998473282442748,
+          "active_p95": 4.0,
+          "active_max": 4,
+          "queue_nonempty_fraction": 1.0,
+          "retrieval_qps": 4094.729438205734,
+          "transition_convergence_ms": 0.003083987394347787,
+          "cap_never_exceeded_after_convergence": true
+        },
+        "decode": {
+          "cap": 3,
+          "samples": 659,
+          "active_mean": 3.0,
+          "active_p95": 3.0,
+          "active_max": 3,
+          "queue_nonempty_fraction": 1.0,
+          "retrieval_qps": 3068.8785668776213,
+          "transition_convergence_ms": 6.170291977468878,
+          "cap_never_exceeded_after_convergence": true
+        }
+      }
+    ],
+    "errors": [],
+    "all_fixed_caps_respected": true,
+    "all_fixed_concurrency_p95_matches": true,
+    "all_phase_caps_respected": true,
+    "gil_parallelism_ratio_2_vs_1": 2.0003671928636546,
+    "gil_parallelism_ratio_4_vs_1": 3.3328997082604395,
+    "faiss_search_concurrent_not_gil_serialized": true
+  },
+  "passed": true
+}

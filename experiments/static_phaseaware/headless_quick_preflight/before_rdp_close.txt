@@ -1,0 +1,94 @@
+Sun Aug  2 11:07:45 CEST 2026
+2026-08-02 11:07:45.878 system_profiler[6427:3582267] hw.cpufamily: 0xda33d83d
+Hardware:
+
+    Hardware Overview:
+
+      Model Name: Mac mini
+      Model Identifier: Mac14,12
+      Model Number: MNH73FN/A
+      Chip: Apple M2 Pro
+      Total Number of Cores: 10 (6 Performance and 4 Efficiency)
+      Memory: 16 GB
+      System Firmware Version: 18000.120.36
+      OS Loader Version: 18000.120.36
+      Serial Number (system): XNQ4QX3733
+      Hardware UUID: 94F39AC6-5583-5390-B8EE-695BD6501D50
+      Provisioning UDID: 00006020-001A71040CC3C01E
+      Activation Lock Status: Disabled
+
+vm.swapusage: total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)
+The system has 17179869184 (1048576 pages with a page size of 16384).
+
+Stats: 
+Pages free: 15917 
+Pages purgeable: 5093 
+Pages purged: 479483 
+
+Swap I/O:
+Swapins: 0 
+Swapouts: 0 
+
+Page Q counts:
+Pages active: 403952 
+Pages inactive: 402042 
+Pages speculative: 7160 
+Pages throttled: 0 
+Pages wired down: 79244 
+
+Compressor Stats:
+Pages used by compressor: 106328 
+Pages decompressed: 34829 
+Pages compressed: 400636 
+
+File I/O:
+Pageins: 2200938 
+Pageouts: 6419 
+
+System-wide memory free percentage: 81%
+Mach Virtual Memory Statistics: (page size of 16384 bytes)
+Pages free:                                    15948.
+Pages active:                                 403953.
+Pages inactive:                               402042.
+Pages speculative:                              7162.
+Pages throttled:                                   0.
+Pages wired down:                              79244.
+Pages purgeable:                                5093.
+"Translation faults":                      421257274.
+Pages copy-on-write:                        77672869.
+Pages zero filled:                         530094893.
+Pages reactivated:                            139568.
+Pages purged:                                 479483.
+File-backed pages:                            314336.
+Anonymous pages:                              498821.
+Pages stored in compressor:                   359838.
+Pages occupied by compressor:                 106328.
+Decompressions:                                34829.
+Compressions:                                 400636.
+Pageins:                                     2200940.
+Pageouts:                                       6419.
+Swapins:                                           0.
+Swapouts:                                          0.
+  576     1 3550080 435403808 21.2 01-10:14:25 /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/MacOS/ARDAgent
+  664     1 206496 435574784  1.2 01-10:14:23 /System/Library/PrivateFrameworks/MediaAnalysis.framework/Versions/A/mediaanalysisd
+ 5363  5340 191168 435936320  1.1       09:23 codex
+  527     1 175664 443608320  1.0 01-10:14:25 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/corespotlightd
+  829     1 151968 435881568  0.9 01-10:14:14 /System/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal
+  330     1 116096 439879456  0.7 01-10:20:43 /System/Library/CoreServices/Software Update.app/Contents/Resources/softwareupdated
+  168     1 108160 435683904  0.6 01-10:20:45 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer -daemon
+  650     1  89392 435947760  0.5 01-10:14:24 /usr/libexec/spotlightknowledged.updater -u
+  607     1  83632 435625792  0.5 01-10:14:24 /System/Library/CoreServices/NotificationCenter.app/Contents/MacOS/NotificationCenter
+  550     1  80816 435639216  0.5 01-10:14:25 /System/Library/CoreServices/ControlCenter.app/Contents/MacOS/ControlCenter
+  553     1  80240 435633328  0.5 01-10:14:25 /System/Library/CoreServices/Finder.app/Contents/MacOS/Finder
+  185     1  78176 435470816  0.5 01-10:20:45 /usr/libexec/mobileassetd
+  465     1  76720 436059280  0.5 01-10:16:39 /usr/sbin/spindump
+  170     1  73408 435382192  0.4 01-10:20:45 /usr/sbin/coreaudiod
+  659     1  68608 435435616  0.4 01-10:14:23 /usr/libexec/duetexpertd
+  238     1  67952 435368816  0.4 01-10:20:45 /usr/libexec/syspolicyd
+  597     1  66112 435390848  0.4 01-10:14:25 /System/Library/PrivateFrameworks/ChronoCore.framework/Support/chronod
+  666     1  65152 435365520  0.4 01-10:14:23 /System/Library/CoreServices/Dock.app/Contents/XPCServices/com.apple.dock.extra.xpc/Contents/MacOS/com.apple.dock.extra
+  756     1  64048 435575920  0.4 01-10:14:20 /System/Applications/Weather.app/Contents/PlugIns/WeatherWidget.appex/Contents/MacOS/WeatherWidget -LaunchArguments eyJlbmhhbmNlZFNlY3VyaXR5IjpmYWxzZSwidHlwZSI6MSwic2VydmljZU5hbWUiOiJjb20uYXBwbGUud2VhdGhlci53aWRnZXQifQ==
+   90     1  62240 435496720  0.4 01-10:20:46 /usr/libexec/logd
+576 /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/MacOS/ARDAgent
+168 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer -daemon
+

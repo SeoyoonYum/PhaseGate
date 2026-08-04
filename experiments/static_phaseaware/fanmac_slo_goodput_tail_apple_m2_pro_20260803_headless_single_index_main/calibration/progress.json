@@ -1,0 +1,8 @@
+{
+  "valid_blocks": 62,
+  "target_valid_blocks": 45,
+  "last_policy": "fixed2",
+  "last_repeat": 2,
+  "updated": "2026-08-03T12:55:56+0200",
+  "resume_source": "calibration/raw/runs.jsonl"
+}
