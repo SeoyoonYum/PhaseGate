@@ -105,7 +105,9 @@ def main() -> None:
 - Initial pageouts: {manifest['initial_pageout_counter']}; swap: {manifest['initial_swap_usage']}
 - Power: AC, Low Power Mode disabled (full `pmset` output is in the JSON manifest).
 
-This campaign targets the base Apple M4, not M4 Pro. Candidate CPU caps are 1 and 2 because two of four performance cores are reserved for MLX and macOS. Cap 4 is not allowed by the preregistered rule.
+This campaign targets the base Apple M4, not M4 Pro. Under the r5 stabilization
+handoff, CPU scaling reruns caps 1, 2, and 4; cap 4 is tested rather than assumed
+safe, and K_hi is selected only from the new r5 CPU-only measurements.
 """
     (args.campaign / "MACHINE_AUDIT.md").write_text(audit)
 
