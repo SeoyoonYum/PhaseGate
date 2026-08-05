@@ -1,0 +1,54 @@
+{
+  "created_utc": "2026-08-05T23:40:30.661032+00:00",
+  "repository_commit": "3194749db612b6ea1f0baa3d110e2486b9e579e2",
+  "candidate_caps": [
+    1,
+    2,
+    4
+  ],
+  "repeats": 3,
+  "duration_s": 60.0,
+  "warmup_s": 5.0,
+  "seed": 2026080601,
+  "block_order": [
+    {
+      "cap": 4,
+      "repeat": 0
+    },
+    {
+      "cap": 2,
+      "repeat": 2
+    },
+    {
+      "cap": 1,
+      "repeat": 0
+    },
+    {
+      "cap": 2,
+      "repeat": 0
+    },
+    {
+      "cap": 4,
+      "repeat": 1
+    },
+    {
+      "cap": 4,
+      "repeat": 2
+    },
+    {
+      "cap": 1,
+      "repeat": 2
+    },
+    {
+      "cap": 2,
+      "repeat": 1
+    },
+    {
+      "cap": 1,
+      "repeat": 1
+    }
+  ],
+  "observer_mode": "event",
+  "subprocess_sampling": false,
+  "query_stream": "shared deterministic seed sequence; identical prefixes"
+}

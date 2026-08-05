@@ -1,0 +1,17 @@
+{
+  "rule": "smallest tested cap reaching >=90% of maximum median CPU-only QPS; lower-cap tie-break",
+  "candidate_caps": [
+    1,
+    2,
+    4
+  ],
+  "measured_median_qps": {
+    "1": 976.002595279287,
+    "2": 1751.8419875024663,
+    "4": 2464.1744776628257
+  },
+  "selected_K_hi": 4,
+  "timestamp_utc": "2026-08-05T23:50:23.653818+00:00",
+  "repository_commit": "3194749db612b6ea1f0baa3d110e2486b9e579e2",
+  "index_sha256": "4c65bde676235523dbba2f1dc78a44de3f447470d38105488586d7ca486a51f0"
+}
