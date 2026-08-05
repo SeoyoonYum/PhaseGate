@@ -11,6 +11,7 @@ sys.path.insert(0, str(REPO / "src"))
 
 import faiss  # noqa: E402
 from phaseguard.phase_monitor import GPUPhase  # noqa: E402
+from phaseguard.observer import EventBuffer  # noqa: E402
 from phaseguard.policies import FixedWorkerPolicy, StaticCapsPolicy, TimeGateController  # noqa: E402
 from phaseguard.shared_index_manager import SharedIndexTaskManager  # noqa: E402
 
@@ -24,11 +25,11 @@ class PermitRecorder:
 
 
 def main() -> None:
-    for cap in (0, 1, 2):
-        fixed = FixedWorkerPolicy(2, cap)
+    for cap in (0, 1, 2, 4):
+        fixed = FixedWorkerPolicy(4, cap)
         assert all(fixed.select(phase, 2048) == cap for phase in GPUPhase)
-    gate = StaticCapsPolicy(2, 2, 1)
-    assert gate.select(GPUPhase.PREFILL, 2048) == 2
+    gate = StaticCapsPolicy(4, 4, 1)
+    assert gate.select(GPUPhase.PREFILL, 2048) == 4
     assert gate.select(GPUPhase.DECODE, 2048) == 1
 
     recorder = PermitRecorder()
@@ -40,7 +41,9 @@ def main() -> None:
 
     index = REPO.parent / "kv-uma-research/experiments/phaseguard/index/hnsw_smoke_10k_d384.faiss"
     faiss.omp_set_num_threads(1)
-    with SharedIndexTaskManager(index, 2, ef_search=128) as manager:
+    observer = EventBuffer()
+    with SharedIndexTaskManager(index, 2, ef_search=128,
+                                event_sink=observer.emit) as manager:
         assert manager.index_load_count == 1
         assert faiss.omp_get_max_threads() == 1
         tasks = [manager.submit(f"t{i}", 1024, 16, 9000 + i) for i in range(8)]
@@ -66,6 +69,11 @@ def main() -> None:
         assert sum(int(row["queries"]) for row in results) == snap["completed_queries"]
         assert snap["admitted_queries"] == snap["completed_queries"]
         assert snap["submitted_tasks"] == snap["completed_tasks"]
+    admissions = [event for event in observer.events()
+                  if event["event_type"] == "query_admitted"]
+    assert admissions
+    assert all(int(event["active_query_count"]) <= int(event["requested_cap"])
+               for event in admissions)
     print("M4 PhaseGate semantics: PASS")
 
 

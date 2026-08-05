@@ -8,7 +8,7 @@ import uuid
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from .retrieval import load_index, make_queries, search_chunks
 
@@ -37,7 +37,8 @@ class SharedIndexTaskManager:
     """
 
     def __init__(self, index_path: str | Path, max_workers: int, ef_search: int = 128,
-                 top_k: int = 10) -> None:
+                 top_k: int = 10,
+                 event_sink: Callable[..., None] | None = None) -> None:
         if max_workers < 1:
             raise ValueError("max_workers must be positive")
         self.max_workers = max_workers
@@ -57,6 +58,11 @@ class SharedIndexTaskManager:
         self._stop = False
         self._executor: ThreadPoolExecutor | None = None
         self.index_load_count = 1
+        self._event_sink = event_sink
+
+    def _emit(self, event_type: str, timestamp: float | None = None, **fields: Any) -> None:
+        if self._event_sink is not None:
+            self._event_sink(event_type, timestamp=timestamp, **fields)
 
     def start(self) -> "SharedIndexTaskManager":
         if self._executor is not None:
@@ -81,6 +87,8 @@ class SharedIndexTaskManager:
                 return
             task_id, request_id, submitted, n_queries, chunk, seed = task
             started = time.perf_counter()
+            self._emit("retrieval_task_started", started, query_id=task_id,
+                       request_id=request_id, requested_cap=self.permits)
             result = SharedRetrievalResult(task_id, request_id, worker_id, submitted,
                                            started, started, 0, 0, 0.0, [])
             try:
@@ -88,27 +96,53 @@ class SharedIndexTaskManager:
                     self._inflight[worker_id] = True
                 queries = make_queries(seed, n_queries, int(self.index.d))
                 iterator = search_chunks(self.index, queries, self.top_k, chunk)
+                chunk_index = 0
                 while True:
+                    if result.queries >= n_queries:
+                        break
                     with self._condition:
                         self._condition.wait_for(
-                            lambda: self._stop or worker_id < self._permit)
+                            lambda: self._stop or (
+                                worker_id < self._permit and sum(self._active) < self._permit
+                            ))
                         if self._stop:
                             raise RuntimeError("manager stopped")
                         self._active[worker_id] = True
+                        active_after_admit = sum(self._active)
+                        requested_cap = self._permit
+                    query_id = f"{task_id}:{chunk_index}"
+                    query_count = min(chunk, n_queries - result.queries)
                     query_started = time.perf_counter()
+                    self._emit("query_admitted", query_started, query_id=query_id,
+                               request_id=request_id, query_count=query_count,
+                               requested_cap=requested_cap,
+                               active_query_count=active_after_admit, worker_id=worker_id)
+                    self._emit("query_started", query_started, query_id=query_id,
+                               request_id=request_id, query_count=query_count,
+                               requested_cap=requested_cap,
+                               active_query_count=active_after_admit, worker_id=worker_id)
                     try:
                         count, checksum = next(iterator)
                     except StopIteration:
                         with self._condition:
                             self._active[worker_id] = False
+                            self._condition.notify_all()
                         break
                     query_ended = time.perf_counter()
                     with self._condition:
                         self._active[worker_id] = False
                         self._admitted_queries += count
                         self._completed_queries += count
+                        active_after_complete = sum(self._active)
+                        requested_cap = self._permit
+                        self._condition.notify_all()
+                    self._emit("query_completed", query_ended, query_id=query_id,
+                               request_id=request_id, query_count=count,
+                               requested_cap=requested_cap,
+                               active_query_count=active_after_complete, worker_id=worker_id)
                     result.queries += count; result.chunks += 1; result.checksum += checksum
                     result.query_latencies_s.extend([(query_ended - query_started) / count] * count)
+                    chunk_index += 1
             except Exception as exc:  # retain accounting evidence for invalidation
                 result.error = repr(exc)
             finally:
@@ -119,6 +153,9 @@ class SharedIndexTaskManager:
                     self._completed[task_id] = asdict(result)
                     self._received_tasks += 1
                     self._condition.notify_all()
+                self._emit("retrieval_task_completed", result.ended, query_id=task_id,
+                           request_id=request_id, query_count=result.queries,
+                           requested_cap=self.permits)
 
     @property
     def permits(self) -> int:
@@ -130,7 +167,9 @@ class SharedIndexTaskManager:
             raise ValueError("permit count outside [0, max_workers]")
         with self._condition:
             self._permit = count
+            active = sum(self._active)
             self._condition.notify_all()
+        self._emit("cap_change", requested_cap=count, active_query_count=active)
 
     def submit(self, request_id: str, queries: int, chunk: int = 16,
                seed: int = 20260728) -> str:
@@ -139,7 +178,11 @@ class SharedIndexTaskManager:
         task_id = uuid.uuid4().hex
         with self._condition:
             self._submitted_tasks += 1
+            outstanding = self._submitted_tasks - self._received_tasks
         self._tasks.put((task_id, request_id, time.perf_counter(), queries, chunk, seed))
+        self._emit("retrieval_task_submitted", query_id=task_id, request_id=request_id,
+                   query_count=queries, requested_cap=self.permits,
+                   active_query_count=self.active_retrievals(), outstanding_tasks=outstanding)
         return task_id
 
     def wait(self, task_id: str, timeout: float = 600.0) -> dict[str, Any]:

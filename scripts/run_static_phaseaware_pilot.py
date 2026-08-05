@@ -33,6 +33,8 @@ from phaseguard.context_validation import (AlwaysBackloggedHNSW, capture_state,
     state_delta, total_rss_bytes)  # noqa: E402
 from phaseguard.shared_index_manager import SharedIndexTaskManager  # noqa: E402
 from phaseguard.metrics import append_jsonl, environment_metadata, percentile  # noqa: E402
+from phaseguard.observer import (EventBuffer, NativeMemoryMonitor, event_state_samples,
+    finalize_event_log, reconstruct_event_log)  # noqa: E402
 from phaseguard.phase_monitor import GPUPhase, PhaseMonitor  # noqa: E402
 from phaseguard.policies import (FixedWorkerPolicy, PolicyController,
     StaticCapsPolicy, TimeGateController)  # noqa: E402
@@ -235,7 +237,7 @@ def run_block(args: argparse.Namespace) -> None:
         raise SystemExit("feeders must exceed workers and queries-per-task must cover chunk")
 
     label = policy_name(args)
-    run_key = (f"static_{args.stage}_{'smoke_' if args.smoke else ''}{label}_"
+    run_key = (f"static_{args.stage}_{'smoke_' if args.smoke else ''}{args.observer_mode}_{label}_"
                f"r{args.repeat:02d}_a{args.attempt:02d}")
     output = raw_path(args.stage, args.smoke)
     if any(row.get("run_key") == run_key for row in read_jsonl(output)):
@@ -247,6 +249,7 @@ def run_block(args: argparse.Namespace) -> None:
     power_clean = thermal.assert_power(args.allow_battery)
     measure.set_mem_limit_gb(args.mem_limit_gb)
     run_id = uuid.uuid4().hex
+    event_buffer = EventBuffer()
     log_dir = ROOT / args.stage / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     manifest = {"run_id": run_id, "run_key": run_key, "started": datetime.now().isoformat(),
@@ -285,7 +288,10 @@ def run_block(args: argparse.Namespace) -> None:
 
     manager_context: Any = (
         nullcontext(None) if args.policy == "llm-only"
-        else SharedIndexTaskManager(str(args.index), args.max_workers, args.ef_search, args.top_k)
+        else SharedIndexTaskManager(
+            str(args.index), args.max_workers, args.ef_search, args.top_k,
+            event_sink=event_buffer.emit if args.observer_mode == "event" else None,
+        )
     )
     with manager_context as manager:
         pids = [] if manager is None else manager.worker_pids()
@@ -313,7 +319,8 @@ def run_block(args: argparse.Namespace) -> None:
                 intervals = [(int(item["cap"]), float(item["duration_s"]))
                              for item in schedule["intervals"]]
                 timegate = TimeGateController(manager, args.prefill_cap, args.decode_cap,
-                                              intervals, args.timegate_offset_s).start()
+                                              intervals, args.timegate_offset_s,
+                                              event_sink=event_buffer.emit).start()
             else:
                 policy = create_policy(args)
                 controller = PolicyController(policy, manager, args.context)
@@ -331,7 +338,8 @@ def run_block(args: argparse.Namespace) -> None:
         samples: list[dict[str, Any]] = []
         stop = threading.Event()
         sample_counter = [0]
-        last_rss = [total_rss_bytes([os.getpid(), *pids])]
+        legacy_subprocess_count = [0]
+        last_rss = [0]
 
         def sample_loop() -> None:
             while not stop.is_set():
@@ -339,6 +347,7 @@ def run_block(args: argparse.Namespace) -> None:
                 snapshot = manager.demand_snapshot() if manager is not None else zero_snapshot()
                 if sample_counter[0] % args.rss_sample_stride == 0:
                     last_rss[0] = total_rss_bytes([os.getpid(), *pids])
+                    legacy_subprocess_count[0] += len([os.getpid(), *pids])
                 samples.append({"timestamp": time.perf_counter(), "phase": phase.value,
                                 "phase_started": phase_started, "request_id": request_id,
                                 "rss_bytes": last_rss[0], **snapshot})
@@ -347,15 +356,27 @@ def run_block(args: argparse.Namespace) -> None:
 
         measure.reset_peak()
         host_before = capture_state(pids)
-        sampler = threading.Thread(target=sample_loop, daemon=True,
-                                   name="static-phaseaware-sampler")
-        sampler.start()
+        sampler = None
+        memory_monitor = None
+        if args.observer_mode == "legacy":
+            last_rss[0] = int(host_before.experiment_rss_bytes)
+            sampler = threading.Thread(target=sample_loop, daemon=True,
+                                       name="static-phaseaware-sampler")
+            sampler.start()
+        elif args.observer_mode == "event":
+            memory_monitor = NativeMemoryMonitor(args.memory_sample_interval_s).start()
         started = time.perf_counter()
         rows = execute_gpu_trace(model, monitor, args.llm_requests, args.context,
                                  args.output_tokens, args.prompt_seed)
         duration = time.perf_counter() - started
+        measured_end = started + duration
         stop.set()
-        sampler.join(timeout=10)
+        if sampler is not None:
+            sampler.join(timeout=10)
+            if sampler.is_alive():
+                raise RuntimeError("legacy sampler did not stop")
+        if memory_monitor is not None:
+            memory_monitor.stop()
         host_after = capture_state(pids)
         q1 = manager.demand_snapshot() if manager is not None else zero_snapshot()
         l1 = load.snapshot() if load is not None else l0
@@ -363,7 +384,37 @@ def run_block(args: argparse.Namespace) -> None:
             load.stop()
         if timegate is not None:
             timegate.stop()
-        events = monitor.events()
+        phase_events = monitor.events()
+
+    observer_events = finalize_event_log(
+        run_id=run_id, run_key=run_key, repeat=args.repeat, policy=label,
+        phase_events=phase_events, requests=rows,
+        runtime_events=event_buffer.events() if args.observer_mode == "event" else [],
+        default_cap=int(q0["permitted_workers"]),
+    )
+    reconstruction = reconstruct_event_log(observer_events)
+    if args.observer_mode == "event":
+        state_samples = event_state_samples(observer_events)
+        samples = [sample for sample in state_samples
+                   if started <= float(sample["timestamp"]) <= measured_end]
+    memory_audit = (memory_monitor.audit() if memory_monitor is not None else {
+        "sample_count": len(samples) if args.observer_mode == "legacy" else 0,
+        "interval_s": args.sample_ms / 1000.0 if args.observer_mode == "legacy" else None,
+        "observed_rate_hz": len(samples) / duration if duration > 0 else 0.0,
+        "missed_intervals": None,
+        "max_scheduling_delay_ms": None,
+        "subprocess_count": legacy_subprocess_count[0],
+        "api": "legacy ps subprocess" if args.observer_mode == "legacy" else "none",
+    })
+    if memory_monitor is not None:
+        peak_observer_rss = max(
+            [int(sample["peak_rss_bytes"]) for sample in memory_monitor.samples],
+            default=int(host_after.experiment_rss_bytes),
+        )
+    elif args.observer_mode == "legacy":
+        peak_observer_rss = max([int(sample["rss_bytes"]) for sample in samples], default=0)
+    else:
+        peak_observer_rss = int(host_after.experiment_rss_bytes)
 
     # The post-sentinel must be LLM-only. Exiting the manager context first
     # terminates persistent FAISS workers and any outstanding non-preemptive task.
@@ -402,7 +453,7 @@ def run_block(args: argparse.Namespace) -> None:
         int(row["outstanding_tasks"]) > int(row["permitted_workers"])
         and int(row["permitted_workers"]) < args.max_workers for row in samples
     ])) if manager is not None else 0.0)
-    active_log_present = bool(prefill_samples and decode_samples)
+    active_log_present = manager is None or bool(prefill_samples and decode_samples)
     cap_applied = prefill_applied >= .95 and transition["decode_cap_applied_fraction"] >= .95
     drift_clean = (
         abs(tpot_drift - 1.0) <= args.within_block_drift_tolerance
@@ -418,6 +469,18 @@ def run_block(args: argparse.Namespace) -> None:
                                       row.get("token_timestamps", [])[1:]))
         for row in rows
     ) and len(rows) == args.llm_requests
+    observer_clean = (
+        reconstruction["sequence_exact"]
+        and reconstruction["timestamps_monotonic"]
+        and reconstruction["active_never_negative"]
+        and reconstruction["token_events"] == args.llm_requests * args.output_tokens
+        and (args.observer_mode != "event" or (
+            reconstruction["query_accounting_exact"]
+            and reconstruction["admissions_within_cap"]
+            and int(memory_audit["subprocess_count"]) == 0
+            and float(memory_audit["observed_rate_hz"]) <= 1.01
+        ))
+    )
     cpu_disabled_during_llm = prefill_cap == 0 and decode_cap == 0
     enough_progress = (
         args.policy == "llm-only" or cpu_disabled_during_llm
@@ -438,6 +501,7 @@ def run_block(args: argparse.Namespace) -> None:
         "steady_duration_sufficient": duration >= args.min_duration_s,
         "completion_count_sufficient": enough_progress,
         "decode_admission_zero": decode_admission_zero,
+        "observer_clean": observer_clean,
     }
     invalid_reasons = [key for key, passed in validity.items() if not passed]
 
@@ -487,10 +551,10 @@ def run_block(args: argparse.Namespace) -> None:
         "admitted_queries_decode": phase_counter_delta(samples, "DECODE", "admitted_queries"),
         "completed_queries_prefill": phase_counter_delta(samples, "PREFILL", "completed_queries"),
         "completed_queries_decode": phase_counter_delta(samples, "DECODE", "completed_queries"),
-        "active_retrieval_worker_mean": float(np.mean(
-            [row["active_retrievals"] for row in samples])),
-        "active_retrieval_worker_p95": percentile(
-            [row["active_retrievals"] for row in samples], 95),
+        "active_retrieval_worker_mean": (float(np.mean(
+            [row["active_retrievals"] for row in samples])) if samples else 0.0),
+        "active_retrieval_worker_p95": (percentile(
+            [row["active_retrievals"] for row in samples], 95) if samples else 0.0),
         "decode_overlap_fraction": (float(np.mean(
             [row["active_retrievals"] > 0 for row in decode_samples])) if decode_samples else 0.0),
         "prefill_active_retrieval_worker_mean": (float(np.mean(
@@ -510,7 +574,7 @@ def run_block(args: argparse.Namespace) -> None:
         "prefill_cap_applied_fraction": prefill_applied,
         **transition,
         "resident_memory_bytes": int(delta["experiment_rss_after_bytes"]),
-        "peak_resident_memory_bytes": max([int(row["rss_bytes"]) for row in samples], default=0),
+        "peak_resident_memory_bytes": peak_observer_rss,
         "peak_mlx_memory_mb": measure.peak_mb(),
         "tpot_within_block_drift_ratio": tpot_drift,
         "ttft_within_block_drift_ratio": ttft_drift,
@@ -535,6 +599,10 @@ def run_block(args: argparse.Namespace) -> None:
         "worker_cap_changes": 0 if controller is None else controller.changes,
         "timegate_audit": None if timegate is None else timegate.audit(),
         "timegate_transitions": [] if timegate is None else timegate.transitions,
+        "observer_mode": args.observer_mode,
+        "observer_memory_audit": memory_audit,
+        "observer_reconstruction_audit": reconstruction,
+        "observer_subprocess_count_during_block": memory_audit["subprocess_count"],
         "sample_count": len(samples), **delta,
     }
     append_jsonl(output, row)
@@ -543,8 +611,10 @@ def run_block(args: argparse.Namespace) -> None:
     timeline_dir = ROOT / args.stage / "raw" / ("smoke_timelines" if args.smoke else "timelines")
     timeline_dir.mkdir(parents=True, exist_ok=True)
     (timeline_dir / f"{run_key}.json").write_text(json.dumps({
-        "run_id": run_id, "run_key": run_key, "events": events,
-        "demand_samples": samples}, separators=(",", ":")) + "\n")
+        "run_id": run_id, "run_key": run_key, "observer_mode": args.observer_mode,
+        "events": observer_events, "demand_samples": samples,
+        "memory_samples": [] if memory_monitor is None else memory_monitor.samples,
+        "observer_reconstruction_audit": reconstruction}, separators=(",", ":")) + "\n")
     print(json.dumps(row, indent=2, default=str))
 
 
@@ -584,6 +654,8 @@ def block_command(args: argparse.Namespace, policy: str, prefill: int, decode: i
                "--query-seed", str(args.seed + repeat * 10_000 + 5_000),
                "--context", str(args.context), "--output-tokens", str(args.output_tokens),
                "--llm-requests", str(args.llm_requests), "--sample-ms", str(args.sample_ms),
+               "--observer-mode", args.observer_mode,
+               "--memory-sample-interval-s", str(args.memory_sample_interval_s),
                "--max-workers", str(args.max_workers), "--feeders", str(args.feeders),
                "--queries-per-task", str(args.queries_per_task), "--chunk", str(args.chunk),
                "--ef-search", str(args.ef_search), "--top-k", str(args.top_k),
@@ -673,6 +745,8 @@ def parser() -> argparse.ArgumentParser:
                     default=Path("experiments/phaseguard/index/hnsw_100k_d384.faiss"))
     ap.add_argument("--sample-ms", type=float, default=5.0)
     ap.add_argument("--rss-sample-stride", type=int, default=20)
+    ap.add_argument("--observer-mode", choices=("minimal", "event", "legacy"), default="event")
+    ap.add_argument("--memory-sample-interval-s", type=float, default=1.0)
     ap.add_argument("--warmup-s", type=float, default=1.0)
     ap.add_argument("--mem-limit-gb", type=float, default=6.0)
     ap.add_argument("--min-headroom-gb", type=float, default=6.5)

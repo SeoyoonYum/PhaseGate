@@ -1,0 +1,9 @@
+{
+  "source_path": "/Users/m1/kv-uma-research-m4-20260805/experiments/static_phaseaware/fanmac_m4_causal_shape_20260805_r4",
+  "captured_before_harness_edit": true,
+  "file_count": 64,
+  "total_bytes": 391619438,
+  "aggregate_method": "find -type f -print0 | sort -z | xargs -0 shasum -a 256 | shasum -a 256",
+  "aggregate_sha256": "463498729aaeed423a20896a23927d34bdf38224f27dfb5ffe6b415402a9a544",
+  "immutability_rule": "No files in this directory may be created, modified, renamed, deleted, or appended by stabilization or r5 work."
+}

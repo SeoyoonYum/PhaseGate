@@ -32,7 +32,6 @@ class PhaseMonitor:
         self._events: list[PhaseEvent] = [
             PhaseEvent(self._phase_started, None, GPUPhase.IDLE.value, "start")
         ]
-        self._token_times: dict[str, list[float]] = {}
         self._listener: Callable[[GPUPhase, str | None], int | None] | None = None
 
     def set_listener(self, listener: Callable[[GPUPhase, str | None], int | None]) -> None:
@@ -50,18 +49,14 @@ class PhaseMonitor:
         return now
 
     def record_token(self, request_id: str) -> float:
-        now = time.perf_counter()
-        with self._lock:
-            self._token_times.setdefault(request_id, []).append(now)
-        return now
+        # Single-writer fast path: GPUWorker owns the request-local timestamp
+        # buffer. Do not acquire the phase/event lock here.
+        del request_id
+        return time.perf_counter()
 
     def snapshot(self) -> tuple[GPUPhase, str | None, float]:
         with self._lock:
             return self._phase, self._request_id, self._phase_started
-
-    def token_times(self, request_id: str) -> list[float]:
-        with self._lock:
-            return list(self._token_times.get(request_id, ()))
 
     def events(self) -> list[dict[str, object]]:
         with self._lock:

@@ -1,0 +1,6 @@
+observer semantics: PASS
+M4 PhaseGate semantics: PASS
+static phase-aware policy semantics: PASS
+event LLM-only functional smoke: PASS (performance not interpreted)
+minimal LLM-only functional smoke: PASS (performance not interpreted)
+legacy LLM-only functional smoke: PASS (performance not interpreted)

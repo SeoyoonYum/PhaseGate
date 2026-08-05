@@ -94,7 +94,8 @@ class TimeGateController:
     """
 
     def __init__(self, manager: object, high_cap: int, low_cap: int,
-                 intervals: list[tuple[int, float]], offset_s: float = 0.0) -> None:
+                 intervals: list[tuple[int, float]], offset_s: float = 0.0,
+                 event_sink: Callable[..., None] | None = None) -> None:
         if not intervals or any(cap not in (high_cap, low_cap) or duration <= 0
                                 for cap, duration in intervals):
             raise ValueError("TimeGate requires positive frozen high/low intervals")
@@ -103,6 +104,7 @@ class TimeGateController:
         self.intervals = tuple((int(cap), float(duration)) for cap, duration in intervals)
         self.offset_s = float(offset_s) % sum(duration for _, duration in self.intervals)
         self.phase_state_consulted = False
+        self.event_sink = event_sink
         self.transitions: list[dict[str, float | int]] = []
         self._stop = threading.Event()
         self._thread: threading.Thread | None = None
@@ -127,7 +129,11 @@ class TimeGateController:
         while not self._stop.is_set():
             cap, _ = self.intervals[index]
             self.manager.set_permits(cap)
-            self.transitions.append({"timestamp": time.perf_counter(), "cap": cap})
+            timestamp = time.perf_counter()
+            self.transitions.append({"timestamp": timestamp, "cap": cap})
+            if self.event_sink is not None:
+                self.event_sink("timegate_transition", timestamp=timestamp,
+                                requested_cap=cap)
             if self._stop.wait(remaining):
                 break
             index = (index + 1) % len(self.intervals)
