@@ -49,6 +49,7 @@ class SharedIndexTaskManager:
         self._tasks: queue.Queue[tuple[str, str, float, int, int, int] | None] = queue.Queue()
         self._completed: dict[str, dict[str, Any]] = {}
         self._active = [False] * max_workers
+        self._inflight = [False] * max_workers
         self._submitted_tasks = 0
         self._received_tasks = 0
         self._admitted_queries = 0
@@ -84,29 +85,37 @@ class SharedIndexTaskManager:
                                            started, started, 0, 0, 0.0, [])
             try:
                 with self._condition:
-                    self._active[worker_id] = True
-                    self._admitted_queries += n_queries
+                    self._inflight[worker_id] = True
                 queries = make_queries(seed, n_queries, int(self.index.d))
                 iterator = search_chunks(self.index, queries, self.top_k, chunk)
                 while True:
+                    with self._condition:
+                        self._condition.wait_for(
+                            lambda: self._stop or worker_id < self._permit)
+                        if self._stop:
+                            raise RuntimeError("manager stopped")
+                        self._active[worker_id] = True
                     query_started = time.perf_counter()
                     try:
                         count, checksum = next(iterator)
                     except StopIteration:
+                        with self._condition:
+                            self._active[worker_id] = False
                         break
                     query_ended = time.perf_counter()
-                    result.queries += count
-                    result.chunks += 1
-                    result.checksum += checksum
+                    with self._condition:
+                        self._active[worker_id] = False
+                        self._admitted_queries += count
+                        self._completed_queries += count
+                    result.queries += count; result.chunks += 1; result.checksum += checksum
                     result.query_latencies_s.extend([(query_ended - query_started) / count] * count)
-                with self._condition:
-                    self._completed_queries += result.queries
             except Exception as exc:  # retain accounting evidence for invalidation
                 result.error = repr(exc)
             finally:
                 result.ended = time.perf_counter()
                 with self._condition:
                     self._active[worker_id] = False
+                    self._inflight[worker_id] = False
                     self._completed[task_id] = asdict(result)
                     self._received_tasks += 1
                     self._condition.notify_all()
@@ -149,13 +158,14 @@ class SharedIndexTaskManager:
     def demand_snapshot(self) -> dict[str, int]:
         with self._condition:
             active = sum(self._active)
+            inflight = sum(self._inflight)
             outstanding = self._submitted_tasks - self._received_tasks
             return {
                 "permitted_workers": self._permit,
                 "active_retrievals": active,
-                "inflight_tasks": active,
-                "retrieval_queue_depth": max(0, outstanding - active),
-                "paused_inflight_tasks": max(0, active - self._permit),
+                "inflight_tasks": inflight,
+                "retrieval_queue_depth": max(0, outstanding - inflight),
+                "paused_inflight_tasks": max(0, inflight - active),
                 "effective_backlog_tasks": max(0, outstanding - active),
                 "outstanding_tasks": outstanding,
                 "submitted_tasks": self._submitted_tasks,

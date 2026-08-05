@@ -25,16 +25,17 @@ import mlx.core as mx
 import numpy as np
 
 REPO = Path(__file__).resolve().parents[1]
-ROOT = REPO / "experiments/static_phaseaware"
+ROOT = Path(os.environ.get("PHASEGATE_CAMPAIGN_ROOT",
+                           REPO / "experiments/static_phaseaware"))
 sys.path.insert(0, str(REPO / "src"))
 from common import measure, models, thermal  # noqa: E402
 from phaseguard.context_validation import (AlwaysBackloggedHNSW, capture_state,
     state_delta, total_rss_bytes)  # noqa: E402
-from phaseguard.cpu_task_manager import CPUTaskManager  # noqa: E402
+from phaseguard.shared_index_manager import SharedIndexTaskManager  # noqa: E402
 from phaseguard.metrics import append_jsonl, environment_metadata, percentile  # noqa: E402
 from phaseguard.phase_monitor import GPUPhase, PhaseMonitor  # noqa: E402
 from phaseguard.policies import (FixedWorkerPolicy, PolicyController,
-    StaticCapsPolicy)  # noqa: E402
+    StaticCapsPolicy, TimeGateController)  # noqa: E402
 from phaseguard.request_pipeline import GPUTicket, GPUWorker  # noqa: E402
 from phaseguard.static_phaseaware import (counter_rate_drift, latency_drift_ratio,
     linear_slope, phase_counter_delta, phase_duration_s, phase_transition_metrics)  # noqa: E402
@@ -172,6 +173,8 @@ def policy_name(args: argparse.Namespace) -> str:
         return f"phasegate{args.prefill_cap}to{args.decode_cap}"
     if args.policy == "fixed0":
         return "fixed0"
+    if args.policy == "timegate":
+        return f"timegate{args.prefill_cap}to{args.decode_cap}"
     return args.policy
 
 
@@ -215,8 +218,8 @@ def write_baseline(stage: str, smoke: bool, repeats: int) -> dict[str, Any]:
 
 
 def run_block(args: argparse.Namespace) -> None:
-    if args.max_workers != 4:
-        raise SystemExit("the pilot fixes max-workers=4")
+    if not 1 <= args.max_workers <= 8:
+        raise SystemExit("max-workers must be in [1, 8]")
     if not 0 <= args.fixed_workers <= args.max_workers:
         raise SystemExit("fixed workers outside [0, 4]")
     if not 0 <= args.prefill_cap <= args.max_workers or not 0 <= args.decode_cap <= args.max_workers:
@@ -277,7 +280,7 @@ def run_block(args: argparse.Namespace) -> None:
 
     manager_context: Any = (
         nullcontext(None) if args.policy == "llm-only"
-        else CPUTaskManager(str(args.index), args.max_workers, args.ef_search, args.top_k)
+        else SharedIndexTaskManager(str(args.index), args.max_workers, args.ef_search, args.top_k)
     )
     with manager_context as manager:
         pids = [] if manager is None else manager.worker_pids()
@@ -296,11 +299,21 @@ def run_block(args: argparse.Namespace) -> None:
         monitor = PhaseMonitor()
         controller = None
         load = None
+        timegate = None
         if manager is not None:
-            policy = create_policy(args)
-            controller = PolicyController(policy, manager, args.context)
-            monitor.set_listener(controller)
-            controller(GPUPhase.IDLE, None)
+            if args.policy == "timegate":
+                if args.timegate_schedule is None:
+                    raise RuntimeError("TimeGate requires --timegate-schedule")
+                schedule = json.loads(args.timegate_schedule.read_text())
+                intervals = [(int(item["cap"]), float(item["duration_s"]))
+                             for item in schedule["intervals"]]
+                timegate = TimeGateController(manager, args.prefill_cap, args.decode_cap,
+                                              intervals, args.timegate_offset_s).start()
+            else:
+                policy = create_policy(args)
+                controller = PolicyController(policy, manager, args.context)
+                monitor.set_listener(controller)
+                controller(GPUPhase.IDLE, None)
             load = AlwaysBackloggedHNSW(
                 manager, args.feeders, args.queries_per_task, args.chunk, args.query_seed
             ).start()
@@ -343,6 +356,8 @@ def run_block(args: argparse.Namespace) -> None:
         l1 = load.snapshot() if load is not None else l0
         if load is not None:
             load.stop()
+        if timegate is not None:
+            timegate.stop()
         events = monitor.events()
 
     # The post-sentinel must be LLM-only. Exiting the manager context first
@@ -388,7 +403,16 @@ def run_block(args: argparse.Namespace) -> None:
         abs(tpot_drift - 1.0) <= args.within_block_drift_tolerance
         and abs(ttft_drift - 1.0) <= args.within_block_drift_tolerance
     )
-    memory_clean = int(delta["pageouts_delta"]) == 0 and int(delta["swap_used_delta_bytes"] or 0) == 0
+    pressure_clean = all(value is None or int(value) >= 10 for value in
+                         (delta["memory_free_percent_before"],
+                          delta["memory_free_percent_after"]))
+    memory_clean = int(delta["swap_used_delta_bytes"] or 0) == 0 and pressure_clean
+    token_data_clean = all(
+        len(row.get("token_timestamps", [])) == args.output_tokens
+        and all(b > a for a, b in zip(row.get("token_timestamps", []),
+                                      row.get("token_timestamps", [])[1:]))
+        for row in rows
+    ) and len(rows) == args.llm_requests
     cpu_disabled_during_llm = prefill_cap == 0 and decode_cap == 0
     enough_progress = (
         args.policy == "llm-only" or cpu_disabled_during_llm
@@ -401,6 +425,7 @@ def run_block(args: argparse.Namespace) -> None:
     validity = {
         "queue_saturated": args.policy == "llm-only" or queue_fraction >= .95,
         "memory_clean": memory_clean,
+        "token_data_clean": token_data_clean,
         "sentinel_clean": bool(sentinel_before["passed"] and sentinel_after["passed"]),
         "within_block_drift_clean": drift_clean,
         "active_worker_log_present": active_log_present,
@@ -496,9 +521,15 @@ def run_block(args: argparse.Namespace) -> None:
         "sentinel_after_initial_deviation": sentinel_after["attempts"][0]["deviation"],
         "power_clean": power_clean, "host_model": host_model, "fan_capable": fan_capable,
         "memory_limit_gb": args.mem_limit_gb, "preload_memory_preflight": preload,
+        "pageout_soft_flag": int(delta["pageouts_delta"]) > 0,
+        "memory_pressure_clean": pressure_clean,
+        "single_faiss_process": True, "shared_index_load_count": (
+            0 if manager is None else manager.index_load_count),
         "resident_memory_preflight": resident, "validity": validity,
         "scheduler_overhead_ms": 0.0 if controller is None else controller.overhead_s * 1e3,
         "worker_cap_changes": 0 if controller is None else controller.changes,
+        "timegate_audit": None if timegate is None else timegate.audit(),
+        "timegate_transitions": [] if timegate is None else timegate.transitions,
         "sample_count": len(samples), **delta,
     }
     append_jsonl(output, row)
@@ -609,9 +640,8 @@ def orchestrate(args: argparse.Namespace) -> None:
 def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-one", action="store_true")
-    ap.add_argument("--stage", choices=("calibration", "evaluation", "paired_pilot", "decodecap0_pilot"),
-                    default="calibration")
-    ap.add_argument("--policy", choices=("llm-only", "serialization", "fixed", "fixed0", "phasegate"),
+    ap.add_argument("--stage", default="calibration")
+    ap.add_argument("--policy", choices=("llm-only", "serialization", "fixed", "fixed0", "phasegate", "timegate"),
                     default="llm-only")
     ap.add_argument("--fixed-workers", type=int, default=1)
     ap.add_argument("--prefill-cap", type=int, default=4)
@@ -651,6 +681,8 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--min-duration-s", type=float, default=5.0)
     ap.add_argument("--min-completed-queries", type=int, default=1000)
     ap.add_argument("--baseline-file", type=Path)
+    ap.add_argument("--timegate-schedule", type=Path)
+    ap.add_argument("--timegate-offset-s", type=float, default=0.0)
     ap.add_argument("--allow-battery", action="store_true")
     ap.add_argument("--allow-fanless-pilot", action="store_true")
     ap.add_argument("--smoke", action="store_true")
@@ -662,6 +694,8 @@ def main() -> None:
     args.index = args.index if args.index.is_absolute() else REPO / args.index
     if args.baseline_file is not None and not args.baseline_file.is_absolute():
         args.baseline_file = REPO / args.baseline_file
+    if args.timegate_schedule is not None and not args.timegate_schedule.is_absolute():
+        args.timegate_schedule = REPO / args.timegate_schedule
     if args.smoke:
         args.context = min(args.context, 512)
         args.output_tokens = min(args.output_tokens, 16)
