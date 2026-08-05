@@ -1,0 +1,17 @@
+stage,observer_mode,repeat,run_key,token_data_clean,event_sequence_exact,event_timestamps_monotonic,event_query_accounting_exact,event_admissions_within_cap,event_token_count,observer_subprocess_count,observer_rate_hz,observer_missed_intervals,memory_pressure_clean,pageouts_delta,swap_used_delta_bytes
+observer_minimal_event,event,0,static_observer_minimal_event_event_llm-only_r00_a01,True,True,True,True,True,19200,0,0.9999899704614068,0,True,0,0
+observer_minimal_event,minimal,0,static_observer_minimal_event_minimal_llm-only_r00_a01,True,True,True,True,True,19200,0,0.0,,True,0,0
+observer_minimal_event,event,1,static_observer_minimal_event_event_llm-only_r01_a01,True,True,True,True,True,19200,0,0.9999793424512865,0,True,0,0
+observer_minimal_event,minimal,1,static_observer_minimal_event_minimal_llm-only_r01_a01,True,True,True,True,True,19200,0,0.0,,True,0,0
+observer_minimal_event,event,2,static_observer_minimal_event_event_llm-only_r02_a01,True,True,True,True,True,19200,0,0.9999795167794958,0,True,0,0
+observer_minimal_event,minimal,2,static_observer_minimal_event_minimal_llm-only_r02_a01,True,True,True,True,True,19200,0,0.0,,True,0,0
+observer_legacy_event,event,0,static_observer_legacy_event_event_llm-only_r00_a01,True,True,True,True,True,19200,0,0.9999792475838808,0,True,0,0
+observer_legacy_event,legacy,0,static_observer_legacy_event_legacy_llm-only_r00_a01,True,True,True,True,True,19200,3180,130.5657022665545,,True,0,0
+observer_legacy_event,event,1,static_observer_legacy_event_event_llm-only_r01_a01,True,True,True,True,True,19200,0,0.9999795183990517,0,True,0,0
+observer_legacy_event,legacy,1,static_observer_legacy_event_legacy_llm-only_r01_a01,True,True,True,True,True,19200,3197,130.53199829417724,,True,0,0
+observer_legacy_event,event,2,static_observer_legacy_event_event_llm-only_r02_a01,True,True,True,True,True,19200,0,0.9999795210410684,0,True,0,0
+observer_legacy_event,legacy,2,static_observer_legacy_event_legacy_llm-only_r02_a01,True,True,True,True,True,19200,3208,130.60838517514952,,True,0,0
+observer_legacy_event,event,3,static_observer_legacy_event_event_llm-only_r03_a01,True,True,True,True,True,19200,0,0.9999795241922771,0,True,0,0
+observer_legacy_event,legacy,3,static_observer_legacy_event_legacy_llm-only_r03_a01,True,True,True,True,True,19200,3208,130.5874391754068,,True,0,0
+observer_legacy_event,event,4,static_observer_legacy_event_event_llm-only_r04_a01,True,True,True,True,True,19200,0,0.999979516951255,0,True,0,0
+observer_legacy_event,legacy,4,static_observer_legacy_event_legacy_llm-only_r04_a01,True,True,True,True,True,19200,3210,130.60909270225392,,True,0,0

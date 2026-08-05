@@ -58,6 +58,8 @@ def run_condition(root: Path, freeze: dict[str, Any], stage: str, mode: str,
         "--within-block-qps-drift-tolerance", "0.20",
         "--min-duration-s", "5", "--min-completed-queries", "1000",
     ]
+    if mode == "legacy":
+        command.append("--allow-legacy-observer-diagnostic")
     env = os.environ.copy()
     env.update({"PHASEGATE_CAMPAIGN_ROOT": str(root), "OMP_NUM_THREADS": "1",
                 "VECLIB_MAXIMUM_THREADS": "1"})

@@ -19,6 +19,8 @@ from phaseguard.phase_monitor import GPUPhase, PhaseMonitor  # noqa: E402
 from phaseguard.policies import TimeGateController  # noqa: E402
 from phaseguard.shared_index_manager import SharedIndexTaskManager  # noqa: E402
 
+from run_static_phaseaware_pilot import parser as pilot_parser  # noqa: E402
+
 
 class PermitRecorder:
     def __init__(self) -> None:
@@ -35,6 +37,17 @@ def request_fixture(start: float) -> dict[str, object]:
 
 
 def main() -> None:
+    parsed = pilot_parser().parse_args(["--observer-mode", "event"])
+    assert parsed.observer_mode == "event"
+    assert parsed.allow_legacy_observer_diagnostic is False
+    rejected = subprocess.run(
+        [sys.executable, str(REPO / "scripts/run_static_phaseaware_pilot.py"),
+         "--run-one", "--observer-mode", "legacy"],
+        cwd=REPO, capture_output=True, text=True,
+    )
+    assert rejected.returncode != 0
+    assert "legacy observer is retired" in rejected.stderr
+
     monitor = PhaseMonitor()
     source = inspect.getsource(PhaseMonitor.record_token)
     assert "_lock" not in source and "subprocess" not in source and "open(" not in source

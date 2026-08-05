@@ -118,6 +118,9 @@ def paired(rows: list[dict[str, Any]], first: str, second: str) -> list[dict[str
             "first_request_median_tpot_ms": a["request_median_tpot_ms"],
             "second_request_median_tpot_ms": b["request_median_tpot_ms"],
             "paired_request_median_change": b["request_median_tpot_ms"] / a["request_median_tpot_ms"] - 1,
+            "first_request_p95_median_ms": a["request_p95_p50_ms"],
+            "second_request_p95_median_ms": b["request_p95_p50_ms"],
+            "paired_request_p95_median_change": b["request_p95_p50_ms"] / a["request_p95_p50_ms"] - 1,
             "first_all_gap_mean_ms": a["all_token_gap_mean_ms"],
             "second_all_gap_mean_ms": b["all_token_gap_mean_ms"],
             "paired_all_gap_mean_change": b["all_token_gap_mean_ms"] / a["all_token_gap_mean_ms"] - 1,
@@ -126,6 +129,7 @@ def paired(rows: list[dict[str, Any]], first: str, second: str) -> list[dict[str
             "paired_tail_count_delta": b["requests_above_14ms"] - a["requests_above_14ms"],
             "first_official_p95_ms": a["official_p95_tpot_ms"],
             "second_official_p95_ms": b["official_p95_tpot_ms"],
+            "paired_official_p95_change": b["official_p95_tpot_ms"] / a["official_p95_tpot_ms"] - 1,
         })
     return output
 
@@ -179,10 +183,17 @@ def main() -> None:
     )
     overhead_pass = abs(med_request) <= .01 and abs(med_gap) <= .01
     tail_deltas = [int(row["paired_tail_count_delta"]) for row in causal]
+    causal_request_p95 = median(row["paired_request_p95_median_change"] for row in causal)
+    causal_gap_mean = median(row["paired_all_gap_mean_change"] for row in causal)
+    causal_official_p95 = median(row["paired_official_p95_change"] for row in causal)
     if all(delta < 0 for delta in tail_deltas):
         causal_text = "Event had fewer >14 ms requests in every pair; this supports legacy-observer contribution."
     elif all(delta == 0 for delta in tail_deltas) or median(tail_deltas) == 0:
-        causal_text = "Tail incidence was similar; the result favors a common OS/runtime cause."
+        causal_text = (
+            "The r4-derived tail incidence was similar and does not support the legacy "
+            "observer as the cause of that old slow state. A common OS/runtime stall "
+            "remains plausible, but these quiet validation blocks do not establish its cause."
+        )
     else:
         causal_text = "Tail-count differences were mixed; observer causality is inconclusive."
     lines = [
@@ -198,6 +209,10 @@ def main() -> None:
     ]
     lines.extend(f"| {row['repeat']} | {row['first_request_median_tpot_ms']:.3f} | {row['second_request_median_tpot_ms']:.3f} | {row['paired_request_median_change']*100:.3f}% | {row['first_all_gap_mean_ms']:.3f} | {row['second_all_gap_mean_ms']:.3f} | {row['paired_all_gap_mean_change']*100:.3f}% |" for row in overhead)
     lines += ["", "## Legacy versus event", "", causal_text, "",
+              f"- Median paired request-p95 median change (event/legacy): {causal_request_p95*100:.3f}%",
+              f"- Median paired all-token mean-gap change (event/legacy): {causal_gap_mean*100:.3f}%",
+              f"- Median paired official p95 change (event/legacy): {causal_official_p95*100:.3f}%",
+              "- Legacy was slower on these broad metrics even though it did not increase the diagnostic >14 ms count.", "",
               "The 14 ms threshold is r4-derived and diagnostic, not preregistered paper evidence.", "",
               "| Pair | Legacy tail count | Event tail count | Delta (event-legacy) | Legacy official p95 | Event official p95 |",
               "|---:|---:|---:|---:|---:|---:|"]

@@ -1,0 +1,4 @@
+observer semantics: PASS
+M4 PhaseGate semantics: PASS
+static phase-aware policy semantics: PASS
+stabilized-sentinel event smoke: PASS (performance not interpreted)

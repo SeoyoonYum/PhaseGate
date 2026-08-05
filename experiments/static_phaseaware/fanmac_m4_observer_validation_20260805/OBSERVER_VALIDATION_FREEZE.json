@@ -1,0 +1,72 @@
+{
+  "freeze_version": 1,
+  "created_utc": "2026-08-05T08:41:35Z",
+  "repository_commit": "5846df53e5190324435d711e5300ed9d4023b345",
+  "machine_manifest": "machine_manifest.json",
+  "artifacts": {
+    "model_id": "mlx-community/Qwen2.5-1.5B-Instruct-4bit",
+    "model_revision": "8b403126fc14f14cfc99bb4cfa72ecbc129ea677",
+    "model_quantization": "4-bit",
+    "model_local_path": "/Users/m1/.cache/huggingface/hub/models--mlx-community--Qwen2.5-1.5B-Instruct-4bit/snapshots/8b403126fc14f14cfc99bb4cfa72ecbc129ea677",
+    "model_weights_size_bytes": 868628559,
+    "model_weights_sha256": "0979f33d1bc58afcf696d13f57977644e7b11a6f0eec3e631d8e9463d18c0717",
+    "tokenizer_sha256": "a8506e7111b80c6d8635951a02eab0f4e1a8e4e5772da83846579e97b16f61bf",
+    "tokenizer_config_sha256": "f7c61e32b7a17d19bf8e7037dcb74079a833e53ea9801f24008cac68458f03b7",
+    "index_path": "/Users/m1/kv-uma-research/experiments/phaseguard/index/hnsw_100k_d384.faiss",
+    "index_sha256": "4c65bde676235523dbba2f1dc78a44de3f447470d38105488586d7ca486a51f0",
+    "index_size_bytes": 180820834,
+    "index_vector_count": 100000,
+    "index_dimension": 384,
+    "index_M": 32,
+    "index_ef_construction": 80
+  },
+  "workload": {
+    "context_tokens": 2048,
+    "output_tokens": 128,
+    "measured_requests": 150,
+    "fresh_process_per_block": true,
+    "same_trace_within_pair": true,
+    "warmup": "load model; mx.eval parameters; unchanged global_warmup; stabilized long-context prefill sentinel before block",
+    "memory_limit_gb": 5.5
+  },
+  "observer_modes": {
+    "minimal": "token/phase/request timestamps and block-boundary host state only",
+    "event": "state-change event buffer plus native resource.getrusage memory sampling at 1 Hz",
+    "legacy": "r4 5 ms Python sampler and every-20-sample ps RSS read; diagnostic only"
+  },
+  "randomization": {
+    "seed": 2026080501,
+    "method": "seeded balanced order multiset shuffled across repeat labels"
+  },
+  "minimal_event_pairs": [
+    {"repeat": 0, "order": ["minimal", "event"], "prompt_seed": 3100000003, "query_seed": 4100000003},
+    {"repeat": 1, "order": ["event", "minimal"], "prompt_seed": 3100000017, "query_seed": 4100000017},
+    {"repeat": 2, "order": ["minimal", "event"], "prompt_seed": 3100000041, "query_seed": 4100000041}
+  ],
+  "legacy_event_pairs": [
+    {"repeat": 0, "order": ["event", "legacy"], "prompt_seed": 3200000007, "query_seed": 4200000007},
+    {"repeat": 1, "order": ["legacy", "event"], "prompt_seed": 3200000023, "query_seed": 4200000023},
+    {"repeat": 2, "order": ["legacy", "event"], "prompt_seed": 3200000039, "query_seed": 4200000039},
+    {"repeat": 3, "order": ["legacy", "event"], "prompt_seed": 3200000061, "query_seed": 4200000061},
+    {"repeat": 4, "order": ["event", "legacy"], "prompt_seed": 3200000083, "query_seed": 4200000083}
+  ],
+  "diagnostic_tail_threshold_ms": 14.0,
+  "diagnostic_tail_threshold_status": "derived from immutable r4; diagnostic only; not a preregistered paper metric",
+  "acceptance_gates": {
+    "correctness": [
+      "zero token timestamp/count failures",
+      "zero event reconstruction mismatches",
+      "zero production observer subprocess launches during measured block",
+      "event memory sampling rate <= 1 Hz",
+      "normal memory pressure",
+      "zero swap growth"
+    ],
+    "event_relative_to_minimal": {
+      "absolute_median_paired_request_median_tpot_change_max": 0.01,
+      "absolute_median_paired_all_token_mean_gap_change_max": 0.01
+    },
+    "pageout": "zero preferred; positive with zero swap and normal pressure is preserved as soft flag"
+  },
+  "retry_rule": "one retry only for a hard-invalid block; never retry a valid performance outcome",
+  "immutability": "This file must not change after the first measured observer-validation block."
+}

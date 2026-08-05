@@ -61,3 +61,8 @@ aborted after the allowed retry. New stages condition long-context prefill for a
 120 seconds and require the latest five burst medians to span no more than 1% before
 freezing a reference. This happens before measurement and does not change workload or
 timestamp semantics. The failed validation directory remains immutable evidence.
+# Post-validation production lockout
+
+- The legacy 5 ms observer now requires the explicit
+  `--allow-legacy-observer-diagnostic` flag. Production campaign commands omit
+  this flag, so the retired observer cannot be selected accidentally.

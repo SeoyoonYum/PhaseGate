@@ -1,0 +1,11 @@
+{
+  "created_utc": "2026-08-05T08:55:04Z",
+  "hardware": {"model_name": "Mac mini", "model_identifier": "Mac16,10", "model_number": "MU9D3FN/A", "chip": "Apple M4", "performance_cores": 4, "efficiency_cores": 6, "total_cpu_cores": 10, "gpu_cores": 10, "unified_memory_bytes": 17179869184},
+  "macos": {"version": "26.5", "build": "25F71"},
+  "python": "3.13.14",
+  "packages": {"mlx": "0.31.2", "mlx-lm": "0.31.3", "numpy": "2.4.6", "faiss-cpu": "1.14.3"},
+  "repository": {"path": "/Users/m1/kv-uma-research-m4-harness-20260805", "branch": "exp/m4-harness-stabilization-20260805", "commit": "adef3a6a04ad9fad89f98881a6066cf25f505bf5"},
+  "power": {"source": "AC Power", "low_power_mode": 0, "sleep": 0},
+  "initial_memory": {"swap_usage": "total=0 used=0 free=0", "memory_free_percent": 92},
+  "environment_controls": {"OMP_NUM_THREADS": "1", "VECLIB_MAXIMUM_THREADS": "1"}
+}

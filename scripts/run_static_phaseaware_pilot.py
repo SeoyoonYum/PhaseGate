@@ -764,6 +764,11 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--sample-ms", type=float, default=5.0)
     ap.add_argument("--rss-sample-stride", type=int, default=20)
     ap.add_argument("--observer-mode", choices=("minimal", "event", "legacy"), default="event")
+    ap.add_argument(
+        "--allow-legacy-observer-diagnostic",
+        action="store_true",
+        help="permit the retired high-frequency observer for frozen diagnostics only",
+    )
     ap.add_argument("--memory-sample-interval-s", type=float, default=1.0)
     ap.add_argument("--warmup-s", type=float, default=1.0)
     ap.add_argument("--mem-limit-gb", type=float, default=6.0)
@@ -789,6 +794,11 @@ def parser() -> argparse.ArgumentParser:
 
 def main() -> None:
     args = parser().parse_args()
+    if args.observer_mode == "legacy" and not args.allow_legacy_observer_diagnostic:
+        raise SystemExit(
+            "legacy observer is retired; use --allow-legacy-observer-diagnostic only "
+            "for an explicitly frozen diagnostic"
+        )
     args.index = args.index if args.index.is_absolute() else REPO / args.index
     if args.baseline_file is not None and not args.baseline_file.is_absolute():
         args.baseline_file = REPO / args.baseline_file
