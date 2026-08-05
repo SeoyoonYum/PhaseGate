@@ -37,7 +37,7 @@ from phaseguard.cpu_task_manager import CPUTaskManager  # noqa: E402
 from phaseguard.metrics import append_jsonl, environment_metadata, percentile  # noqa: E402
 from phaseguard.phase_monitor import GPUPhase, PhaseMonitor  # noqa: E402
 from phaseguard.policies import (FixedWorkerPolicy, PolicyController,
-    StaticCapsPolicy)  # noqa: E402
+    StaticCapsPolicy, TimeGateController)  # noqa: E402
 from phaseguard.request_pipeline import GPUTicket, GPUWorker  # noqa: E402
 from phaseguard.static_phaseaware import (counter_rate_drift, latency_drift_ratio,
     linear_slope, phase_counter_delta, phase_duration_s, phase_transition_metrics)  # noqa: E402
@@ -263,6 +263,8 @@ def policy_name(args: argparse.Namespace) -> str:
         return f"fixed{args.fixed_workers}"
     if args.policy == "phasegate":
         return f"phasegate{args.prefill_cap}to{args.decode_cap}"
+    if args.policy == "timegate":
+        return f"timegate{args.prefill_cap}to{args.decode_cap}"
     if args.policy == "fixed0":
         return "fixed0"
     return args.policy
@@ -396,16 +398,25 @@ def run_block(args: argparse.Namespace) -> None:
 
         monitor = PhaseMonitor()
         controller = None
+        timegate_events: list[dict[str, Any]] = []
         load = None
         if manager is not None:
-            policy = create_policy(args)
-            controller = PolicyController(policy, manager, args.context)
-            monitor.set_listener(controller)
-            controller(GPUPhase.IDLE, None)
+            if args.policy == "timegate":
+                if args.timegate_schedule is None:
+                    raise RuntimeError("TimeGate requires --timegate-schedule")
+            else:
+                policy = create_policy(args)
+                controller = PolicyController(policy, manager, args.context)
+                monitor.set_listener(controller)
+                controller(GPUPhase.IDLE, None)
             load = AlwaysBackloggedHNSW(
                 manager, args.feeders, args.queries_per_task, args.chunk, args.query_seed
             ).start()
             time.sleep(args.warmup_s)
+            # Anchor the frozen offset to the measured portion, not backlog warm-up.
+            if args.policy == "timegate":
+                controller = TimeGateController(
+                    manager, args.timegate_schedule, args.timegate_offset_s).start()
 
         q0 = manager.demand_snapshot() if manager is not None else zero_snapshot()
         l0 = load.snapshot() if load is not None else {
@@ -444,6 +455,9 @@ def run_block(args: argparse.Namespace) -> None:
         host_after = capture_state(pids)
         q1 = manager.demand_snapshot() if manager is not None else zero_snapshot()
         l1 = load.snapshot() if load is not None else l0
+        if args.policy == "timegate" and controller is not None:
+            controller.close()
+            timegate_events = controller.events()
         if load is not None:
             load.stop()
         events = monitor.events()
@@ -474,26 +488,34 @@ def run_block(args: argparse.Namespace) -> None:
     completed_queries = int(q1["completed_queries"]) - int(q0["completed_queries"])
     total_qps = completed_queries / duration if manager is not None else 0.0
     task_latencies = list(l1.get("latencies_s", []))[len(list(l0.get("latencies_s", []))):]
-    transition = (phase_transition_metrics(samples, decode_cap) if manager is not None
+    transition = (phase_transition_metrics(samples, decode_cap)
+                  if manager is not None and args.policy != "timegate"
                   else {"phase_transition_to_cap_ms": 0.0,
                         "phase_transition_to_cap_max_ms": 0.0,
                         "decode_cap_overshoot_fraction": 0.0,
                         "decode_cap_overshoot_worker_mean": 0.0,
                         "decode_cap_overshoot_worker_max": 0.0,
-                        "decode_cap_applied_fraction": 1.0})
+                        "decode_cap_applied_fraction": (float(np.mean([
+                            int(row["permitted_workers"]) in {prefill_cap, decode_cap}
+                            for row in decode_samples])) if decode_samples and manager is not None
+                            else 1.0)})
     qps_drift = counter_rate_drift(samples, "completed_queries")
     tpot_quarter_ratio = quarter_ratio(tpot_request)
     ttft_quarter_ratio = quarter_ratio(ttft_request)
     qps_quarter_ratio = quarter_counter_rate_ratio(samples, "completed_queries")
-    prefill_applied = (float(np.mean(
-        [int(row["permitted_workers"]) == prefill_cap for row in prefill_samples]
-    )) if prefill_samples and manager is not None else 1.0)
+    prefill_applied = (float(np.mean([
+        int(row["permitted_workers"]) in ({prefill_cap, decode_cap}
+            if args.policy == "timegate" else {prefill_cap}) for row in prefill_samples
+    ])) if prefill_samples and manager is not None else 1.0)
     cap_binding = (float(np.mean([
         int(row["outstanding_tasks"]) > int(row["permitted_workers"])
         and int(row["permitted_workers"]) < args.max_workers for row in samples
     ])) if manager is not None else 0.0)
     active_log_present = bool(prefill_samples and decode_samples)
     cap_applied = prefill_applied >= .95 and transition["decode_cap_applied_fraction"] >= .95
+    timegate_phase_blind = (args.policy != "timegate" or (
+        controller is not None and controller.phase_callback_calls == 0
+        and all(event.get("source") == "wall_clock_only" for event in timegate_events)))
     drift_clean = (abs(tpot_quarter_ratio - 1.0) <= args.within_block_drift_tolerance
                    and abs(ttft_quarter_ratio - 1.0) <= args.within_block_drift_tolerance)
     qps_drift_clean = (args.policy == "llm-only"
@@ -528,6 +550,7 @@ def run_block(args: argparse.Namespace) -> None:
         "token_timestamps_valid": timestamps_valid,
         "active_worker_log_present": active_log_present,
         "policy_cap_applied": args.policy == "llm-only" or cap_applied,
+        "timegate_phase_blind": timegate_phase_blind,
         "steady_duration_sufficient": duration >= args.min_duration_s,
         "completion_count_sufficient": enough_progress,
         "decode_admission_zero": decode_admission_zero,
@@ -540,13 +563,14 @@ def run_block(args: argparse.Namespace) -> None:
         "token_timestamps_valid": timestamps_valid,
         "active_worker_log_present": active_log_present,
         "policy_cap_applied": args.policy == "llm-only" or cap_applied,
+        "timegate_phase_blind": timegate_phase_blind,
         "decode_admission_zero": decode_admission_zero,
     }
     hard_failure_flags = [key for key, passed in hard_validity.items() if not passed]
     soft_flags = [key for key, passed in validity.items()
                   if not passed and key not in {"token_count_exact", "token_timestamps_valid",
                                                  "active_worker_log_present", "policy_cap_applied",
-                                                 "decode_admission_zero"}]
+                                                 "decode_admission_zero", "timegate_phase_blind"}]
     if preload_soft: soft_flags.append("preload_memory_preflight")
     if resident_soft: soft_flags.append("resident_memory_preflight")
     if sentinel_before_soft: soft_flags.append("sentinel_before")
@@ -657,6 +681,28 @@ def run_block(args: argparse.Namespace) -> None:
         "backlog_slope_tasks_s": (
             (int(q1["outstanding_tasks"]) - int(q0["outstanding_tasks"])) / duration),
         "prefill_cap_applied_fraction": prefill_applied,
+        "prefill_high_cap_fraction": (float(np.mean([
+            int(sample["permitted_workers"]) == prefill_cap for sample in prefill_samples]))
+            if prefill_samples and manager is not None else 0.0),
+        "prefill_low_cap_fraction": (float(np.mean([
+            int(sample["permitted_workers"]) == decode_cap for sample in prefill_samples]))
+            if prefill_samples and manager is not None else 0.0),
+        "decode_high_cap_fraction": (float(np.mean([
+            int(sample["permitted_workers"]) == prefill_cap for sample in decode_samples]))
+            if decode_samples and manager is not None else 0.0),
+        "decode_low_cap_fraction": (float(np.mean([
+            int(sample["permitted_workers"]) == decode_cap for sample in decode_samples]))
+            if decode_samples and manager is not None else 0.0),
+        "high_cap_duty_fraction": (float(np.mean([
+            int(sample["permitted_workers"]) == prefill_cap for sample in samples]))
+            if samples and manager is not None else 0.0),
+        "cap_transitions_per_s": ((max(0, controller.changes - 1) / duration)
+            if controller is not None and duration > 0 else 0.0),
+        "timegate_phase_callback_calls": (None if args.policy != "timegate"
+            else controller.phase_callback_calls),
+        "timegate_schedule_path": (str(args.timegate_schedule)
+            if args.policy == "timegate" else None),
+        "timegate_offset_s": args.timegate_offset_s if args.policy == "timegate" else None,
         **transition,
         "resident_memory_bytes": int(delta["experiment_rss_after_bytes"]),
         "peak_resident_memory_bytes": max([int(row["rss_bytes"]) for row in samples], default=0),
@@ -706,7 +752,8 @@ def run_block(args: argparse.Namespace) -> None:
     timeline_dir.mkdir(parents=True, exist_ok=True)
     (timeline_dir / f"{run_key}.json").write_text(json.dumps({
         "run_id": run_id, "run_key": run_key, "events": events,
-        "demand_samples": samples}, separators=(",", ":")) + "\n")
+        "demand_samples": samples, "timegate_events": timegate_events},
+        separators=(",", ":")) + "\n")
     print(json.dumps(row, indent=2, default=str))
 
 
@@ -766,6 +813,11 @@ def block_command(args: argparse.Namespace, policy: str, prefill: int, decode: i
                "--rss-sample-stride", str(args.rss_sample_stride)]
     if args.run_label:
         command += ["--run-label", args.run_label]
+    if policy == "timegate":
+        if args.timegate_schedule is None:
+            raise RuntimeError("TimeGate requires a frozen schedule")
+        command += ["--timegate-schedule", str(args.timegate_schedule),
+                    "--timegate-offset-s", str(args.timegate_offset_s)]
     command += ["--primary-request-tpot", args.primary_request_tpot,
                 "--ttft-origin", args.ttft_origin]
     if args.closed_loop_arrivals:
@@ -821,14 +873,19 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--stage", choices=("smoke", "isolated_baseline", "characterization",
                                         "token_logging_overhead", "baseline_revalidation",
                                         "calibration", "evaluation", "paired_pilot",
-                                        "decodecap0_pilot"),
+                                        "decodecap0_pilot", "m2_preflight", "m2_semantic_smoke",
+                                        "m2_mechanism", "m2_baseline", "m2_calibration",
+                                        "m2_timegate_smoke", "m2_sentinel", "m2_heldout",
+                                        "m2_output512_baseline", "m2_output512"),
                     default="calibration")
-    ap.add_argument("--policy", choices=("llm-only", "serialization", "fixed", "fixed0", "phasegate"),
+    ap.add_argument("--policy", choices=("llm-only", "serialization", "fixed", "fixed0", "phasegate", "timegate"),
                     default="llm-only")
     ap.add_argument("--run-label")
     ap.add_argument("--fixed-workers", type=int, default=1)
     ap.add_argument("--prefill-cap", type=int, default=4)
     ap.add_argument("--decode-cap", type=int, default=1)
+    ap.add_argument("--timegate-schedule", type=Path)
+    ap.add_argument("--timegate-offset-s", type=float, default=0.0)
     ap.add_argument("--repeat", type=int, default=0)
     ap.add_argument("--attempt", type=int, default=1)
     ap.add_argument("--repeats", type=int, default=3)

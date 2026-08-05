@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import csv
+import json
 import threading
 import time
 from dataclasses import dataclass
@@ -209,3 +210,74 @@ class PolicyController:
                 self.last = permit
             self.overhead_s += time.perf_counter() - t0
             return permit
+
+
+class TimeGateController:
+    """Phase-blind wall-clock permit controller using a frozen cyclic schedule.
+
+    This controller deliberately does not implement the phase-listener call
+    signature and is never registered with :class:`PhaseMonitor`.  Its only
+    input after construction is ``time.perf_counter()``.
+    """
+
+    def __init__(self, manager: object, schedule_path: str | Path,
+                 offset_s: float = 0.0) -> None:
+        payload = json.loads(Path(schedule_path).read_text())
+        intervals = payload.get("intervals")
+        if not isinstance(intervals, list) or len(intervals) < 2:
+            raise ValueError("TimeGate schedule requires at least two intervals")
+        parsed: list[tuple[int, float]] = []
+        for item in intervals:
+            cap, duration = int(item["cap"]), float(item["duration_s"])
+            if not 0 <= cap <= int(manager.max_workers) or duration <= 0:
+                raise ValueError("invalid TimeGate interval")
+            parsed.append((cap, duration))
+        if len({cap for cap, _ in parsed}) != 2:
+            raise ValueError("TimeGate schedule must contain exactly two cap values")
+        self.manager = manager
+        self.intervals = parsed
+        self.period_s = sum(duration for _, duration in parsed)
+        self.offset_s = float(offset_s) % self.period_s
+        self.changes = 0
+        self.overhead_s = 0.0
+        self.last: int | None = None
+        self.phase_callback_calls = 0
+        self._events: list[dict[str, float | int | str]] = []
+        self._stop = threading.Event()
+        self._thread = threading.Thread(target=self._run, name="timegate-clock", daemon=True)
+
+    def _at(self, position: float) -> tuple[int, float]:
+        cursor = position % self.period_s
+        for cap, duration in self.intervals:
+            if cursor < duration:
+                return cap, duration - cursor
+            cursor -= duration
+        cap, duration = self.intervals[-1]
+        return cap, duration
+
+    def start(self) -> "TimeGateController":
+        self._thread.start()
+        return self
+
+    def _run(self) -> None:
+        origin = time.perf_counter()
+        while not self._stop.is_set():
+            t0 = time.perf_counter()
+            cap, remaining = self._at(self.offset_s + (t0 - origin))
+            if cap != self.last:
+                self.manager.set_permits(cap)
+                self.last = cap
+                self.changes += 1
+                self._events.append({"timestamp": t0, "cap": cap,
+                                     "source": "wall_clock_only"})
+            self.overhead_s += time.perf_counter() - t0
+            self._stop.wait(max(0.0005, min(remaining, 0.05)))
+
+    def close(self) -> None:
+        self._stop.set()
+        self._thread.join(timeout=5)
+        if self._thread.is_alive():
+            raise RuntimeError("TimeGate controller did not stop")
+
+    def events(self) -> list[dict[str, float | int | str]]:
+        return list(self._events)
