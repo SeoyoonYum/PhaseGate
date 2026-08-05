@@ -38,7 +38,7 @@ def policy_name(spec: dict[str, Any]) -> str:
 def create_freeze(campaign: Path) -> dict[str, Any]:
     path = campaign / "CALIBRATION_POLICY_FREEZE.json"
     if path.exists(): return json.loads(path.read_text())
-    mechanism = read_jsonl(campaign / "m4_mechanism/raw/runs.jsonl")
+    mechanism = read_jsonl(campaign / "m4_mechanism_clean/raw/runs.jsonl")
     cap4 = [row for row in mechanism if row.get("policy") == "fixed4"]
     cap4_safe = len(cap4) == 3 and all(row.get("status") == "valid"
         and int(row.get("swap_used_delta_bytes", 0)) == 0

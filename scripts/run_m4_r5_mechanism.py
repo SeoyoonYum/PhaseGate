@@ -33,8 +33,8 @@ def label(policy: str, cap: int) -> str:
     return "llm-only" if policy == "llm-only" else f"fixed{cap}"
 
 
-def freeze(campaign: Path) -> dict[str, Any]:
-    path = campaign / "M4_MECHANISM_FREEZE.json"
+def freeze(campaign: Path, stage: str) -> dict[str, Any]:
+    path = campaign / "M4_MECHANISM_CLEAN_FREEZE.json"
     if path.exists():
         return json.loads(path.read_text())
     baseline_result = json.loads((campaign / "R5_BASELINE_A_RESULT.json").read_text())
@@ -52,7 +52,7 @@ def freeze(campaign: Path) -> dict[str, Any]:
         repeats.append({"repeat": repeat, "prompt_seed": 3610000019 + repeat * 10007,
                         "query_seed": 3610500022 + repeat * 10007, "order": order})
     payload = {
-        "created_utc": datetime.now(timezone.utc).isoformat(),
+        "created_utc": datetime.now(timezone.utc).isoformat(), "stage": stage,
         "repository_commit": git_head(), "observer_mode": "event",
         "baseline": baseline_result, "selected_cpu_only_K_hi": k_hi["selected_K_hi"],
         "workload": {"context_tokens": 2048, "output_tokens": 128,
@@ -71,11 +71,11 @@ def freeze(campaign: Path) -> dict[str, Any]:
     return payload
 
 
-def run_block(campaign: Path, spec: dict[str, Any], repeat_spec: dict[str, Any],
+def run_block(campaign: Path, stage: str, spec: dict[str, Any], repeat_spec: dict[str, Any],
               index: Path, model: Path, log: Any) -> None:
     policy, cap = str(spec["policy"]), int(spec["cap"])
     repeat = int(repeat_spec["repeat"]); expected = label(policy, cap)
-    raw = campaign / "m4_mechanism/raw/runs.jsonl"
+    raw = campaign / stage / "raw/runs.jsonl"
     existing = [row for row in read_jsonl(raw)
                 if row.get("policy") == expected and int(row.get("repeat", -1)) == repeat]
     if any(row.get("status") == "valid" for row in existing):
@@ -84,7 +84,7 @@ def run_block(campaign: Path, spec: dict[str, Any], repeat_spec: dict[str, Any],
     if attempt > 2:
         raise RuntimeError(f"mechanism hard-invalid retry exhausted: {expected}/r{repeat}")
     command = [
-        sys.executable, str(BLOCK), "--run-one", "--stage", "m4_mechanism",
+        sys.executable, str(BLOCK), "--run-one", "--stage", stage,
         "--policy", policy, "--observer-mode", "event", "--repeat", str(repeat),
         "--attempt", str(attempt), "--fixed-workers", str(cap),
         "--prefill-cap", str(cap), "--decode-cap", str(cap),
@@ -111,13 +111,13 @@ def run_block(campaign: Path, spec: dict[str, Any], repeat_spec: dict[str, Any],
             if row.get("policy") == expected and int(row.get("repeat", -1)) == repeat]
     if not rows or rows[-1].get("status") != "valid":
         if attempt == 1:
-            run_block(campaign, spec, repeat_spec, index, model, log)
+            run_block(campaign, stage, spec, repeat_spec, index, model, log)
             return
         raise RuntimeError(f"mechanism block invalid twice: {expected}/r{repeat}")
 
 
-def export(campaign: Path) -> None:
-    rows = read_jsonl(campaign / "m4_mechanism/raw/runs.jsonl")
+def export(campaign: Path, stage: str) -> None:
+    rows = read_jsonl(campaign / stage / "raw/runs.jsonl")
     if len([row for row in rows if row.get("status") == "valid"]) != 12:
         raise RuntimeError("mechanism stage is incomplete")
     fields = ["policy", "repeat", "attempt", "status", "p95_tpot_ms", "p95_ttft_ms",
@@ -138,16 +138,17 @@ def main() -> None:
     parser.add_argument("--campaign", required=True, type=Path)
     parser.add_argument("--index", required=True, type=Path)
     parser.add_argument("--model", required=True, type=Path)
+    parser.add_argument("--stage", default="m4_mechanism_clean")
     args = parser.parse_args(); campaign = args.campaign.resolve()
-    protocol = freeze(campaign)
+    protocol = freeze(campaign, args.stage)
     if git_head() != protocol["repository_commit"]:
         raise SystemExit("repository commit differs from M4_MECHANISM_FREEZE.json")
-    with (campaign / "m4_mechanism_orchestration.log").open("a") as log:
+    with (campaign / f"{args.stage}_orchestration.log").open("a") as log:
         for repeat_spec in protocol["repeats"]:
             for spec in repeat_spec["order"]:
-                run_block(campaign, spec, repeat_spec, args.index.resolve(),
+                run_block(campaign, args.stage, spec, repeat_spec, args.index.resolve(),
                           args.model.resolve(), log)
-    export(campaign)
+    export(campaign, args.stage)
 
 
 if __name__ == "__main__":
