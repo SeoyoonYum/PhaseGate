@@ -108,7 +108,12 @@ def await_sentinel(model: Any, context: int, reference_path: Path, tolerance: fl
     if reference_path.exists():
         reference = float(json.loads(reference_path.read_text())["median_ms"])
     else:
-        reference = prefill_sentinel(model, context, max(3, reps))
+        # MLX's first long-context passes can precede the steady thermal/clock
+        # plateau even after the generic one-token warm-up. Discard two full
+        # sentinel bursts before freezing the stage reference.
+        prefill_sentinel(model, context, max(3, reps))
+        prefill_sentinel(model, context, max(3, reps))
+        reference = prefill_sentinel(model, context, max(5, reps))
         reference_path.write_text(json.dumps(
             {"context": context, "median_ms": reference, "created": datetime.now().isoformat()},
             indent=2) + "\n")
