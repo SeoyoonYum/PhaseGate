@@ -52,3 +52,12 @@ Every run manifest and result row records `observer_mode`.
 Smoke performance is not scientific evidence. A full campaign restart is allowed only
 after the frozen minimal/event correctness and overhead gates pass. The legacy/event
 result is diagnostic and may be positive, negative, or inconclusive.
+
+## Sentinel stabilization amendment
+
+The first frozen observer validation exposed a separate cold-reference failure: a
+1677.70 ms stage reference moved to 1795.88 ms after one long block. The stage was
+aborted after the allowed retry. New stages condition long-context prefill for at least
+120 seconds and require the latest five burst medians to span no more than 1% before
+freezing a reference. This happens before measurement and does not change workload or
+timestamp semantics. The failed validation directory remains immutable evidence.

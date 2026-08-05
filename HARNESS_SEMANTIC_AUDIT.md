@@ -48,6 +48,13 @@ Production event mode uses a persistent Python thread calling the native
 and never accesses the phase/token lock. Minimal mode has no in-block memory observer.
 Legacy mode retains the old sampler solely for the frozen causal diagnostic.
 
+## Sentinel reference conditioning
+
+Creating a new stage reference now requires at least 120 seconds of unmeasured
+long-context prefill conditioning and a five-burst rolling range no greater than 1%.
+Existing references are never rewritten. The sentinel remains outside the measured
+block and therefore does not move or add work to the token timestamp path.
+
 ## Functional evidence
 
 - `scripts/test_observer_semantics.py`: token fast path, native monitor, ordered event

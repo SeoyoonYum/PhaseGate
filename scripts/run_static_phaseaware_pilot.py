@@ -105,19 +105,34 @@ def prefill_sentinel(model: Any, context: int, reps: int) -> float:
 
 
 def await_sentinel(model: Any, context: int, reference_path: Path, tolerance: float,
-                   cooldown_s: float, attempts: int, reps: int) -> dict[str, Any]:
+                   cooldown_s: float, attempts: int, reps: int,
+                   reference_warmup_s: float) -> dict[str, Any]:
     reference_path.parent.mkdir(parents=True, exist_ok=True)
     if reference_path.exists():
         reference = float(json.loads(reference_path.read_text())["median_ms"])
     else:
-        # MLX's first long-context passes can precede the steady thermal/clock
-        # plateau even after the generic one-token warm-up. Discard two full
-        # sentinel bursts before freezing the stage reference.
-        prefill_sentinel(model, context, max(3, reps))
-        prefill_sentinel(model, context, max(3, reps))
-        reference = prefill_sentinel(model, context, max(5, reps))
+        # A cold base M4 can sustain a faster prefill state for tens of seconds,
+        # then reach a slower long-block plateau. Condition for a frozen minimum
+        # duration and require a stable rolling window before creating the stage
+        # reference. This work is outside every measured block.
+        started = time.perf_counter()
+        values: list[float] = []
+        maximum_s = max(reference_warmup_s * 2.0, reference_warmup_s + 60.0)
+        while True:
+            values.append(prefill_sentinel(model, context, max(3, reps)))
+            elapsed = time.perf_counter() - started
+            recent = values[-5:]
+            stable = len(recent) == 5 and max(recent) / min(recent) <= 1.01
+            if elapsed >= reference_warmup_s and stable:
+                break
+            if elapsed >= maximum_s:
+                raise RuntimeError("sentinel reference failed to reach a stable plateau")
+        reference = float(np.median(recent))
         reference_path.write_text(json.dumps(
-            {"context": context, "median_ms": reference, "created": datetime.now().isoformat()},
+            {"context": context, "median_ms": reference, "created": datetime.now().isoformat(),
+             "reference_warmup_s": reference_warmup_s,
+             "observed_warmup_s": time.perf_counter() - started,
+             "rolling_values_ms": recent},
             indent=2) + "\n")
     measured: list[dict[str, Any]] = []
     for attempt in range(attempts):
@@ -275,7 +290,8 @@ def run_block(args: argparse.Namespace) -> None:
                      / f"sentinel_{'smoke_' if args.smoke else ''}ctx{args.context}_mem{args.mem_limit_gb:g}.json")
     sentinel_before = await_sentinel(model, args.context, sentinel_path,
                                      args.sentinel_tolerance, args.sentinel_cooldown,
-                                     args.sentinel_attempts, args.sentinel_reps)
+                                     args.sentinel_attempts, args.sentinel_reps,
+                                     args.sentinel_reference_warmup_s)
     if not sentinel_before["passed"]:
         append_jsonl(output, {"run_id": run_id, "run_key": run_key, "status": "invalid",
                      "invalid_reason": "sentinel_before", "stage": args.stage,
@@ -420,7 +436,8 @@ def run_block(args: argparse.Namespace) -> None:
     # terminates persistent FAISS workers and any outstanding non-preemptive task.
     sentinel_after = await_sentinel(model, args.context, sentinel_path,
                                     args.sentinel_tolerance, args.sentinel_cooldown,
-                                    args.sentinel_attempts, args.sentinel_reps)
+                                    args.sentinel_attempts, args.sentinel_reps,
+                                    args.sentinel_reference_warmup_s)
 
     tpot_request = [float(row["p95_tpot_ms"]) for row in rows]
     ttft_request = [float(row["ttft_ms"]) for row in rows]
@@ -667,6 +684,7 @@ def block_command(args: argparse.Namespace, policy: str, prefill: int, decode: i
                "--sentinel-cooldown", str(args.sentinel_cooldown),
                "--sentinel-attempts", str(args.sentinel_attempts),
                "--sentinel-reps", str(args.sentinel_reps),
+               "--sentinel-reference-warmup-s", str(args.sentinel_reference_warmup_s),
                "--within-block-drift-tolerance", str(args.within_block_drift_tolerance),
                "--within-block-qps-drift-tolerance",
                str(args.within_block_qps_drift_tolerance),
@@ -755,6 +773,7 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--sentinel-cooldown", type=float, default=30.0)
     ap.add_argument("--sentinel-attempts", type=int, default=4)
     ap.add_argument("--sentinel-reps", type=int, default=2)
+    ap.add_argument("--sentinel-reference-warmup-s", type=float, default=120.0)
     ap.add_argument("--within-block-drift-tolerance", type=float, default=0.10)
     ap.add_argument("--within-block-qps-drift-tolerance", type=float, default=0.15)
     ap.add_argument("--min-duration-s", type=float, default=5.0)
@@ -782,6 +801,7 @@ def main() -> None:
         args.memory_idle_seconds = min(args.memory_idle_seconds, 1.0)
         args.sentinel_cooldown = min(args.sentinel_cooldown, 1.0)
         args.sentinel_reps = 1
+        args.sentinel_reference_warmup_s = min(args.sentinel_reference_warmup_s, 2.0)
         args.min_duration_s = min(args.min_duration_s, 0.1)
         args.min_completed_queries = min(args.min_completed_queries, 64)
         # Functional smoke still rejects paging; allow the resident model plus
