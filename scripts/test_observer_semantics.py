@@ -20,6 +20,7 @@ from phaseguard.policies import TimeGateController  # noqa: E402
 from phaseguard.shared_index_manager import SharedIndexTaskManager  # noqa: E402
 
 from run_static_phaseaware_pilot import parser as pilot_parser  # noqa: E402
+from run_m4_cpu_scaling import measured_events  # noqa: E402
 
 
 class PermitRecorder:
@@ -37,6 +38,17 @@ def request_fixture(start: float) -> dict[str, object]:
 
 
 def main() -> None:
+    cpu_scaling_source = (REPO / "scripts/run_m4_cpu_scaling.py").read_text()
+    assert 'subprocess.run(["ps"' not in cpu_scaling_source
+    completed, latencies, active_mean, active_p95 = measured_events([
+        {"timestamp": 1.0, "event_type": "query_started", "query_id": "q0",
+         "query_count": 1, "active_query_count": 1},
+        {"timestamp": 1.5, "event_type": "query_completed", "query_id": "q0",
+         "query_count": 1, "active_query_count": 0},
+    ], 1.0, 2.0)
+    assert completed == 1 and latencies == [0.5]
+    assert active_mean == 0.5 and active_p95 == 1.0
+
     parsed = pilot_parser().parse_args(["--observer-mode", "event"])
     assert parsed.observer_mode == "event"
     assert parsed.allow_legacy_observer_diagnostic is False
