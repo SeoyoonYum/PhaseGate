@@ -85,6 +85,67 @@ class StaticCapsPolicy(Policy):
         return self.max_workers
 
 
+class TimeGateController:
+    """Phase-blind wall-clock replay controller.
+
+    This controller is intentionally not a ``Policy`` and its callback accepts
+    no GPU phase. It can therefore be audited mechanically: cap selection only
+    reads monotonic wall time and a frozen interval schedule.
+    """
+
+    def __init__(self, manager: object, high_cap: int, low_cap: int,
+                 intervals: list[tuple[int, float]], offset_s: float = 0.0) -> None:
+        if not intervals or any(cap not in (high_cap, low_cap) or duration <= 0
+                                for cap, duration in intervals):
+            raise ValueError("TimeGate requires positive frozen high/low intervals")
+        self.manager = manager
+        self.high_cap, self.low_cap = high_cap, low_cap
+        self.intervals = tuple((int(cap), float(duration)) for cap, duration in intervals)
+        self.offset_s = float(offset_s) % sum(duration for _, duration in self.intervals)
+        self.phase_state_consulted = False
+        self.transitions: list[dict[str, float | int]] = []
+        self._stop = threading.Event()
+        self._thread: threading.Thread | None = None
+
+    def _position(self, offset: float) -> tuple[int, float]:
+        remaining = offset
+        for index, (_, duration) in enumerate(self.intervals):
+            if remaining < duration:
+                return index, duration - remaining
+            remaining -= duration
+        return 0, self.intervals[0][1]
+
+    def start(self) -> "TimeGateController":
+        if self._thread is not None:
+            raise RuntimeError("TimeGate already started")
+        self._thread = threading.Thread(target=self._run, name="timegate-wall-clock", daemon=True)
+        self._thread.start()
+        return self
+
+    def _run(self) -> None:
+        index, remaining = self._position(self.offset_s)
+        while not self._stop.is_set():
+            cap, _ = self.intervals[index]
+            self.manager.set_permits(cap)
+            self.transitions.append({"timestamp": time.perf_counter(), "cap": cap})
+            if self._stop.wait(remaining):
+                break
+            index = (index + 1) % len(self.intervals)
+            remaining = self.intervals[index][1]
+
+    def stop(self) -> None:
+        self._stop.set()
+        if self._thread is not None:
+            self._thread.join(timeout=5)
+            if self._thread.is_alive():
+                raise RuntimeError("TimeGate controller did not stop")
+
+    def audit(self) -> dict[str, object]:
+        return {"phase_state_consulted": self.phase_state_consulted,
+                "selection_input": "time.monotonic/perf_counter only",
+                "transition_count": len(self.transitions)}
+
+
 @dataclass(frozen=True)
 class ProfilePoint:
     model: str
