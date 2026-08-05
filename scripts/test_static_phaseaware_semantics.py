@@ -2,7 +2,10 @@
 """Fast policy and non-preemptive phase-transition semantics validation."""
 from __future__ import annotations
 
+import json
 import sys
+import tempfile
+import time
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
@@ -10,7 +13,7 @@ sys.path.insert(0, str(REPO / "src"))
 sys.path.insert(0, str(REPO / "scripts"))
 from analyze_static_phaseaware import select_with_tie_rule  # noqa: E402
 from phaseguard.phase_monitor import GPUPhase  # noqa: E402
-from phaseguard.policies import FixedWorkerPolicy, StaticCapsPolicy  # noqa: E402
+from phaseguard.policies import FixedWorkerPolicy, StaticCapsPolicy, TimeGateController  # noqa: E402
 from phaseguard.static_phaseaware import counter_rate_drift, phase_transition_metrics  # noqa: E402
 
 
@@ -64,6 +67,21 @@ def main() -> None:
     ]
     selected = select_with_tie_rule(candidates, "decode_cap")
     assert selected is not None and selected["decode_cap"] == 3
+    class FakeManager:
+        max_workers = 4
+        def __init__(self) -> None: self.permits = []
+        def set_permits(self, count: int) -> None: self.permits.append(count)
+    manager = FakeManager()
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".json") as handle:
+        json.dump({"intervals": [{"cap": 4, "duration_s": .01},
+                                  {"cap": 1, "duration_s": .01}]}, handle)
+        handle.flush()
+        timegate = TimeGateController(manager, handle.name, offset_s=.005).start()
+        time.sleep(.035)
+        timegate.close()
+    assert set(manager.permits) == {1, 4}
+    assert timegate.phase_callback_calls == 0
+    assert all(event["source"] == "wall_clock_only" for event in timegate.events())
     print("static phase-aware policy semantics: PASS")
 
 
