@@ -1,0 +1,9 @@
+{
+  "stage": "m2_preflight",
+  "p95_tpot_ms": 14.774480562204722,
+  "p95_ttft_ms": 2205.0928335500003,
+  "median_inter_token_gap_ms": 13.870309708661418,
+  "p99_inter_token_gap_ms": 17.186515410649008,
+  "p95_transition_gap_ms": 21.2471561,
+  "source_run_key": "static_m2_preflight_llm-only_r00_a01"
+}

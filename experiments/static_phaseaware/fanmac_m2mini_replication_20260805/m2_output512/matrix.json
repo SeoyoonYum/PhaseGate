@@ -1,0 +1,21 @@
+{
+  "frozen_before_execution": true,
+  "prompt_query_seed_base": 926806301,
+  "policy_order_seed_base": 926806401,
+  "requests_per_block": 75,
+  "output_tokens": 512,
+  "orders": [
+    [
+      "fixed1",
+      "phasegate4to1"
+    ],
+    [
+      "phasegate4to1",
+      "fixed1"
+    ],
+    [
+      "phasegate4to1",
+      "fixed1"
+    ]
+  ]
+}

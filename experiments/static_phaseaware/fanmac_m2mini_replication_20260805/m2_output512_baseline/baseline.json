@@ -1,0 +1,13 @@
+{
+  "valid_repeats": 3,
+  "requests_per_repeat": 75,
+  "output_tokens": 512,
+  "p95_tpot_ms": 14.173547676320938,
+  "p95_ttft_ms": 2188.3974921,
+  "median_inter_token_gap_ms": 14.00817571819961,
+  "run_keys": [
+    "static_m2_output512_baseline_llm-only_r00_a01",
+    "static_m2_output512_baseline_llm-only_r01_a01",
+    "static_m2_output512_baseline_llm-only_r02_a01"
+  ]
+}

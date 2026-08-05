@@ -1,0 +1,2 @@
+output_tokens,paired_repeats,median_qps_gain,median_prefill_fraction
+512,3,0.3652685691259905,0.2021129396345259

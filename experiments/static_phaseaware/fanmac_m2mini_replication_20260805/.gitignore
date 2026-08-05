@@ -1,0 +1,7 @@
+# Raw per-request/token timelines and machine-local execution logs are retained
+# on the experiment host. The compact reproducibility bundle and summarized
+# artifacts in this directory are the reviewable Git payload.
+*/raw/
+*/logs/
+raw/
+logs/

@@ -1,0 +1,6 @@
+repeat,fixed_pageout_delta,phasegate_pageout_delta,timegate_pageout_delta,phasegate_fixed_pageout_imbalance,phasegate_timegate_pageout_imbalance,phasegate_vs_fixed_gain,phasegate_vs_timegate_gain,fixed_swap_delta,phasegate_swap_delta,timegate_swap_delta,fully_pageout_free
+0,0,0,0,0,0,0.8090520458958583,0.03016034284739111,0,0,0,True
+1,0,0,0,0,0,0.8050316628918377,0.030307700477122168,0,0,0,True
+2,0,0,0,0,0,0.8043615102796016,0.03124744586621442,0,0,0,True
+3,0,0,0,0,0,0.8039705739605998,0.018185764254112335,0,0,0,True
+4,0,0,0,0,0,0.805474527129068,0.013296540425981718,0,0,0,True

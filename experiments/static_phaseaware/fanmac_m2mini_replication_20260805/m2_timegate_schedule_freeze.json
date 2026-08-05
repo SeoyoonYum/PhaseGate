@@ -1,0 +1,39 @@
+{
+  "frozen_before_heldout": true,
+  "source": "M2 calibration only",
+  "source_policy": "phasegate4to1",
+  "source_run_key": "static_m2_calibration_phasegate4to1_r01_a01",
+  "schedule_type": "periodic T_high/T_low fallback after replay smoke duty audit",
+  "fallback_reason": "The calibration replay smoke missed the predeclared duty tolerance by 3.0006 percentage points because its 430.718 s replay period caused an observation-window boundary effect. No held-out evaluation had started.",
+  "failed_replay_schedule_artifact": "m2_timegate_schedule_replay_failed_audit.json",
+  "failed_replay_audit_artifact": "m2_timegate_semantic_audit_replay_failed.csv",
+  "phase_blind": true,
+  "phase_callback_registered": false,
+  "high_cap": 4,
+  "low_cap": 1,
+  "T_high_s": 2.178218166689658,
+  "T_low_s": 2.128961878310365,
+  "intervals": [
+    {
+      "cap": 4,
+      "duration_s": 2.178218166689658
+    },
+    {
+      "cap": 1,
+      "duration_s": 2.128961878310365
+    }
+  ],
+  "period_s": 4.307180045000023,
+  "target_high_cap_duty_fraction": 0.5057179277235545,
+  "target_transitions_per_s": 0.4643409328388058,
+  "offset_seed": 926805801,
+  "heldout_offsets_s": [
+    2.239323687638784,
+    0.995620945818412,
+    0.9299869724956158,
+    2.5571041578290075,
+    3.815016610424277,
+    2.0304013905245135,
+    0.1327019049218812
+  ]
+}

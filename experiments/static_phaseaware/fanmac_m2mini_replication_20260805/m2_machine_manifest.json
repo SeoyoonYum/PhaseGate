@@ -1,0 +1,71 @@
+{
+  "captured": "2026-08-05T02:41:33.741253+02:00",
+  "repository_path": "/Users/m1/kv-uma-research-m2mini",
+  "branch": "exp/m2mini-phasegate-20260805",
+  "repository_commit": "9bd57c31bd100ae5fb1590dd326f51556c71da69",
+  "initial_worktree_was_clean": true,
+  "m4_manifest_available": false,
+  "model_name": "Mac mini",
+  "model_identifier": "Mac14,3",
+  "chip": "Apple M2",
+  "cpu_cores_total": 8,
+  "performance_cores": 4,
+  "efficiency_cores": 4,
+  "gpu_cores": 10,
+  "unified_memory_bytes": 17179869184,
+  "macos": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5\nBuildVersion:\t\t25F71",
+  "python": "3.13.14",
+  "packages": {
+    "mlx": "0.31.2",
+    "mlx-lm": "0.31.3",
+    "numpy": "2.4.6",
+    "faiss-cpu": "1.14.3"
+  },
+  "model": {
+    "identifier": "mlx-community/Qwen2.5-1.5B-Instruct-4bit",
+    "revision": "8b403126fc14f14cfc99bb4cfa72ecbc129ea677",
+    "quantization": "4bit"
+  },
+  "index": {
+    "path": "/Users/m1/kv-uma-research-m2mini/experiments/phaseguard/index/hnsw_100k_d384.faiss",
+    "sha256": "4c65bde676235523dbba2f1dc78a44de3f447470d38105488586d7ca486a51f0",
+    "bytes": 180820834,
+    "configuration": {
+      "backend": "faiss-hnsw",
+      "dimensions": 384,
+      "ef_construction": 80,
+      "graph_degree": 32,
+      "index_bytes": 180820834,
+      "seed": 20260728,
+      "vectors": 100000
+    }
+  },
+  "disk": "Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s5   228Gi    31Gi   178Gi    15%    463k  1.9G    0%   /System/Volumes/Data",
+  "power": "Now drawing from 'AC Power'",
+  "power_settings": "AC Power:\n Sleep On Power Button 1\n autorestartatconnect 0\n lowpowermode         0\n standby              0\n ttyskeepawake        1\n powernap             1\n displaysleep         0\n womp                 1\n networkoversleep     0\n sleep                0\n tcpkeepalive         1\n autorestart          1\n disksleep            0",
+  "initial_vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                   156316.\nPages active:                                 397369.\nPages inactive:                               279636.\nPages speculative:                            116815.\nPages throttled:                                   0.\nPages wired down:                              66303.\nPages purgeable:                                1938.\n\"Translation faults\":                       17704961.\nPages copy-on-write:                         2656618.\nPages zero filled:                          18352752.\nPages reactivated:                              2461.\nPages purged:                                  30182.\nFile-backed pages:                            657690.\nAnonymous pages:                              136130.\nPages stored in compressor:                        0.\nPages occupied by compressor:                      0.\nDecompressions:                                    0.\nCompressions:                                      0.\nPageins:                                      174099.\nPageouts:                                          8.\nSwapins:                                           0.\nSwapouts:                                          0.",
+  "initial_swap": "vm.swapusage: total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+  "initial_memory_pressure": "The system has 17179869184 (1048576 pages with a page size of 16384).\n\nStats: \nPages free: 156428 \nPages purgeable: 1938 \nPages purged: 30182 \n\nSwap I/O:\nSwapins: 0 \nSwapouts: 0 \n\nPage Q counts:\nPages active: 397302 \nPages inactive: 279561 \nPages speculative: 116815 \nPages throttled: 0 \nPages wired down: 66300 \n\nCompressor Stats:\nPages used by compressor: 0 \nPages decompressed: 0 \nPages compressed: 0 \n\nFile I/O:\nPageins: 174070 \nPageouts: 8 \n\nSystem-wide memory free percentage: 93%",
+  "initial_memory_pressure_state": "normal",
+  "caffeinate_processes": "5768 caffeinate -dimsu",
+  "remote_desktop_audit": "no active 5900/3283 connection",
+  "remote_desktop_active_connection": false,
+  "execution_mode": "headless_ssh_tmux",
+  "seeds": {
+    "preflight_prompt_query": 926805001,
+    "semantic_prompt_query": 926805101,
+    "cpu_scaling_query": 926805201,
+    "mechanism_prompt_query": 926805301,
+    "mechanism_policy_order": 926805401,
+    "baseline_prompt": 926805501,
+    "calibration_prompt_query": 926805601,
+    "calibration_policy_order": 926805701,
+    "timegate_offsets": 926805801,
+    "sentinel_prompt": 926805901,
+    "heldout_prompt_query": 926806001,
+    "heldout_policy_order": 926806101,
+    "output512_baseline_prompt": 926806201,
+    "output512_prompt_query": 926806301,
+    "output512_policy_order": 926806401
+  }
+}

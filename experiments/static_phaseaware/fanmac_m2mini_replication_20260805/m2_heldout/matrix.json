@@ -1,0 +1,48 @@
+{
+  "frozen_before_execution": true,
+  "repeats": 5,
+  "requests_per_policy": 200,
+  "prompt_query_seed_base": 926806001,
+  "policy_order_seed_base": 926806101,
+  "orders": [
+    [
+      "fixed1",
+      "llm-only",
+      "phasegate4to1",
+      "timegate4to1"
+    ],
+    [
+      "phasegate4to1",
+      "llm-only",
+      "fixed1",
+      "timegate4to1"
+    ],
+    [
+      "timegate4to1",
+      "phasegate4to1",
+      "llm-only",
+      "fixed1"
+    ],
+    [
+      "fixed1",
+      "phasegate4to1",
+      "llm-only",
+      "timegate4to1"
+    ],
+    [
+      "timegate4to1",
+      "llm-only",
+      "phasegate4to1",
+      "fixed1"
+    ]
+  ],
+  "timegate_offsets_s": [
+    2.239323687638784,
+    0.995620945818412,
+    0.9299869724956158,
+    2.5571041578290075,
+    3.815016610424277
+  ],
+  "same_trace_within_repeat": true,
+  "new_heldout_traces": true
+}

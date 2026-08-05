@@ -1,0 +1,27 @@
+{
+  "frozen_before_execution": true,
+  "prompt_query_seed_base": 926805301,
+  "policy_order_seed_base": 926805401,
+  "requests_per_block": 100,
+  "output_tokens": 128,
+  "orders": [
+    [
+      "llm-only",
+      "fixed4",
+      "fixed1",
+      "fixed2"
+    ],
+    [
+      "llm-only",
+      "fixed2",
+      "fixed1",
+      "fixed4"
+    ],
+    [
+      "llm-only",
+      "fixed1",
+      "fixed4",
+      "fixed2"
+    ]
+  ]
+}

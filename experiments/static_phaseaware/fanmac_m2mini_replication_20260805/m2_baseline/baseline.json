@@ -1,0 +1,20 @@
+{
+  "valid_repeats": 5,
+  "requests_per_repeat": 150,
+  "output_tokens": 128,
+  "p95_tpot_ms": 14.01198346456693,
+  "p95_ttft_ms": 2187.09242065,
+  "median_inter_token_gap_ms": 13.915889602362205,
+  "p99_inter_token_gap_ms": 15.595337161321368,
+  "p95_transition_gap_ms": 20.377095949999998,
+  "tpot_max_deviation": 0.0036105975992761774,
+  "ttft_max_deviation": 0.0016080196779955092,
+  "run_keys": [
+    "static_m2_baseline_llm-only_r00_a01",
+    "static_m2_baseline_llm-only_r01_a01",
+    "static_m2_baseline_llm-only_r02_a01",
+    "static_m2_baseline_llm-only_r03_a01",
+    "static_m2_baseline_llm-only_r04_a01"
+  ],
+  "variation_within_3pct": true
+}

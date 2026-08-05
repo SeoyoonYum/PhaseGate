@@ -1,0 +1,12 @@
+{
+  "rows": [
+    "static_m2_sentinel_llm-only_r00_a01",
+    "static_m2_sentinel_llm-only_r01_a01",
+    "static_m2_sentinel_llm-only_r02_a01"
+  ],
+  "median_p95_tpot_ms": 13.934241079921259,
+  "median_p95_ttft_ms": 2184.6621962,
+  "tpot_drift": -0.005548278360609227,
+  "ttft_drift": -0.001111166783376083,
+  "within_3pct": true
+}
