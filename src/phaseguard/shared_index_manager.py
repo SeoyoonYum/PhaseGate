@@ -87,16 +87,18 @@ class SharedIndexTaskManager:
                     self._active[worker_id] = True
                     self._admitted_queries += n_queries
                 queries = make_queries(seed, n_queries, int(self.index.d))
-                for count, checksum in search_chunks(self.index, queries, self.top_k, chunk):
+                iterator = search_chunks(self.index, queries, self.top_k, chunk)
+                while True:
+                    query_started = time.perf_counter()
+                    try:
+                        count, checksum = next(iterator)
+                    except StopIteration:
+                        break
                     query_ended = time.perf_counter()
                     result.queries += count
                     result.chunks += 1
                     result.checksum += checksum
-                    result.query_latencies_s.extend(
-                        [(query_ended - started) / count] * count
-                        if result.chunks == 1 else [0.0] * count
-                    )
-                    started = query_ended
+                    result.query_latencies_s.extend([(query_ended - query_started) / count] * count)
                 with self._condition:
                     self._completed_queries += result.queries
             except Exception as exc:  # retain accounting evidence for invalidation
