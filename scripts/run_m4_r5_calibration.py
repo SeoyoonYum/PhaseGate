@@ -39,6 +39,13 @@ def accepted(row: dict[str, Any], amendment: dict[str, Any]) -> bool:
     return row.get("status") == "valid" or row.get("run_key") in amendment["accepted_run_keys"]
 
 
+def max_attempts(name: str, repeat: int, amendment: dict[str, Any]) -> int:
+    for item in amendment.get("premeasurement_retry_authorizations", []):
+        if item["policy"] == name and int(item["repeat"]) == repeat:
+            return int(item["max_attempt"])
+    return 2
+
+
 def policy_name(spec: dict[str, Any]) -> str:
     if spec["family"] == "fixed": return f"fixed{spec['decode_cap']}"
     return f"phasegate{spec['prefill_cap']}to{spec['decode_cap']}"
@@ -85,7 +92,9 @@ def run_candidate(campaign: Path, spec: dict[str, Any], repeat_spec: dict[str, A
                 if row.get("policy") == name and int(row.get("repeat", -1)) == repeat]
     if any(accepted(row, amendment) for row in existing): return
     attempt = max([int(row.get("attempt", 0)) for row in existing], default=0) + 1
-    if attempt > 2: raise RuntimeError(f"calibration retry exhausted: {name}/r{repeat}")
+    allowed_attempts = max_attempts(name, repeat, amendment)
+    if attempt > allowed_attempts:
+        raise RuntimeError(f"calibration retry exhausted: {name}/r{repeat}")
     family = str(spec["family"]); high = int(spec["prefill_cap"]); low = int(spec["decode_cap"])
     command = [sys.executable, str(BLOCK), "--run-one", "--stage", "m4_calibration",
         "--policy", family, "--observer-mode", "event", "--repeat", str(repeat),
@@ -109,7 +118,7 @@ def run_candidate(campaign: Path, spec: dict[str, Any], repeat_spec: dict[str, A
     rows = [row for row in read_jsonl(raw)
             if row.get("policy") == name and int(row.get("repeat", -1)) == repeat]
     if not rows or rows[-1].get("status") != "valid":
-        if attempt == 1:
+        if attempt < allowed_attempts:
             run_candidate(campaign, spec, repeat_spec, index, model, log); return
         raise RuntimeError(f"calibration invalid twice: {name}/r{repeat}")
 
