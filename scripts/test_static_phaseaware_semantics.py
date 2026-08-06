@@ -55,6 +55,13 @@ def main() -> None:
          "active_retrievals": 0, "phase_started": 2.0, "request_id": "r1"},
     ]
     assert phase_cap_applied_fraction(delayed_cap, "DECODE", 0) > .999
+    sparse_fixed_zero = [
+        {"timestamp": 3.0, "phase": "PREFILL", "permitted_workers": 0},
+        {"timestamp": 3.2, "phase": "DECODE", "permitted_workers": 0},
+        {"timestamp": 4.0, "phase": "IDLE", "permitted_workers": 4},
+    ]
+    assert phase_cap_applied_fraction(sparse_fixed_zero, "PREFILL", 0) == 1.0
+    assert phase_cap_applied_fraction(sparse_fixed_zero, "DECODE", 0) == 1.0
     progress = [
         {"timestamp": 0.0, "completed_queries": 0},
         {"timestamp": 1.0, "completed_queries": 100},

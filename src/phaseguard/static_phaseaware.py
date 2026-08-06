@@ -32,7 +32,10 @@ def phase_cap_applied_fraction(samples: list[dict[str, Any]], phase: str,
     """Wall-time fraction at a requested cap, never event-count weighted."""
     total = applied = 0.0
     for before, after in zip(samples, samples[1:]):
-        if before["phase"] != phase or after["phase"] != phase:
+        # State at `before` is valid until the next event. Requiring `after` to
+        # have the same phase incorrectly drops the entire phase for Fixed-0,
+        # which intentionally generates no retrieval events inside the phase.
+        if before["phase"] != phase:
             continue
         duration = max(0.0, float(after["timestamp"]) - float(before["timestamp"]))
         total += duration
