@@ -1,0 +1,4 @@
+policy,valid_paired_repeats,median_retrieval_qps,median_normalized_p95_tpot,median_normalized_p95_ttft,joint_slo_pass_count,median_request_joint_attainment,median_p99_inter_token_gap_ms,pageout_soft_flag_count,pageout_median,pageout_min,pageout_max
+fixed1,7,783.7443332408648,1.1653375937321964,1.0060814294791487,7,0.976,14.243050669610964,2,0,0,20
+phasegate4to1,7,1574.2172247255212,1.180840361885923,1.0458933509566468,7,0.976,14.364443420490716,3,0,0,2
+timegate4to1,7,1537.6396289081545,1.6025757611444214,1.043179593779681,0,0.388,19.374451249314003,2,0,0,4

@@ -1,0 +1,214 @@
+{
+  "created_utc": "2026-08-06T07:59:38.913573+00:00",
+  "repository_commit": "c1a2b5f51a6a0a63428c306bfb1d85402a51a9cd",
+  "primary_B": 1.25,
+  "policies": [
+    {
+      "name": "fixed1",
+      "family": "fixed",
+      "high": 1,
+      "low": 1
+    },
+    {
+      "name": "phasegate4to1",
+      "family": "phasegate",
+      "high": 4,
+      "low": 1
+    },
+    {
+      "name": "timegate4to1",
+      "family": "timegate",
+      "high": 4,
+      "low": 1
+    }
+  ],
+  "paired_randomized_repeats": 7,
+  "measured_requests_per_block": 250,
+  "context_tokens": 2048,
+  "output_tokens": 128,
+  "observer_mode": "event",
+  "repeats": [
+    {
+      "repeat": 0,
+      "prompt_seed": 3820000013,
+      "query_seed": 3820500016,
+      "timegate_offset_s": 931.6322415850486,
+      "order": [
+        {
+          "name": "timegate4to1",
+          "family": "timegate",
+          "high": 4,
+          "low": 1
+        },
+        {
+          "name": "phasegate4to1",
+          "family": "phasegate",
+          "high": 4,
+          "low": 1
+        },
+        {
+          "name": "fixed1",
+          "family": "fixed",
+          "high": 1,
+          "low": 1
+        }
+      ]
+    },
+    {
+      "repeat": 1,
+      "prompt_seed": 3820010020,
+      "query_seed": 3820510023,
+      "timegate_offset_s": 443.34799300084956,
+      "order": [
+        {
+          "name": "phasegate4to1",
+          "family": "phasegate",
+          "high": 4,
+          "low": 1
+        },
+        {
+          "name": "fixed1",
+          "family": "fixed",
+          "high": 1,
+          "low": 1
+        },
+        {
+          "name": "timegate4to1",
+          "family": "timegate",
+          "high": 4,
+          "low": 1
+        }
+      ]
+    },
+    {
+      "repeat": 2,
+      "prompt_seed": 3820020027,
+      "query_seed": 3820520030,
+      "timegate_offset_s": 886.5533864163509,
+      "order": [
+        {
+          "name": "timegate4to1",
+          "family": "timegate",
+          "high": 4,
+          "low": 1
+        },
+        {
+          "name": "phasegate4to1",
+          "family": "phasegate",
+          "high": 4,
+          "low": 1
+        },
+        {
+          "name": "fixed1",
+          "family": "fixed",
+          "high": 1,
+          "low": 1
+        }
+      ]
+    },
+    {
+      "repeat": 3,
+      "prompt_seed": 3820030034,
+      "query_seed": 3820530037,
+      "timegate_offset_s": 528.273737294759,
+      "order": [
+        {
+          "name": "timegate4to1",
+          "family": "timegate",
+          "high": 4,
+          "low": 1
+        },
+        {
+          "name": "phasegate4to1",
+          "family": "phasegate",
+          "high": 4,
+          "low": 1
+        },
+        {
+          "name": "fixed1",
+          "family": "fixed",
+          "high": 1,
+          "low": 1
+        }
+      ]
+    },
+    {
+      "repeat": 4,
+      "prompt_seed": 3820040041,
+      "query_seed": 3820540044,
+      "timegate_offset_s": 800.1366484638074,
+      "order": [
+        {
+          "name": "fixed1",
+          "family": "fixed",
+          "high": 1,
+          "low": 1
+        },
+        {
+          "name": "phasegate4to1",
+          "family": "phasegate",
+          "high": 4,
+          "low": 1
+        },
+        {
+          "name": "timegate4to1",
+          "family": "timegate",
+          "high": 4,
+          "low": 1
+        }
+      ]
+    },
+    {
+      "repeat": 5,
+      "prompt_seed": 3820050048,
+      "query_seed": 3820550051,
+      "timegate_offset_s": 274.0754714289042,
+      "order": [
+        {
+          "name": "phasegate4to1",
+          "family": "phasegate",
+          "high": 4,
+          "low": 1
+        },
+        {
+          "name": "fixed1",
+          "family": "fixed",
+          "high": 1,
+          "low": 1
+        },
+        {
+          "name": "timegate4to1",
+          "family": "timegate",
+          "high": 4,
+          "low": 1
+        }
+      ]
+    },
+    {
+      "repeat": 6,
+      "prompt_seed": 3820060055,
+      "query_seed": 3820560058,
+      "timegate_offset_s": 421.5184509213975,
+      "order": [
+        {
+          "name": "fixed1",
+          "family": "fixed",
+          "high": 1,
+          "low": 1
+        },
+        {
+          "name": "timegate4to1",
+          "family": "timegate",
+          "high": 4,
+          "low": 1
+        },
+        {
+          "name": "phasegate4to1",
+          "family": "phasegate",
+          "high": 4,
+          "low": 1
+        }
+      ]
+    }
+  ]
+}

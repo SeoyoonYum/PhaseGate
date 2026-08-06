@@ -1,0 +1,30 @@
+{
+  "created_date": "2026-08-06",
+  "repository_commit": "72bcef3a1516d6100ec1c975d7678abc48d0ffda",
+  "scope": "TimeGate semantic validity correction only",
+  "scientific_workload_changed": false,
+  "policy_semantics_changed": false,
+  "raw_rows_modified": false,
+  "accepted_run_keys": [
+    "static_m4_timegate_semantic_event_timegate4to1_r00_a01"
+  ],
+  "excluded_duplicate_run_keys": [
+    "static_m4_timegate_semantic_event_timegate4to1_r00_a02"
+  ],
+  "corrected_audit": {
+    "phase_state_consulted": false,
+    "selection_input": "time.monotonic/perf_counter only",
+    "allowed_caps_only": true,
+    "high_cap": 4,
+    "low_cap": 1,
+    "frozen_high_duty_fraction": 0.5138355761419262,
+    "observed_high_duty_fraction": 0.5227610554235923,
+    "prefill_high_cap_fraction": 0.530197617744257,
+    "decode_high_cap_fraction": 0.5152367069451183,
+    "query_accounting_exact": true,
+    "admissions_within_cap": true,
+    "observer_subprocess_count": 0,
+    "swap_growth_bytes": 0
+  },
+  "selection_rule": "retain first semantic attempt without inspecting policy performance; exclude automatically triggered duplicate"
+}

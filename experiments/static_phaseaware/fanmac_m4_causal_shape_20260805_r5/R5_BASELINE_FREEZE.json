@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-08-05T19:06:38.147220+00:00",
+  "repository_commit": "57705767158d2a2e8aa4ccc0134cfd4527803b4b",
+  "machine": {
+    "model_identifier": "Mac16,10",
+    "chip": "Apple M4",
+    "performance_cores": 4,
+    "efficiency_cores": 6,
+    "gpu_cores": 10,
+    "unified_memory": "16 GB"
+  },
+  "artifacts": {
+    "model_id": "mlx-community/Qwen2.5-1.5B-Instruct-4bit",
+    "model_revision": "8b403126fc14f14cfc99bb4cfa72ecbc129ea677",
+    "model_local_path": "/Users/m1/.cache/huggingface/hub/models--mlx-community--Qwen2.5-1.5B-Instruct-4bit/snapshots/8b403126fc14f14cfc99bb4cfa72ecbc129ea677",
+    "quantization": "4-bit",
+    "index_path": "/Users/m1/kv-uma-research/experiments/phaseguard/index/hnsw_100k_d384.faiss",
+    "index_sha256": "4c65bde676235523dbba2f1dc78a44de3f447470d38105488586d7ca486a51f0"
+  },
+  "workload": {
+    "observer_mode": "event",
+    "context_tokens": 2048,
+    "output_tokens": 128,
+    "measured_requests": 300,
+    "valid_repeats": 5,
+    "fresh_process_per_repeat": true,
+    "cpu_retrieval": false,
+    "warmup": "model global warmup plus stabilized long-context prefill sentinel",
+    "token_timestamp_semantics": "unchanged: after mx.eval on the model step",
+    "mlx_memory_limit_gb": 5.5
+  },
+  "trace_sets": {
+    "A": [
+      {
+        "repeat": 0,
+        "prompt_seed": 3500000017,
+        "query_seed": 3500500020
+      },
+      {
+        "repeat": 1,
+        "prompt_seed": 3500010024,
+        "query_seed": 3500510027
+      },
+      {
+        "repeat": 2,
+        "prompt_seed": 3500020031,
+        "query_seed": 3500520034
+      },
+      {
+        "repeat": 3,
+        "prompt_seed": 3500030038,
+        "query_seed": 3500530041
+      },
+      {
+        "repeat": 4,
+        "prompt_seed": 3500040045,
+        "query_seed": 3500540048
+      }
+    ],
+    "B": [
+      {
+        "repeat": 0,
+        "prompt_seed": 3600000023,
+        "query_seed": 3600500026
+      },
+      {
+        "repeat": 1,
+        "prompt_seed": 3600010030,
+        "query_seed": 3600510033
+      },
+      {
+        "repeat": 2,
+        "prompt_seed": 3600020037,
+        "query_seed": 3600520040
+      },
+      {
+        "repeat": 3,
+        "prompt_seed": 3600030044,
+        "query_seed": 3600530047
+      },
+      {
+        "repeat": 4,
+        "prompt_seed": 3600040051,
+        "query_seed": 3600540054
+      }
+    ]
+  },
+  "acceptance": {
+    "definition": "every run within +/-3% of its set median for official run p95 TPOT and TTFT",
+    "relative_tolerance": 0.03,
+    "hard_invalid": [
+      "crash_or_hang",
+      "swap_growth",
+      "warning_or_critical_memory_pressure",
+      "token_or_event_corruption",
+      "wrong_token_count",
+      "non_monotonic_timestamps",
+      "event_reconstruction_mismatch",
+      "production_observer_subprocess_launch"
+    ],
+    "hard_invalid_retry_limit": 1,
+    "set_policy": "run A first; if it fails, diagnose and permit only frozen B after a documented environmental correction"
+  },
+  "diagnostic_threshold_ms": 14.0,
+  "diagnostic_threshold_status": "derived from r4; diagnostic only, not a paper metric",
+  "next_stage_if_pass": "r5 CPU-only scaling caps 1,2,4"
+}

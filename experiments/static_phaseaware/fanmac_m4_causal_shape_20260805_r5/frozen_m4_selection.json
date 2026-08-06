@@ -1,0 +1,55 @@
+{
+  "created_utc": "2026-08-06T07:59:38.016829+00:00",
+  "repository_commit": "c1a2b5f51a6a0a63428c306bfb1d85402a51a9cd",
+  "primary_B": 1.25,
+  "selected_fixed": "fixed1",
+  "selected_phasegate": "phasegate4to1",
+  "budget_specific_selections": {
+    "1.1": {
+      "fixed": null,
+      "phasegate": null
+    },
+    "1.15": {
+      "fixed": null,
+      "phasegate": null
+    },
+    "1.2": {
+      "fixed": null,
+      "phasegate": "phasegate4to1"
+    },
+    "1.25": {
+      "fixed": "fixed1",
+      "phasegate": "phasegate4to1"
+    },
+    "1.3": {
+      "fixed": "fixed1",
+      "phasegate": "phasegate4to1"
+    },
+    "1.35": {
+      "fixed": "fixed1",
+      "phasegate": "phasegate4to1"
+    },
+    "1.4": {
+      "fixed": "fixed2",
+      "phasegate": "phasegate4to2"
+    },
+    "1.45": {
+      "fixed": "fixed2",
+      "phasegate": "phasegate4to2"
+    }
+  },
+  "baseline": {
+    "stage": "r5_baseline_A",
+    "valid_repeats": 5,
+    "p95_tpot_ms": 12.046228928229537,
+    "p95_ttft_ms": 1799.1402580089925,
+    "run_keys": [
+      "static_r5_baseline_A_event_llm-only_r00_a01",
+      "static_r5_baseline_A_event_llm-only_r01_a01",
+      "static_r5_baseline_A_event_llm-only_r02_a01",
+      "static_r5_baseline_A_event_llm-only_r03_a01",
+      "static_r5_baseline_A_event_llm-only_r04_a01"
+    ]
+  },
+  "calibration_freeze": "CALIBRATION_POLICY_FREEZE.json"
+}
