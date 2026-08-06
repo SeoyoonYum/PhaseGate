@@ -40,7 +40,8 @@ from phaseguard.policies import (FixedWorkerPolicy, PolicyController,
     StaticCapsPolicy, TimeGateController)  # noqa: E402
 from phaseguard.request_pipeline import GPUTicket, GPUWorker  # noqa: E402
 from phaseguard.static_phaseaware import (counter_rate_drift, latency_drift_ratio,
-    linear_slope, phase_counter_delta, phase_duration_s, phase_transition_metrics)  # noqa: E402
+    linear_slope, phase_cap_applied_fraction, phase_counter_delta, phase_duration_s,
+    phase_transition_metrics)  # noqa: E402
 
 
 POLICIES_MINIMAL = (
@@ -463,9 +464,8 @@ def run_block(args: argparse.Namespace) -> None:
                         "decode_cap_overshoot_worker_max": 0.0,
                         "decode_cap_applied_fraction": 1.0})
     qps_drift = counter_rate_drift(samples, "completed_queries")
-    prefill_applied = (float(np.mean(
-        [int(row["permitted_workers"]) == prefill_cap for row in prefill_samples]
-    )) if prefill_samples and manager is not None else 1.0)
+    prefill_applied = (phase_cap_applied_fraction(samples, "PREFILL", prefill_cap)
+                       if prefill_samples and manager is not None else 1.0)
     cap_binding = (float(np.mean([
         int(row["outstanding_tasks"]) > int(row["permitted_workers"])
         and int(row["permitted_workers"]) < args.max_workers for row in samples

@@ -11,7 +11,8 @@ sys.path.insert(0, str(REPO / "scripts"))
 from analyze_static_phaseaware import select_with_tie_rule  # noqa: E402
 from phaseguard.phase_monitor import GPUPhase  # noqa: E402
 from phaseguard.policies import FixedWorkerPolicy, StaticCapsPolicy  # noqa: E402
-from phaseguard.static_phaseaware import counter_rate_drift, phase_transition_metrics  # noqa: E402
+from phaseguard.static_phaseaware import (counter_rate_drift, phase_cap_applied_fraction,
+    phase_transition_metrics)  # noqa: E402
 
 
 def main() -> None:
@@ -45,6 +46,15 @@ def main() -> None:
     assert metrics["decode_cap_overshoot_worker_mean"] == 2.0
     assert metrics["decode_cap_overshoot_worker_max"] == 3.0
     assert metrics["decode_cap_applied_fraction"] == 1.0
+    delayed_cap = [
+        {"timestamp": 2.0, "phase": "DECODE", "permitted_workers": 2,
+         "active_retrievals": 2, "phase_started": 2.0, "request_id": "r1"},
+        {"timestamp": 2.0001, "phase": "DECODE", "permitted_workers": 0,
+         "active_retrievals": 2, "phase_started": 2.0, "request_id": "r1"},
+        {"timestamp": 2.1001, "phase": "DECODE", "permitted_workers": 0,
+         "active_retrievals": 0, "phase_started": 2.0, "request_id": "r1"},
+    ]
+    assert phase_cap_applied_fraction(delayed_cap, "DECODE", 0) > .999
     progress = [
         {"timestamp": 0.0, "completed_queries": 0},
         {"timestamp": 1.0, "completed_queries": 100},

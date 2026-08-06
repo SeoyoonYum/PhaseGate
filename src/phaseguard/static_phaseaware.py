@@ -27,6 +27,20 @@ def phase_duration_s(samples: list[dict[str, Any]], phase: str) -> float:
     return total
 
 
+def phase_cap_applied_fraction(samples: list[dict[str, Any]], phase: str,
+                               cap: int) -> float:
+    """Wall-time fraction at a requested cap, never event-count weighted."""
+    total = applied = 0.0
+    for before, after in zip(samples, samples[1:]):
+        if before["phase"] != phase or after["phase"] != phase:
+            continue
+        duration = max(0.0, float(after["timestamp"]) - float(before["timestamp"]))
+        total += duration
+        if int(before["permitted_workers"]) == cap:
+            applied += duration
+    return applied / total if total > 0 else 0.0
+
+
 def phase_transition_metrics(samples: list[dict[str, Any]], decode_cap: int) -> dict[str, float]:
     """Measure non-preemptive worker overshoot after each decode admission change."""
     decode = [row for row in samples if row["phase"] == "DECODE"]
@@ -64,9 +78,8 @@ def phase_transition_metrics(samples: list[dict[str, Any]], decode_cap: int) -> 
         "decode_cap_overshoot_fraction": float(overshoot.mean()),
         "decode_cap_overshoot_worker_mean": float(excess[overshoot].mean()) if overshoot.any() else 0.0,
         "decode_cap_overshoot_worker_max": float(excess.max()),
-        "decode_cap_applied_fraction": float(np.mean(
-            [int(row["permitted_workers"]) == decode_cap for row in decode]
-        )),
+        "decode_cap_applied_fraction": phase_cap_applied_fraction(
+            samples, "DECODE", decode_cap),
     }
 
 

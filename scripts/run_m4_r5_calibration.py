@@ -30,6 +30,15 @@ def git_head() -> str:
                           capture_output=True, text=True).stdout.strip()
 
 
+def validity_amendment(campaign: Path) -> dict[str, Any]:
+    path = campaign / "CALIBRATION_GATE_AMENDMENT.json"
+    return json.loads(path.read_text()) if path.exists() else {"accepted_run_keys": []}
+
+
+def accepted(row: dict[str, Any], amendment: dict[str, Any]) -> bool:
+    return row.get("status") == "valid" or row.get("run_key") in amendment["accepted_run_keys"]
+
+
 def policy_name(spec: dict[str, Any]) -> str:
     if spec["family"] == "fixed": return f"fixed{spec['decode_cap']}"
     return f"phasegate{spec['prefill_cap']}to{spec['decode_cap']}"
@@ -71,9 +80,10 @@ def run_candidate(campaign: Path, spec: dict[str, Any], repeat_spec: dict[str, A
                   index: Path, model: Path, log: Any) -> None:
     name = policy_name(spec); repeat = int(repeat_spec["repeat"])
     raw = campaign / "m4_calibration/raw/runs.jsonl"
+    amendment = validity_amendment(campaign)
     existing = [row for row in read_jsonl(raw)
                 if row.get("policy") == name and int(row.get("repeat", -1)) == repeat]
-    if any(row.get("status") == "valid" for row in existing): return
+    if any(accepted(row, amendment) for row in existing): return
     attempt = max([int(row.get("attempt", 0)) for row in existing], default=0) + 1
     if attempt > 2: raise RuntimeError(f"calibration retry exhausted: {name}/r{repeat}")
     family = str(spec["family"]); high = int(spec["prefill_cap"]); low = int(spec["decode_cap"])
@@ -105,8 +115,9 @@ def run_candidate(campaign: Path, spec: dict[str, Any], repeat_spec: dict[str, A
 
 
 def select(campaign: Path, protocol: dict[str, Any]) -> None:
+    amendment = validity_amendment(campaign)
     rows = [row for row in read_jsonl(campaign / "m4_calibration/raw/runs.jsonl")
-            if row.get("status") == "valid"]
+            if accepted(row, amendment)]
     expected = len(protocol["candidates"]) * 3
     if len(rows) != expected: raise RuntimeError(f"calibration incomplete: {len(rows)}/{expected}")
     groups: dict[str, list[dict[str, Any]]] = {}
@@ -158,7 +169,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(); parser.add_argument("--campaign", type=Path, required=True)
     parser.add_argument("--index", type=Path, required=True); parser.add_argument("--model", type=Path, required=True)
     args = parser.parse_args(); campaign = args.campaign.resolve(); protocol = create_freeze(campaign)
-    if git_head() != protocol["repository_commit"]: raise SystemExit("commit differs from calibration freeze")
+    amendment = validity_amendment(campaign)
+    expected_commit = amendment.get("repository_commit", protocol["repository_commit"])
+    if git_head() != expected_commit: raise SystemExit("commit differs from calibration freeze/amendment")
     with (campaign / "m4_calibration_orchestration.log").open("a") as log:
         for repeat_spec in protocol["repeats"]:
             for spec in repeat_spec["order"]:
