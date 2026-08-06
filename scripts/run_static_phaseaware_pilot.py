@@ -491,7 +491,16 @@ def run_block(args: argparse.Namespace) -> None:
         and int(row["permitted_workers"]) < args.max_workers for row in samples
     ])) if manager is not None else 0.0)
     active_log_present = manager is None or bool(prefill_samples and decode_samples)
-    cap_applied = prefill_applied >= .95 and transition["decode_cap_applied_fraction"] >= .95
+    if args.policy == "timegate":
+        allowed_caps = {prefill_cap, decode_cap}
+        cap_applied = (
+            timegate is not None
+            and timegate.audit()["phase_state_consulted"] is False
+            and int(timegate.audit()["transition_count"]) > 0
+            and all(int(row["permitted_workers"]) in allowed_caps for row in samples)
+        )
+    else:
+        cap_applied = prefill_applied >= .95 and transition["decode_cap_applied_fraction"] >= .95
     drift_clean = (
         abs(tpot_drift - 1.0) <= args.within_block_drift_tolerance
         and abs(ttft_drift - 1.0) <= args.within_block_drift_tolerance

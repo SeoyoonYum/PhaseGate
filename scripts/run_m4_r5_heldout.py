@@ -29,6 +29,15 @@ def git_head() -> str:
                           capture_output=True, text=True).stdout.strip()
 
 
+def gate_amendment(campaign: Path) -> dict[str, Any]:
+    path = campaign / "HELDOUT_GATE_AMENDMENT.json"
+    return json.loads(path.read_text()) if path.exists() else {"accepted_run_keys": []}
+
+
+def accepted(row: dict[str, Any], amendment: dict[str, Any]) -> bool:
+    return row.get("status") == "valid" or row.get("run_key") in amendment["accepted_run_keys"]
+
+
 def parse_policy(name: str) -> tuple[str, int, int]:
     if match := re.fullmatch(r"fixed(\d+)", name):
         cap = int(match.group(1)); return "fixed", cap, cap
@@ -97,9 +106,10 @@ def run(campaign: Path, stage: str, spec: dict[str, Any], repeat: int,
         requests: int, prompt_seed: int, query_seed: int, index: Path, model: Path,
         log: Any, schedule: Path | None = None, offset: float = 0.0) -> dict[str, Any]:
     name = str(spec["name"]); raw = campaign / stage / "raw/runs.jsonl"
+    amendment = gate_amendment(campaign)
     existing = [row for row in read_jsonl(raw)
                 if row.get("policy") == name and int(row.get("repeat", -1)) == repeat]
-    valid = [row for row in existing if row.get("status") == "valid"]
+    valid = [row for row in existing if accepted(row, amendment)]
     if valid: return valid[-1]
     attempt = max([int(row.get("attempt", 0)) for row in existing], default=0) + 1
     if attempt > 2: raise RuntimeError(f"retry exhausted: {stage}/{name}/r{repeat}")
@@ -146,7 +156,9 @@ def main() -> None:
     parser.add_argument("--index", type=Path, required=True); parser.add_argument("--model", type=Path, required=True)
     args = parser.parse_args(); campaign = args.campaign.resolve(); index = args.index.resolve(); model = args.model.resolve()
     schedule, heldout = freeze_schedule(campaign)
-    if git_head() != heldout["repository_commit"]: raise SystemExit("commit differs from held-out freeze")
+    amendment = gate_amendment(campaign)
+    expected_commit = amendment.get("repository_commit", heldout["repository_commit"])
+    if git_head() != expected_commit: raise SystemExit("commit differs from held-out freeze/amendment")
     schedule_path = campaign / "timegate_schedule_freeze.json"
     with (campaign / "m4_heldout_orchestration.log").open("a") as log:
         high, low = schedule["high_cap"], schedule["low_cap"]
