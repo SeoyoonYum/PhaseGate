@@ -105,6 +105,24 @@ def prefill_sentinel(model: Any, context: int, reps: int) -> float:
     return float(np.median(measure.time_prefill(model, context, reps=reps, warmup=1)))
 
 
+def condition_prefill_plateau(model: Any, context: int, reps: int,
+                              minimum_s: float) -> dict[str, Any]:
+    """Reach the stable long-block plateau in the current fresh process."""
+    started = time.perf_counter()
+    values: list[float] = []
+    maximum_s = max(minimum_s * 2.0, minimum_s + 60.0)
+    while True:
+        values.append(prefill_sentinel(model, context, max(3, reps)))
+        elapsed = time.perf_counter() - started
+        recent = values[-5:]
+        stable = len(recent) == 5 and max(recent) / min(recent) <= 1.01
+        if elapsed >= minimum_s and stable:
+            return {"duration_s": elapsed, "rolling_values_ms": recent,
+                    "median_ms": float(np.median(recent))}
+        if elapsed >= maximum_s:
+            raise RuntimeError("sentinel conditioning failed to reach a stable plateau")
+
+
 def await_sentinel(model: Any, context: int, reference_path: Path, tolerance: float,
                    cooldown_s: float, attempts: int, reps: int,
                    reference_warmup_s: float) -> dict[str, Any]:
@@ -116,23 +134,14 @@ def await_sentinel(model: Any, context: int, reference_path: Path, tolerance: fl
         # then reach a slower long-block plateau. Condition for a frozen minimum
         # duration and require a stable rolling window before creating the stage
         # reference. This work is outside every measured block.
-        started = time.perf_counter()
-        values: list[float] = []
-        maximum_s = max(reference_warmup_s * 2.0, reference_warmup_s + 60.0)
-        while True:
-            values.append(prefill_sentinel(model, context, max(3, reps)))
-            elapsed = time.perf_counter() - started
-            recent = values[-5:]
-            stable = len(recent) == 5 and max(recent) / min(recent) <= 1.01
-            if elapsed >= reference_warmup_s and stable:
-                break
-            if elapsed >= maximum_s:
-                raise RuntimeError("sentinel reference failed to reach a stable plateau")
-        reference = float(np.median(recent))
+        conditioning = condition_prefill_plateau(
+            model, context, reps, reference_warmup_s)
+        recent = conditioning["rolling_values_ms"]
+        reference = float(conditioning["median_ms"])
         reference_path.write_text(json.dumps(
             {"context": context, "median_ms": reference, "created": datetime.now().isoformat(),
              "reference_warmup_s": reference_warmup_s,
-             "observed_warmup_s": time.perf_counter() - started,
+             "observed_warmup_s": conditioning["duration_s"],
              "rolling_values_ms": recent},
             indent=2) + "\n")
     measured: list[dict[str, Any]] = []
@@ -146,7 +155,18 @@ def await_sentinel(model: Any, context: int, reference_path: Path, tolerance: fl
             return {"reference_ms": reference, "passed": True, "attempts": measured}
         if attempt + 1 < attempts:
             time.sleep(cooldown_s)
-    return {"reference_ms": reference, "passed": False, "attempts": measured}
+    # A separate conditioning process is insufficient because the initial
+    # fast prefill state is process-local. Condition this same fresh process,
+    # outside the measured block, then audit once more.
+    conditioning = condition_prefill_plateau(
+        model, context, reps, reference_warmup_s)
+    value = prefill_sentinel(model, context, reps)
+    ratio = value / reference
+    passed = abs(ratio - 1.0) <= tolerance
+    measured.append({"attempt": "post_conditioning", "median_ms": value,
+                     "ratio": ratio, "deviation": ratio - 1.0, "passed": passed})
+    return {"reference_ms": reference, "passed": passed, "attempts": measured,
+            "in_process_conditioning": conditioning}
 
 
 def zero_snapshot() -> dict[str, int]:
