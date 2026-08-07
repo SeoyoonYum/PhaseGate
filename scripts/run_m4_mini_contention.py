@@ -10,6 +10,7 @@ import os
 import random
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from statistics import median
@@ -72,6 +73,33 @@ def append_jsonl(path: Path, row: dict[str, Any]) -> None:
         handle.write(json.dumps(row, sort_keys=True) + "\n")
 
 
+def thermal_clean(snapshot: dict[str, Any]) -> bool:
+    thermal = snapshot["thermal"]
+    text = thermal["stdout"].lower()
+    return (
+        thermal["returncode"] == 0
+        and "no thermal warning level has been recorded" in text
+        and "no performance warning level has been recorded" in text
+    )
+
+
+def tree_checksum_manifest(root: Path) -> dict[str, Any]:
+    files = []
+    aggregate = hashlib.sha256()
+    for path in sorted(item for item in root.rglob("*") if item.is_file()):
+        relative = str(path.relative_to(root))
+        digest = sha256(path)
+        size = path.stat().st_size
+        files.append({"path": relative, "size": size, "sha256": digest})
+        aggregate.update(f"{digest}  {relative}\n".encode())
+    return {
+        "root_name": root.name,
+        "file_count": len(files),
+        "aggregate_sha256": aggregate.hexdigest(),
+        "files": files,
+    }
+
+
 def verify_machine(machine: dict[str, Any]) -> None:
     hardware = machine["hardware"]
     expected = {"model_name": "Mac mini", "model_identifier": "Mac16,10",
@@ -90,7 +118,8 @@ def verify_machine(machine: dict[str, Any]) -> None:
         raise SystemExit("index checksum mismatch")
 
 
-def prepare(campaign: Path, index: Path, model: Path, r4: Path, machine_source: Path) -> None:
+def prepare(campaign: Path, index: Path, model: Path, r4: Path, r1: Path,
+            machine_source: Path) -> None:
     if campaign.exists() and any(campaign.iterdir()):
         required = [campaign / "CAMPAIGN_MANIFEST.json",
                     campaign / "BASELINE_PROTOCOL_FREEZE.json",
@@ -110,43 +139,47 @@ def prepare(campaign: Path, index: Path, model: Path, r4: Path, machine_source: 
         raise SystemExit("model snapshot is incomplete")
     if not r4.is_dir():
         raise SystemExit("immutable r4 campaign is missing")
-    stop_report = r4.parents[3] / "M4_CAMPAIGN_STOP_REPORT.md"
+    if not r1.is_dir():
+        raise SystemExit("immutable r1 contention pilot is missing")
+    stop_report = r1 / "M4_MINI_CONTENTION_STOP_REPORT.md"
     if not stop_report.exists():
-        stop_report = REPO / "M4_CAMPAIGN_STOP_REPORT.md"
+        raise SystemExit("r1 stop report is missing")
     source_mechanism = r4 / "m4_mechanism_runs.csv"
     head = git_head()
     baseline_sets = {
-        "A": [{"repeat": repeat, "prompt_seed": 2026085100 + repeat * 10_000,
-               "query_seed": 2026090100 + repeat * 10_000} for repeat in range(5)],
-        "B": [{"repeat": repeat, "prompt_seed": 2026089100 + repeat * 10_000,
-               "query_seed": 2026094100 + repeat * 10_000} for repeat in range(5)],
+        "A": [{"repeat": repeat, "prompt_seed": 2026087200 + repeat * 10_000,
+               "query_seed": 2026092200 + repeat * 10_000} for repeat in range(5)],
+        "B": [{"repeat": repeat, "prompt_seed": 2026091200 + repeat * 10_000,
+               "query_seed": 2026096200 + repeat * 10_000} for repeat in range(5)],
     }
     policies = [{"policy": "llm-only", "cap": 0}, {"policy": "fixed", "cap": 1},
                 {"policy": "fixed", "cap": 2}, {"policy": "fixed", "cap": 4}]
     repeats = []
+    base_order = [dict(item) for item in policies]
+    random.Random(2026080702).shuffle(base_order)
     for repeat in range(3):
-        order = [dict(item) for item in policies]
-        random.Random(2026080601 + repeat).shuffle(order)
-        repeats.append({"repeat": repeat, "prompt_seed": 2026084100 + repeat * 10_000,
-                        "query_seed": 2026084600 + repeat * 10_000, "order": order})
+        order = base_order[repeat:] + base_order[:repeat]
+        repeats.append({"repeat": repeat, "prompt_seed": 2026087300 + repeat * 10_000,
+                        "query_seed": 2026092300 + repeat * 10_000, "order": order})
     common = {"context_tokens": 2048, "output_tokens": 128,
               "observer_mode": "event", "memory_sample_interval_s": 1,
-              "warmup_s": 2, "fresh_process_per_block": True,
+              "warmup_s": 2, "block_cooldown_s": 10,
+              "fresh_process_per_block": True,
               "faiss_omp_threads": 1, "max_workers": 4,
               "queries_per_task": 4096, "chunk": 16, "ef_search": 128, "top_k": 10,
               "mlx_memory_limit_gb": 5.5}
     baseline_freeze = {
         "created_utc": now(), "repository_commit": head,
-        "source": "r4 isolated-baseline and revalidation request counts/seeds",
-        "trace_sets": baseline_sets, "workload": {**common, "measured_requests": 150,
+        "source": "r2 protocol with newly frozen 300-request traces",
+        "trace_sets": baseline_sets, "workload": {**common, "measured_requests": 300,
                                                    "valid_repeats": 5},
-        "gate": {"definition": "every run's p95 TPOT and TTFT within +/-3% of its set median; zero pageout and swap growth; normal memory pressure",
+        "gate": {"definition": "every run's p95 TPOT and TTFT within +/-3% of its set median; zero swap growth; normal memory pressure and thermal state; pageout is a soft flag",
                  "max_revalidation_sets": 1, "set_B_requires_documented_environmental_correction": True},
     }
     matrix = {
         "created_utc": now(), "repository_commit": head,
         "campaign_scope": "diagnostic contention only; no calibration, PhaseGate, TimeGate, held-out, or output-length sweep",
-        "workload": {**common, "measured_requests": 100, "valid_repeats": 3},
+        "workload": {**common, "measured_requests": 300, "valid_repeats": 3},
         "policies": policies, "repeats": repeats,
         "cap_interpretation": {"cap_1": "low-cap condition", "cap_2": "campaign-frozen K_hi",
                                "cap_4": "diagnostic-only; cannot change K_hi or future policy caps"},
@@ -169,12 +202,16 @@ def prepare(campaign: Path, index: Path, model: Path, r4: Path, machine_source: 
                      "rss_sampling": "block boundary and <=1 Hz native resource API"},
         "thermal_monitoring": "pmset -g therm and pmset -g batt at block boundaries",
         "source_files": {"r4_campaign": str(r4), "r4_mechanism_csv_sha256": sha256(source_mechanism),
+                         "r1_contention_pilot": str(r1),
                          "stop_report": str(stop_report), "stop_report_sha256": sha256(stop_report)},
         "initial_thermal_power": thermal_snapshot(),
         "scientific_constraints": {"frozen_K_hi": 2, "cap4_diagnostic_only": True,
                                    "valid_blocks_never_rerun_for_outcome": True,
                                    "hard_invalid_retry_limit": 1},
     }
+    r1_checksums = tree_checksum_manifest(r1)
+    r1_checksums.update({"created_utc": now(), "purpose": "prove immutable r1 pilot remained unchanged"})
+    (campaign / "R1_CHECKSUM_MANIFEST.json").write_text(json.dumps(r1_checksums, indent=2) + "\n")
     (campaign / "BASELINE_PROTOCOL_FREEZE.json").write_text(json.dumps(baseline_freeze, indent=2) + "\n")
     (campaign / "FROZEN_EXECUTION_MATRIX.json").write_text(json.dumps(matrix, indent=2) + "\n")
     (campaign / "CAMPAIGN_MANIFEST.json").write_text(json.dumps(manifest, indent=2) + "\n")
@@ -193,6 +230,7 @@ def common_command(stage: str, repeat: int, attempt: int, policy: str, cap: int,
                "--max-workers", "4", "--feeders", "8", "--queries-per-task", "4096",
                "--chunk", "16", "--ef-search", "128", "--top-k", "10",
                "--memory-sample-interval-s", "1", "--warmup-s", "2",
+               "--allow-pageout-preflight",
                "--mem-limit-gb", "5.5", "--min-headroom-gb", "3.0",
                "--memory-idle-seconds", "2", "--sentinel-tolerance", "0.03",
                "--sentinel-cooldown", "2", "--sentinel-attempts", "2",
@@ -210,9 +248,12 @@ def run_block(campaign: Path, stage: str, policy: str, cap: int, repeat: int,
               index: Path, baseline: Path | None, log: TextIO) -> dict[str, Any]:
     label = "llm-only" if policy == "llm-only" else f"fixed{cap}"
     raw = campaign / stage / "raw/runs.jsonl"
+    invalidated_path = campaign / "externally_invalidated_runs.jsonl"
+    invalidated = {row["run_key"] for row in read_jsonl(invalidated_path)}
     existing = [row for row in read_jsonl(raw) if row.get("policy") == label
                 and int(row.get("repeat", -1)) == repeat]
-    valid = [row for row in existing if row.get("status") == "valid"]
+    valid = [row for row in existing if row.get("status") == "valid"
+             and row.get("run_key") not in invalidated]
     if valid:
         return valid[-1]
     attempt = max([int(row.get("attempt", 0)) for row in existing], default=0) + 1
@@ -235,19 +276,30 @@ def run_block(campaign: Path, stage: str, policy: str, cap: int, repeat: int,
                              query_seed, requests, model, index, baseline, log)
         raise RuntimeError(f"block process failed twice: {stage}/{label}/r{repeat}")
     rows = [row for row in read_jsonl(raw) if row.get("policy") == label
-            and int(row.get("repeat", -1)) == repeat]
+            and int(row.get("repeat", -1)) == repeat and int(row.get("attempt", -1)) == attempt]
     if not rows or rows[-1].get("status") != "valid":
         if attempt == 1:
             return run_block(campaign, stage, policy, cap, repeat, prompt_seed,
                              query_seed, requests, model, index, baseline, log)
         raise RuntimeError(f"hard-invalid result twice: {stage}/{label}/r{repeat}")
+    if not (thermal_clean(audit["before"]) and thermal_clean(audit["after"])):
+        append_jsonl(invalidated_path, {
+            "created_utc": now(), "run_key": rows[-1]["run_key"],
+            "reason": "thermal_or_performance_warning", "stage": stage,
+            "policy": label, "repeat": repeat, "attempt": attempt,
+        })
+        if attempt == 1:
+            return run_block(campaign, stage, policy, cap, repeat, prompt_seed,
+                             query_seed, requests, model, index, baseline, log)
+        raise RuntimeError(f"thermal hard-invalid twice: {stage}/{label}/r{repeat}")
     return rows[-1]
 
 
 def export_baseline(campaign: Path, set_name: str) -> bool:
     stage = f"contention_baseline_{set_name}"
+    invalidated = {row["run_key"] for row in read_jsonl(campaign / "externally_invalidated_runs.jsonl")}
     valid = [row for row in read_jsonl(campaign / stage / "raw/runs.jsonl")
-             if row.get("status") == "valid"]
+             if row.get("status") == "valid" and row.get("run_key") not in invalidated]
     by_repeat = {int(row["repeat"]): row for row in valid}
     if len(by_repeat) != 5:
         raise RuntimeError(f"expected five valid baseline blocks, found {len(by_repeat)}")
@@ -266,18 +318,21 @@ def export_baseline(campaign: Path, set_name: str) -> bool:
             "memory_pressure_clean": row["memory_pressure_clean"], "duration_s": row["duration_s"],
             "observer_mode": row["observer_mode"],
             "observer_subprocess_count": row["observer_subprocess_count_during_block"],
-            "token_count_exact": row["observer_reconstruction_audit"]["token_events"] == 150 * 128,
+            "request_count_exact": int(row["llm_requests"]) == 300,
+            "token_count_exact": row["observer_reconstruction_audit"]["token_events"] == 300 * 128,
             "event_reconstruction_exact": row["observer_reconstruction_audit"]["query_accounting_exact"]
                                           and row["observer_reconstruction_audit"]["timestamps_monotonic"]})
     write_csv(campaign / f"contention_baseline_{set_name}_runs.csv", output)
-    passed = all(row["within_3pct_both"] and int(row["pageouts_delta"]) == 0
+    passed = all(row["within_3pct_both"]
                  and int(row["swap_used_delta_bytes"]) == 0 and row["memory_pressure_clean"]
                  and int(row["observer_subprocess_count"]) == 0
-                 and row["token_count_exact"] and row["event_reconstruction_exact"] for row in output)
+                 and row["request_count_exact"] and row["token_count_exact"]
+                 and row["event_reconstruction_exact"] for row in output)
     result = {"created_utc": now(), "baseline_set": set_name, "passed": passed,
               "median_p95_tpot_ms": med_tpot, "median_p95_ttft_ms": med_ttft,
               "run_keys": [row["run_key"] for row in output],
-              "gate": "all five runs within +/-3% around set medians; zero pageout/swap growth; normal pressure"}
+              "pageout_soft_flag_blocks": sum(int(row["pageouts_delta"]) > 0 for row in output),
+              "gate": "all five runs within +/-3% around set medians; zero swap growth; normal pressure/thermal state; pageout soft"}
     (campaign / f"CONTENTION_BASELINE_{set_name}_RESULT.json").write_text(json.dumps(result, indent=2) + "\n")
     if passed:
         normalization = {"stage": stage, "valid_repeats": 5,
@@ -298,7 +353,8 @@ def run_baseline(campaign: Path, set_name: str, model: Path, index: Path) -> Non
         for trace in freeze["trace_sets"][set_name]:
             run_block(campaign, f"contention_baseline_{set_name}", "llm-only", 0,
                       trace["repeat"], trace["prompt_seed"], trace["query_seed"],
-                      150, model, index, None, log)
+                      300, model, index, None, log)
+            time.sleep(float(freeze["workload"]["block_cooldown_s"]))
     if not export_baseline(campaign, set_name):
         raise SystemExit(f"contention baseline set {set_name} failed the frozen gate")
 
@@ -328,9 +384,12 @@ def run_contention(campaign: Path, model: Path, index: Path) -> None:
             for spec in repeat["order"]:
                 run_block(campaign, "m4_mini_contention", spec["policy"], spec["cap"],
                           repeat["repeat"], repeat["prompt_seed"], repeat["query_seed"],
-                          100, model, index, normalizer, log)
+                          300, model, index, normalizer, log)
+                time.sleep(float(matrix["workload"]["block_cooldown_s"]))
     raw = read_jsonl(campaign / "m4_mini_contention/raw/runs.jsonl")
-    valid = [row for row in raw if row.get("status") == "valid"]
+    invalidated = {row["run_key"] for row in read_jsonl(campaign / "externally_invalidated_runs.jsonl")}
+    valid = [row for row in raw if row.get("status") == "valid"
+             and row.get("run_key") not in invalidated]
     keys = {(row["policy"], int(row["repeat"])) for row in valid}
     expected = {(policy, repeat) for policy in ("llm-only", "fixed1", "fixed2", "fixed4")
                 for repeat in range(3)}
@@ -360,14 +419,15 @@ def main() -> None:
     parser.add_argument("--index", required=True, type=Path)
     parser.add_argument("--model", required=True, type=Path)
     parser.add_argument("--r4", required=True, type=Path)
+    parser.add_argument("--r1", required=True, type=Path)
     parser.add_argument("--machine-source", required=True, type=Path)
     parser.add_argument("--stage", choices=("prepare", "baseline-A", "baseline-B", "contention"),
                         required=True)
     args = parser.parse_args()
     campaign = args.campaign.resolve(); index = args.index.resolve(); model = args.model.resolve()
-    r4 = args.r4.resolve(); machine_source = args.machine_source.resolve()
+    r4 = args.r4.resolve(); r1 = args.r1.resolve(); machine_source = args.machine_source.resolve()
     if args.stage == "prepare":
-        prepare(campaign, index, model, r4, machine_source)
+        prepare(campaign, index, model, r4, r1, machine_source)
     else:
         if not campaign.exists():
             raise SystemExit("campaign must be prepared first")

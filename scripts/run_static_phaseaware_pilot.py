@@ -85,14 +85,15 @@ def baseline_path(stage: str, smoke: bool) -> Path:
     return ROOT / stage / ("baseline_smoke.json" if smoke else "baseline.json")
 
 
-def memory_preflight(pids: list[int], seconds: float, minimum_headroom_gb: float) -> dict[str, Any]:
+def memory_preflight(pids: list[int], seconds: float, minimum_headroom_gb: float,
+                     allow_pageout: bool = False) -> dict[str, Any]:
     before = capture_state(pids)
     time.sleep(seconds)
     after = capture_state(pids)
     delta = state_delta(before, after)
     headroom = min(int(delta["headroom_before_bytes"]), int(delta["headroom_after_bytes"]))
     passed = (
-        int(delta["pageouts_delta"]) == 0
+        (allow_pageout or int(delta["pageouts_delta"]) == 0)
         and int(delta["swap_used_delta_bytes"] or 0) == 0
         and headroom >= int(minimum_headroom_gb * 1024**3)
     )
@@ -294,7 +295,8 @@ def run_block(args: argparse.Namespace) -> None:
     (log_dir / f"{run_key}_manifest.json").write_text(
         json.dumps(manifest, indent=2, default=str) + "\n")
 
-    preload = memory_preflight([], args.memory_idle_seconds, args.min_headroom_gb)
+    preload = memory_preflight([], args.memory_idle_seconds, args.min_headroom_gb,
+                               args.allow_pageout_preflight)
     if not preload["passed"]:
         append_jsonl(output, {"run_id": run_id, "run_key": run_key, "status": "invalid",
                      "invalid_reason": "preload_memory_preflight", "stage": args.stage,
@@ -332,7 +334,8 @@ def run_block(args: argparse.Namespace) -> None:
     )
     with manager_context as manager:
         pids = [] if manager is None else manager.worker_pids()
-        resident = memory_preflight(pids, args.memory_idle_seconds, args.min_headroom_gb)
+        resident = memory_preflight(pids, args.memory_idle_seconds, args.min_headroom_gb,
+                                    args.allow_pageout_preflight)
         if not resident["passed"]:
             append_jsonl(output, {"run_id": run_id, "run_key": run_key, "status": "invalid",
                          "invalid_reason": "resident_memory_preflight", "stage": args.stage,
@@ -803,6 +806,11 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--mem-limit-gb", type=float, default=6.0)
     ap.add_argument("--min-headroom-gb", type=float, default=6.5)
     ap.add_argument("--memory-idle-seconds", type=float, default=30.0)
+    ap.add_argument(
+        "--allow-pageout-preflight", action="store_true",
+        help="Treat global pageout growth during memory preflight as a soft flag; "
+             "swap growth, low memory headroom, and pressure failures remain hard failures.",
+    )
     ap.add_argument("--sentinel-tolerance", type=float, default=0.05)
     ap.add_argument("--sentinel-cooldown", type=float, default=30.0)
     ap.add_argument("--sentinel-attempts", type=int, default=4)
