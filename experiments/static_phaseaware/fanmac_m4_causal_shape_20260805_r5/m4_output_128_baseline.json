@@ -1,0 +1,11 @@
+{
+  "stage": "m4_output_128_baseline",
+  "valid_repeats": 3,
+  "p95_tpot_ms": 13.596782580134455,
+  "p95_ttft_ms": 1780.076244052907,
+  "run_keys": [
+    "static_m4_output_128_baseline_event_llm-only_r00_a01",
+    "static_m4_output_128_baseline_event_llm-only_r01_a01",
+    "static_m4_output_128_baseline_event_llm-only_r02_a01"
+  ]
+}
