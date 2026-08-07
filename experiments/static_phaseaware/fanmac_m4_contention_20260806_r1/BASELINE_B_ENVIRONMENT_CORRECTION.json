@@ -1,0 +1,45 @@
+{
+  "created_utc": "2026-08-07T02:43:29Z",
+  "authorization": "run the single pre-frozen baseline set B after a documented environmental correction",
+  "set_A_result": {
+    "passed": false,
+    "median_p95_tpot_ms": 12.314921340730503,
+    "median_p95_ttft_ms": 1798.6864462014637,
+    "tpot_absolute_deviations": [
+      0.022459396378179175,
+      0.031932550208981336,
+      0.0,
+      0.0025152044953492547,
+      0.02324070199232564
+    ],
+    "pageout_deltas": [41, 5, 54, 0, 31],
+    "swap_growth_blocks": 0,
+    "warning_or_critical_memory_pressure_blocks": 0,
+    "thermal_warning_blocks": 0,
+    "observer_subprocess_blocks": 0
+  },
+  "environment_diagnosis": {
+    "memory_free_percent": 93,
+    "compressor_pages": 0,
+    "swap_used": "0.00M",
+    "power": "AC Power",
+    "thermal_warning": false,
+    "background_observation": "Remote Management and Spotlight were resident but nearly CPU-idle; they were not terminated because doing so could require privilege or disrupt machine access."
+  },
+  "correction": {
+    "kind": "quiet idle and thermal cooldown",
+    "scientific_workload_changed": false,
+    "measurement_definition_changed": false,
+    "observer_changed": false,
+    "code_changed": false,
+    "processes_force_terminated": false,
+    "idle_window_start_utc": "2026-08-07T02:42:31Z",
+    "idle_window_end_utc": "2026-08-07T02:43:29Z",
+    "pageouts_at_start": 1494,
+    "pageouts_at_end": 1494,
+    "pageout_delta_during_idle": 0,
+    "memory_pressure_after": "normal",
+    "swap_used_after": "0.00M"
+  },
+  "retry_limit": "set B is the only allowed revalidation set; no set C may be run"
+}

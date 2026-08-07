@@ -1,0 +1,41 @@
+{
+  "created_utc": "2026-08-07T03:30:00.765126+00:00",
+  "campaign_id": "fanmac_m4_contention_20260806_r1",
+  "status": "stopped-before-contention-matrix",
+  "measurement_commit": "d4562a71880a79d4ee5370c9da7e82aaabc87a3f",
+  "finalizer_source_head": "c3696dc3facbf1e357fe8224d00500e8096ec022",
+  "baseline_sets_run": [
+    "A",
+    "B"
+  ],
+  "baseline_A_passed": false,
+  "baseline_B_passed": false,
+  "contention_valid_blocks": 0,
+  "contention_expected_blocks": 12,
+  "set_C_run": false,
+  "frozen_K_hi": 2,
+  "cap4_diagnostic_only": true,
+  "cap4_executed": false,
+  "valid_baseline_blocks": 10,
+  "request_rows": 1500,
+  "swap_growth_blocks": 0,
+  "memory_pressure_failure_blocks": 0,
+  "thermal_clean_blocks": 10,
+  "observer_subprocess_blocks": 0,
+  "set_A_pageout_deltas": [
+    41,
+    5,
+    54,
+    0,
+    31
+  ],
+  "set_B_pageout_deltas": [
+    0,
+    3,
+    0,
+    0,
+    2
+  ],
+  "set_B_unused_index_argument_typo": true,
+  "raw_data_retained": true
+}

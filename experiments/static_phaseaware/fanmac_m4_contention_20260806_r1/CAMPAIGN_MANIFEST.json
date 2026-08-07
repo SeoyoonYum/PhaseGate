@@ -1,0 +1,88 @@
+{
+  "created_utc": "2026-08-07T01:55:08.409295+00:00",
+  "campaign_id": "fanmac_m4_contention_20260806_r1",
+  "repository_commit": "d4562a71880a79d4ee5370c9da7e82aaabc87a3f",
+  "device_scope": "fan-cooled base-M4 Mac mini, not M4 Pro",
+  "machine": {
+    "model_name": "Mac mini",
+    "model_identifier": "Mac16,10",
+    "model_number": "MU9D3FN/A",
+    "chip": "Apple M4",
+    "total_cpu_cores": 10,
+    "performance_cores": 4,
+    "efficiency_cores": 6,
+    "gpu_cores": 10,
+    "unified_memory": "16 GB"
+  },
+  "macos": {
+    "product_version": "26.5",
+    "build_version": "25F71"
+  },
+  "python": "3.13.14",
+  "packages": {
+    "mlx": "0.31.2",
+    "mlx-lm": "0.31.3",
+    "numpy": "2.4.6",
+    "faiss-cpu": "1.14.3",
+    "matplotlib": "3.11.0"
+  },
+  "model": {
+    "identifier": "mlx-community/Qwen2.5-1.5B-Instruct-4bit",
+    "revision": "8b403126fc14f14cfc99bb4cfa72ecbc129ea677",
+    "quantization": "4-bit",
+    "local_path": "/Users/m1/.cache/huggingface/hub/models--mlx-community--Qwen2.5-1.5B-Instruct-4bit/snapshots/8b403126fc14f14cfc99bb4cfa72ecbc129ea677"
+  },
+  "index": {
+    "path": "/Users/m1/kv-uma-research/experiments/phaseguard/index/hnsw_100k_d384.faiss",
+    "sha256": "4c65bde676235523dbba2f1dc78a44de3f447470d38105488586d7ca486a51f0",
+    "vectors": 100000,
+    "dimensions": 384,
+    "M": 32,
+    "efConstruction": 80,
+    "file_size": 180820834
+  },
+  "observer": {
+    "mode": "event",
+    "legacy_5ms_sampler": false,
+    "repeated_ps_subprocesses": false,
+    "memory_sampling_max_hz": 1,
+    "phase_timing_source": "PhaseMonitor/event timestamps",
+    "rss_sampling": "block boundary and <=1 Hz native resource API"
+  },
+  "thermal_monitoring": "pmset -g therm and pmset -g batt at block boundaries",
+  "source_files": {
+    "r4_campaign": "/Users/m1/kv-uma-research-m4-20260805/experiments/static_phaseaware/fanmac_m4_causal_shape_20260805_r4",
+    "r4_mechanism_csv_sha256": "e499c27c9ac70ce762cc8be6a0d32e56e9c099a004d4d93a647d4161b31e442b",
+    "stop_report": "/Users/m1/kv-uma-research-m4-harness-20260805/M4_CAMPAIGN_STOP_REPORT.md",
+    "stop_report_sha256": "e23af5fff1a6792013f2de8137ff38d39094fb13fd7e879f4530feabf5d89434"
+  },
+  "initial_thermal_power": {
+    "timestamp_utc": "2026-08-07T01:55:08.409421+00:00",
+    "thermal": {
+      "command": [
+        "pmset",
+        "-g",
+        "therm"
+      ],
+      "returncode": 0,
+      "stdout": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+      "stderr": ""
+    },
+    "power": {
+      "command": [
+        "pmset",
+        "-g",
+        "batt"
+      ],
+      "returncode": 0,
+      "stdout": "Now drawing from 'AC Power'",
+      "stderr": ""
+    }
+  },
+  "scientific_constraints": {
+    "frozen_K_hi": 2,
+    "cap4_diagnostic_only": true,
+    "valid_blocks_never_rerun_for_outcome": true,
+    "hard_invalid_retry_limit": 1
+  }
+}

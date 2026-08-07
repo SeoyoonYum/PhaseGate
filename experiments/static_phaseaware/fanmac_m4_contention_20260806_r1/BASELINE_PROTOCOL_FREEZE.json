@@ -1,0 +1,83 @@
+{
+  "created_utc": "2026-08-07T01:55:08.409182+00:00",
+  "repository_commit": "d4562a71880a79d4ee5370c9da7e82aaabc87a3f",
+  "source": "r4 isolated-baseline and revalidation request counts/seeds",
+  "trace_sets": {
+    "A": [
+      {
+        "repeat": 0,
+        "prompt_seed": 2026085100,
+        "query_seed": 2026090100
+      },
+      {
+        "repeat": 1,
+        "prompt_seed": 2026095100,
+        "query_seed": 2026100100
+      },
+      {
+        "repeat": 2,
+        "prompt_seed": 2026105100,
+        "query_seed": 2026110100
+      },
+      {
+        "repeat": 3,
+        "prompt_seed": 2026115100,
+        "query_seed": 2026120100
+      },
+      {
+        "repeat": 4,
+        "prompt_seed": 2026125100,
+        "query_seed": 2026130100
+      }
+    ],
+    "B": [
+      {
+        "repeat": 0,
+        "prompt_seed": 2026089100,
+        "query_seed": 2026094100
+      },
+      {
+        "repeat": 1,
+        "prompt_seed": 2026099100,
+        "query_seed": 2026104100
+      },
+      {
+        "repeat": 2,
+        "prompt_seed": 2026109100,
+        "query_seed": 2026114100
+      },
+      {
+        "repeat": 3,
+        "prompt_seed": 2026119100,
+        "query_seed": 2026124100
+      },
+      {
+        "repeat": 4,
+        "prompt_seed": 2026129100,
+        "query_seed": 2026134100
+      }
+    ]
+  },
+  "workload": {
+    "context_tokens": 2048,
+    "output_tokens": 128,
+    "observer_mode": "event",
+    "memory_sample_interval_s": 1,
+    "warmup_s": 2,
+    "fresh_process_per_block": true,
+    "faiss_omp_threads": 1,
+    "max_workers": 4,
+    "queries_per_task": 4096,
+    "chunk": 16,
+    "ef_search": 128,
+    "top_k": 10,
+    "mlx_memory_limit_gb": 5.5,
+    "measured_requests": 150,
+    "valid_repeats": 5
+  },
+  "gate": {
+    "definition": "every run's p95 TPOT and TTFT within +/-3% of its set median; zero pageout and swap growth; normal memory pressure",
+    "max_revalidation_sets": 1,
+    "set_B_requires_documented_environmental_correction": true
+  }
+}

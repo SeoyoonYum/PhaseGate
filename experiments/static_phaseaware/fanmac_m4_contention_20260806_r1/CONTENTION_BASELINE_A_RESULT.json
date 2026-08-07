@@ -1,0 +1,15 @@
+{
+  "created_utc": "2026-08-07T02:40:04.184444+00:00",
+  "baseline_set": "A",
+  "passed": false,
+  "median_p95_tpot_ms": 12.314921340730503,
+  "median_p95_ttft_ms": 1798.6864462014637,
+  "run_keys": [
+    "static_contention_baseline_A_event_llm-only_r00_a01",
+    "static_contention_baseline_A_event_llm-only_r01_a01",
+    "static_contention_baseline_A_event_llm-only_r02_a01",
+    "static_contention_baseline_A_event_llm-only_r03_a01",
+    "static_contention_baseline_A_event_llm-only_r04_a01"
+  ],
+  "gate": "all five runs within +/-3% around set medians; zero pageout/swap growth; normal pressure"
+}

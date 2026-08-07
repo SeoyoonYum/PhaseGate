@@ -1,0 +1,11 @@
+baseline_set,repeat,run_key,p95_tpot_ms,tpot_abs_deviation,p95_ttft_ms,ttft_abs_deviation,within_3pct_both,pageouts_delta,swap_used_delta_bytes,memory_pressure_clean,duration_s,observer_mode,observer_subprocess_count,token_count_exact,event_reconstruction_exact
+A,0,static_contention_baseline_A_event_llm-only_r00_a01,12.591507040488068,0.022459396378179175,1782.9276185948402,0.00876129780146151,True,41,0,True,487.3895200830011,event,0,True,True
+A,1,static_contention_baseline_A_event_llm-only_r01_a01,12.708168184763036,0.031932550208981336,1797.9407165461453,0.0004145968058486549,False,5,0,True,489.9955474579765,event,0,True,True
+A,2,static_contention_baseline_A_event_llm-only_r02_a01,12.314921340730503,0.0,1801.3132541935192,0.001460403505904484,True,54,0,True,490.75812270800816,event,0,True,True
+A,3,static_contention_baseline_A_event_llm-only_r03_a01,12.283946795214426,0.0025152044953492547,1799.241383151093,0.0003085234509889734,True,0,0,True,490.508461541991,event,0,True,True
+A,4,static_contention_baseline_A_event_llm-only_r04_a01,12.028713923791654,0.02324070199232564,1798.6864462014637,0.0,True,31,0,True,490.6558265000058,event,0,True,True
+B,0,static_contention_baseline_B_event_llm-only_r00_a01,12.090153546887448,0.0,1773.2328311059973,0.011718300815076743,True,0,0,True,483.70085275001475,event,0,True,True
+B,1,static_contention_baseline_B_event_llm-only_r01_a01,12.071086705109336,0.0015770553867796577,1782.9904501646524,0.006280054819331138,True,3,0,True,486.8650588330056,event,0,True,True
+B,2,static_contention_baseline_B_event_llm-only_r02_a01,12.732235042058159,0.05310780319543684,1794.258491853543,0.0,False,0,0,True,489.90943762499955,event,0,True,True
+B,3,static_contention_baseline_B_event_llm-only_r03_a01,12.589035041164594,0.041263453962136154,1798.9023167057894,0.002588158213173042,False,0,0,True,490.5999672500184,event,0,True,True
+B,4,static_contention_baseline_B_event_llm-only_r04_a01,11.998542558576446,0.00757732215357898,1803.5663208007463,0.005187562990206507,True,2,0,True,490.57069954200415,event,0,True,True
