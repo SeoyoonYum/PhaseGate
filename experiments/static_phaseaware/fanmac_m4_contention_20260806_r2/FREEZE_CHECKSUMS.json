@@ -1,0 +1,10 @@
+{
+  "created_before_first_measured_block": true,
+  "repository_commit": "9d0e8dcb9d6b87f84b047e83553a6a62f78e7be6",
+  "files": {
+    "BASELINE_PROTOCOL_FREEZE.json": "85c2f28ea12b439206c7914e9542742bb59ed976eacf6df73e9e255a97956b68",
+    "FROZEN_EXECUTION_MATRIX.json": "9b8c2f72d7399be91c4a7238981f29a4a9cc00ba56424c4e6748c80cb1bfdf47",
+    "CAMPAIGN_MANIFEST.json": "3d3d6c20e5d7a5a4f9d4f7c3d46bda3c5d7248ed6b35885162cf540129cb730b",
+    "R1_CHECKSUM_MANIFEST.json": "e5dc872c4f46d0066cd4d4758f084132c38f493b33d9394dd9fc832b2e9af702"
+  }
+}

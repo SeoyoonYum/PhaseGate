@@ -1,0 +1,219 @@
+{
+  "root_name": "fanmac_m4_contention_20260806_r1",
+  "file_count": 42,
+  "aggregate_sha256": "0033b6dc2867bdf08a8f1d0c2d822f2219dc3b1be2b7053439102301b3a3e549",
+  "files": [
+    {
+      "path": "BASELINE_B_ENVIRONMENT_CORRECTION.json",
+      "size": 1620,
+      "sha256": "044cf89fbf5160081113ffe7b525b74712b08a02b654467f675c5da9d7308467"
+    },
+    {
+      "path": "BASELINE_PROTOCOL_FREEZE.json",
+      "size": 1978,
+      "sha256": "d45fe47e190e0636361d4c01b4d32255c183282f352e25c7cf8a2a1cd32ee5ac"
+    },
+    {
+      "path": "CAMPAIGN_MANIFEST.json",
+      "size": 2932,
+      "sha256": "305b8fb8374a2f29ed96ed99fb9b816c3e2ef41d77afff7a03ad452c4ba3a183"
+    },
+    {
+      "path": "CONTENTION_BASELINE_A_RESULT.json",
+      "size": 603,
+      "sha256": "54adf034456717f81b9eaed80f8e6ddfe492bf56e161b9aad504a487985476ef"
+    },
+    {
+      "path": "CONTENTION_BASELINE_B_RESULT.json",
+      "size": 602,
+      "sha256": "18cadbb614568dc4ee289572013068ad8c2383920c36392e9ef276799c3a9672"
+    },
+    {
+      "path": "FROZEN_EXECUTION_MATRIX.json",
+      "size": 2407,
+      "sha256": "3472508d9f86aaf8e039e4488e231517a03812f185a4f5a1e9d14446f181ac66"
+    },
+    {
+      "path": "M4_MINI_CONTENTION_STOP_REPORT.md",
+      "size": 3590,
+      "sha256": "267a6ea1baf276dbed9ed52f97a256d24faae07275b233f872a0f8e3926372e1"
+    },
+    {
+      "path": "contention_baseline_A/logs/sentinel_ctx2048_mem5.5.json",
+      "size": 323,
+      "sha256": "d27eca65440845ad20e8ef8eb5a281251ec24df5d95570af0c5e827e08540d71"
+    },
+    {
+      "path": "contention_baseline_A/logs/static_contention_baseline_A_event_llm-only_r00_a01_manifest.json",
+      "size": 3264,
+      "sha256": "946437eff2bf7c7747cddc239f068b5029c637652099061927bad29809a53277"
+    },
+    {
+      "path": "contention_baseline_A/logs/static_contention_baseline_A_event_llm-only_r01_a01_manifest.json",
+      "size": 3264,
+      "sha256": "d252bb88be7f580c290836379f506207cae540a3001a8901c6a3d63075ea134f"
+    },
+    {
+      "path": "contention_baseline_A/logs/static_contention_baseline_A_event_llm-only_r02_a01_manifest.json",
+      "size": 3264,
+      "sha256": "028422008634dacb9d484d479ed991f5b248aefe70dcd2e63cbecb614e66b64f"
+    },
+    {
+      "path": "contention_baseline_A/logs/static_contention_baseline_A_event_llm-only_r03_a01_manifest.json",
+      "size": 3264,
+      "sha256": "d193df1f3c1508bfdf40fd048172dfcf36b0ab862e41eeccd43b2d1f8abda8f7"
+    },
+    {
+      "path": "contention_baseline_A/logs/static_contention_baseline_A_event_llm-only_r04_a01_manifest.json",
+      "size": 3264,
+      "sha256": "bb3b883080deacbdb790aa194d80b844b4cd5dc95f193a2b6565935f2d0b4aef"
+    },
+    {
+      "path": "contention_baseline_A/raw/requests.jsonl",
+      "size": 4220358,
+      "sha256": "527af3eaa0d949c21738946967ca0118aba869453b01211c44191125b9a944b2"
+    },
+    {
+      "path": "contention_baseline_A/raw/runs.jsonl",
+      "size": 30658,
+      "sha256": "1ad8629b0ed2d88f6a210e315c42df71c1dfe6da75ad25a80183828a24c2ac44"
+    },
+    {
+      "path": "contention_baseline_A/raw/timelines/static_contention_baseline_A_event_llm-only_r00_a01.json",
+      "size": 6821717,
+      "sha256": "7fa4dd2df9718a36db6c131c38cf14161c79493b189e22ec8426eaee0ac0f03f"
+    },
+    {
+      "path": "contention_baseline_A/raw/timelines/static_contention_baseline_A_event_llm-only_r01_a01.json",
+      "size": 6821648,
+      "sha256": "d522abc0af118498384df9e09cc57616046e7e6b1613ecf9c3ce41596673b92d"
+    },
+    {
+      "path": "contention_baseline_A/raw/timelines/static_contention_baseline_A_event_llm-only_r02_a01.json",
+      "size": 6821970,
+      "sha256": "0da740e8473191c46c245a347f9d903c9eafce2d6899917a6d12e33773c0ef3e"
+    },
+    {
+      "path": "contention_baseline_A/raw/timelines/static_contention_baseline_A_event_llm-only_r03_a01.json",
+      "size": 6822052,
+      "sha256": "ce97185bf31b857f3131d0273cdf176a296255bdba1249a4aa939cf7791806cf"
+    },
+    {
+      "path": "contention_baseline_A/raw/timelines/static_contention_baseline_A_event_llm-only_r04_a01.json",
+      "size": 6821897,
+      "sha256": "6c7ebba525588a72bc88ce784ed03f841dcdf21b5233cd047c461c1bab699bd8"
+    },
+    {
+      "path": "contention_baseline_A_runs.csv",
+      "size": 1162,
+      "sha256": "2e0c52c4c2e9ce2744e6b5900a4a616b879ab78dc5a227e9e27bb6fe481f99bb"
+    },
+    {
+      "path": "contention_baseline_B/logs/sentinel_ctx2048_mem5.5.json",
+      "size": 321,
+      "sha256": "30233c9188bcc0afcbed084629d390ab26d68036531fbc31df2d3508e463d879"
+    },
+    {
+      "path": "contention_baseline_B/logs/static_contention_baseline_B_event_llm-only_r00_a01_manifest.json",
+      "size": 3266,
+      "sha256": "5cd085bd013b8ebbf0d5817ab90b6fc53d29bd9462606b81e0bdab9584eed8d6"
+    },
+    {
+      "path": "contention_baseline_B/logs/static_contention_baseline_B_event_llm-only_r01_a01_manifest.json",
+      "size": 3266,
+      "sha256": "6285c6c90b39600668d476b2f03e06fcab8e306a9660a3cf29ff6cab19e61945"
+    },
+    {
+      "path": "contention_baseline_B/logs/static_contention_baseline_B_event_llm-only_r02_a01_manifest.json",
+      "size": 3266,
+      "sha256": "8addef379c4d4b6e4087e9f91b702738e5a5decd07298d088296ed9083afcbfd"
+    },
+    {
+      "path": "contention_baseline_B/logs/static_contention_baseline_B_event_llm-only_r03_a01_manifest.json",
+      "size": 3266,
+      "sha256": "e0c9b6b7bee0d71ae82255fb3b3748326ea650043cfd475338195a6434daca06"
+    },
+    {
+      "path": "contention_baseline_B/logs/static_contention_baseline_B_event_llm-only_r04_a01_manifest.json",
+      "size": 3266,
+      "sha256": "05e525d547c74299d5942c5e539f7f23ea69fc3069c82c448d912a2e614940b7"
+    },
+    {
+      "path": "contention_baseline_B/raw/requests.jsonl",
+      "size": 4220503,
+      "sha256": "974518f250e91d56d477b957d9be1a32cb8f1550bf1d1247b7a7083486875903"
+    },
+    {
+      "path": "contention_baseline_B/raw/runs.jsonl",
+      "size": 30643,
+      "sha256": "22a2552fe2a09bcc2d52ef0df0b1c916cc623927bb14a323fad5943f9c289fda"
+    },
+    {
+      "path": "contention_baseline_B/raw/timelines/static_contention_baseline_B_event_llm-only_r00_a01.json",
+      "size": 6821587,
+      "sha256": "733938ce69b62c15fae64dd1ab9634cb515d81246bdb57edbc8993e89c101883"
+    },
+    {
+      "path": "contention_baseline_B/raw/timelines/static_contention_baseline_B_event_llm-only_r01_a01.json",
+      "size": 6821507,
+      "sha256": "137cb74cc0cd981c6156247d6fd30254fb663bdeee100bc9355488aad363bfe6"
+    },
+    {
+      "path": "contention_baseline_B/raw/timelines/static_contention_baseline_B_event_llm-only_r02_a01.json",
+      "size": 6821955,
+      "sha256": "3032ea24a93b42cf44c009f251084ae3bb475d6c5cc68bd389baf4b809e348b9"
+    },
+    {
+      "path": "contention_baseline_B/raw/timelines/static_contention_baseline_B_event_llm-only_r03_a01.json",
+      "size": 6821983,
+      "sha256": "ce5c6a8a41c2ab1cf48629d615dae61f64b34747ef0b9e82572139668d236817"
+    },
+    {
+      "path": "contention_baseline_B/raw/timelines/static_contention_baseline_B_event_llm-only_r04_a01.json",
+      "size": 6821937,
+      "sha256": "1d60bb446f142b93173decd67e1f8f2094cb960c98c05ac0ff6fe1daf88d20f5"
+    },
+    {
+      "path": "contention_baseline_B_runs.csv",
+      "size": 1161,
+      "sha256": "a9d11c713da7fcc4cc700b88f582504176cfac4ac5504282c8e369683972d8f0"
+    },
+    {
+      "path": "contention_orchestration.log",
+      "size": 68321,
+      "sha256": "17811ef9894158ce95a37ef08d36c88a22f1ef77ef72c0c6cf6045dec2553d15"
+    },
+    {
+      "path": "m4_mini_contention_baseline_request_metrics.csv",
+      "size": 280676,
+      "sha256": "4a90ab1cd582c6abbfe7e4a414d7f133df7b79e025c30f6258e03f42e087720a"
+    },
+    {
+      "path": "m4_mini_contention_baseline_runs.csv",
+      "size": 2061,
+      "sha256": "be64993b0a558f3155055d4f8ed3aca10c4e89bbf8327dc1049bd4e931ad1bd3"
+    },
+    {
+      "path": "m4_mini_contention_results_bundle.sha256",
+      "size": 104,
+      "sha256": "b68e866e6017308962b6c3a4a30b8d80b46e6b2c18c6a6a4cbd7992c2f86b1e5"
+    },
+    {
+      "path": "m4_mini_contention_results_bundle.zip",
+      "size": 5885389,
+      "sha256": "ae98f656084f12f57cdbd58e3ecbbab07faed6b74bc0bf6b9cfef828814d052f"
+    },
+    {
+      "path": "m4_mini_contention_stop_manifest.json",
+      "size": 967,
+      "sha256": "76e85658efd353069961162c82bd85c872f54151be51af9cd36c04d924abf4da"
+    },
+    {
+      "path": "thermal_power_audit.jsonl",
+      "size": 10520,
+      "sha256": "0209c3e3bce5f7304eb9a3ab154106c10e4039fb5425bfb89b8172b90aa06b63"
+    }
+  ],
+  "created_utc": "2026-08-07T05:01:50.805720+00:00",
+  "purpose": "prove immutable r1 pilot remained unchanged"
+}

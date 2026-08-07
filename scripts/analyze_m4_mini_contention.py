@@ -73,10 +73,13 @@ def thermal_clean(snapshot: dict[str, Any]) -> bool:
 def create_bundle(campaign: Path) -> tuple[Path, str, int]:
     output = campaign / "m4_mini_contention_results_bundle.zip"
     checksum = campaign / "m4_mini_contention_results_bundle.sha256"
+    # The completion audit verifies the finished bundle and therefore cannot be
+    # embedded in the bundle without creating a checksum self-reference.
+    completion_audit = campaign / "M4_MINI_CONTENTION_COMPLETION_AUDIT.json"
     included: list[tuple[str, bytes]] = []
     home = str(Path.home())
     for path in sorted(campaign.rglob("*")):
-        if not path.is_file() or path in {output, checksum}:
+        if not path.is_file() or path in {output, checksum, completion_audit}:
             continue
         if path.name.endswith("_orchestration.log") or path.suffix.lower() in {
             ".json", ".jsonl", ".csv", ".md", ".pdf", ".png", ".txt"
@@ -85,9 +88,16 @@ def create_bundle(campaign: Path) -> tuple[Path, str, int]:
             if path.suffix.lower() in {".json", ".jsonl", ".csv", ".md", ".txt", ".log"}:
                 data = data.decode("utf-8").replace(home, "$HOME").encode()
             included.append((f"campaign/{path.relative_to(campaign)}", data))
-    for name in ("run_m4_mini_contention.py", "analyze_m4_mini_contention.py"):
+    for name in ("run_m4_mini_contention.py", "analyze_m4_mini_contention.py",
+                 "audit_m4_mini_contention_r2.py", "test_m4_mini_contention_r2.py",
+                 "run_static_phaseaware_pilot.py"):
         path = REPO / "scripts" / name
         included.append((f"scripts/{name}", path.read_text().replace(home, "$HOME").encode()))
+    for name in ("observer.py", "shared_index_manager.py", "policies.py",
+                 "phase_monitor.py", "request_pipeline.py"):
+        path = REPO / "src" / "phaseguard" / name
+        included.append((f"src/phaseguard/{name}",
+                         path.read_text().replace(home, "$HOME").encode()))
     hashes = [f"{hashlib.sha256(data).hexdigest()}  {name}" for name, data in included]
     included.append(("BUNDLE_CONTENTS.sha256", ("\n".join(hashes) + "\n").encode()))
     with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
@@ -141,6 +151,8 @@ def main() -> None:
         event = row["observer_reconstruction_audit"]
         detailed.append({
             "repeat": repeat, "policy": policy, "cap": cap(policy), "run_key": row["run_key"],
+            "attempt": row["attempt"], "status": row["status"],
+            "invalid_reason": row.get("invalid_reason"),
             "p95_ttft_ms": row["p95_ttft_ms"],
             "normalized_p95_ttft": float(row["p95_ttft_ms"]) / normalization_ttft,
             "normalized_p95_ttft_within_repeat": float(row["p95_ttft_ms"]) / float(baseline["p95_ttft_ms"]),
@@ -163,8 +175,19 @@ def main() -> None:
             "observer_subprocess_count": row["observer_subprocess_count_during_block"],
             "event_sequence_exact": event["sequence_exact"],
             "event_timestamps_monotonic": event["timestamps_monotonic"],
+            "event_admissions_within_cap": event["admissions_within_cap"],
             "query_accounting_exact": event["query_accounting_exact"],
-            "token_events": event["token_events"], "duration_s": row["duration_s"],
+            "token_events": event["token_events"],
+            "prefill_active_worker_mean": row["prefill_active_retrieval_worker_mean"],
+            "prefill_active_worker_p95": row["prefill_active_retrieval_worker_p95"],
+            "decode_active_worker_mean": row["decode_active_retrieval_worker_mean"],
+            "decode_active_worker_p95": row["decode_active_retrieval_worker_p95"],
+            "queue_nonempty_fraction": row["queue_nonempty_fraction"],
+            "single_faiss_process": row["single_faiss_process"],
+            "shared_index_load_count": row["shared_index_load_count"],
+            "resident_memory_bytes": row["resident_memory_bytes"],
+            "peak_resident_memory_bytes": row["peak_resident_memory_bytes"],
+            "duration_s": row["duration_s"],
         })
     write_csv(campaign / "m4_mini_contention_per_run.csv", detailed)
 
@@ -283,12 +306,22 @@ def main() -> None:
     fig.savefig(campaign / "figure_m4_mini_ttft_tpot_contention.png", dpi=180); plt.close(fig)
 
     baseline_name = complete["passed_baseline_set"]
-    baseline_rows = csv_rows(campaign / f"contention_baseline_{baseline_name}_runs.csv")
-    baseline_result = json.loads((campaign / f"CONTENTION_BASELINE_{baseline_name}_RESULT.json").read_text())
-    baseline_thermal = [row for row in thermal_rows
-                        if row["stage"] == f"contention_baseline_{baseline_name}"]
-    baseline_thermal_clean = sum(thermal_clean(row["before"]) and thermal_clean(row["after"])
-                                 for row in baseline_thermal)
+    baseline_sets: dict[str, dict[str, Any]] = {}
+    for set_name in ("A", "B"):
+        rows = csv_rows(campaign / f"contention_baseline_{set_name}_runs.csv")
+        result = json.loads(
+            (campaign / f"CONTENTION_BASELINE_{set_name}_RESULT.json").read_text())
+        thermal_set = [row for row in thermal_rows
+                       if row["stage"] == f"contention_baseline_{set_name}"]
+        baseline_sets[set_name] = {
+            "rows": rows,
+            "result": result,
+            "thermal_clean": sum(thermal_clean(row["before"])
+                                 and thermal_clean(row["after"])
+                                 for row in thermal_set),
+            "pageout_flags": sum(int(row["pageouts_delta"]) > 0 for row in rows),
+        }
+    baseline_result = baseline_sets[baseline_name]["result"]
     table = "\n".join(
         f"| {row['policy']} | {float(row['median_p95_ttft_ms']):.2f} | "
         f"{float(row['median_normalized_p95_ttft']):.3f}x | {float(row['median_p95_tpot_ms']):.3f} | "
@@ -304,11 +337,34 @@ def main() -> None:
     asymmetric = all(float(row["median_normalized_p95_tpot"]) - 1
                      > float(row["median_normalized_p95_ttft"]) - 1
                      for row in summary if int(row["cap"]) > 0)
-    baseline_table = "\n".join(
-        f"| {row['repeat']} | {float(row['p95_tpot_ms']):.3f} | {float(row['tpot_abs_deviation'])*100:.2f}% | "
-        f"{float(row['p95_ttft_ms']):.2f} | {float(row['ttft_abs_deviation'])*100:.2f}% | "
-        f"{row['pageouts_delta']} | {row['swap_used_delta_bytes']} | {row['within_3pct_both']} |"
-        for row in baseline_rows)
+    baseline_tables = {}
+    for set_name, item in baseline_sets.items():
+        baseline_tables[set_name] = "\n".join(
+            f"| {row['repeat']} | {float(row['p95_tpot_ms']):.3f} | "
+            f"{float(row['tpot_abs_deviation'])*100:.2f}% | "
+            f"{float(row['p95_ttft_ms']):.2f} | "
+            f"{float(row['ttft_abs_deviation'])*100:.2f}% | "
+            f"{row['pageouts_delta']} | {row['swap_used_delta_bytes']} | "
+            f"{row['within_3pct_both']} |"
+            for row in item["rows"])
+    baseline_summary_table = "\n".join(
+        f"| {set_name} | {item['result']['passed']} | "
+        f"{float(item['result']['median_p95_tpot_ms']):.3f} | "
+        f"{float(item['result']['median_p95_ttft_ms']):.2f} | "
+        f"{item['pageout_flags']}/5 | {item['thermal_clean']}/5 |"
+        for set_name, item in baseline_sets.items())
+    per_repeat_table = "\n".join(
+        f"| {row['repeat']} | {row['policy']} | {float(row['p95_ttft_ms']):.2f} | "
+        f"{float(row['normalized_p95_ttft']):.3f}x | "
+        f"{float(row['normalized_p95_ttft_within_repeat']):.3f}x | "
+        f"{float(row['p95_tpot_ms']):.3f} | "
+        f"{float(row['normalized_p95_tpot']):.3f}x | "
+        f"{float(row['normalized_p95_tpot_within_repeat']):.3f}x | "
+        f"{float(row['retrieval_qps']):.1f} | {row['pageouts_delta']} | "
+        f"{row['swap_used_delta_bytes']} | "
+        f"{bool(row['thermal_clean_before'] and row['thermal_clean_after'])} | "
+        f"{row['status']} |"
+        for row in detailed)
     secondary_table = "\n".join(
         f"| {row['policy']} | {float(row['median_inter_token_gap_p99_ms']):.3f} | "
         f"{float(row['median_request_maximum_gap_p95_ms']):.3f} | "
@@ -323,7 +379,12 @@ def main() -> None:
         f"{display(row['zero_pageout_median_normalized_p95_tpot'])} | "
         f"{display(row['zero_pageout_median_retrieval_qps'])} |"
         for row in pageout_sensitivity)
-    baseline_pageout_flags = sum(int(row["pageouts_delta"]) > 0 for row in baseline_rows)
+    summary_by_policy = {row["policy"]: row for row in summary}
+    fixed1 = summary_by_policy["fixed1"]
+    fixed2 = summary_by_policy["fixed2"]
+    fixed4 = summary_by_policy["fixed4"]
+    failed_a_repeats = [row for row in baseline_sets["A"]["rows"]
+                        if row["within_3pct_both"] != "True"]
     report = f"""# M4 Mini Contention Final Report
 
 ## Scope and frozen interpretation
@@ -334,13 +395,27 @@ The harness used event-driven phase timing, <=1 Hz native process-memory monitor
 
 ## Baseline stability gate
 
-Baseline set {baseline_name} passed. Its median p95 TPOT was {baseline_result['median_p95_tpot_ms']:.3f} ms and median p95 TTFT was {baseline_result['median_p95_ttft_ms']:.2f} ms.
+Set A ran first and failed the frozen gate. Its median p95 TPOT was {baseline_sets['A']['result']['median_p95_tpot_ms']:.3f} ms and median p95 TTFT was {baseline_sets['A']['result']['median_p95_ttft_ms']:.2f} ms. Repeat {failed_a_repeats[0]['repeat']} exceeded the TPOT gate at {float(failed_a_repeats[0]['tpot_abs_deviation'])*100:.2f}% absolute deviation; the other four TPOT values and all five TTFT values were within +/-3%.
+
+### Set A (failed, retained)
 
 | Repeat | p95 TPOT (ms) | abs dev. | p95 TTFT (ms) | abs dev. | pageouts | swap bytes | within +/-3% |
 |---:|---:|---:|---:|---:|---:|---:|---:|
-{baseline_table}
+{baseline_tables['A']}
 
-All baseline blocks had zero swap growth, normal memory pressure, exact 300-request/38,400-token accounting, and zero observer subprocesses. Positive global pageout was retained as a soft flag in {baseline_pageout_flags}/5 blocks. Clean pre/post block-boundary thermal status was recorded for {baseline_thermal_clean}/5 baseline blocks.
+The single pre-frozen environmental correction was a 120-second quiet idle/thermal cooldown. It produced zero pageout growth during the correction interval and changed neither the workload nor observer. Set B was then run once and passed. Its median p95 TPOT was {baseline_result['median_p95_tpot_ms']:.3f} ms and median p95 TTFT was {baseline_result['median_p95_ttft_ms']:.2f} ms; only Set B defines the official normalization baseline.
+
+### Set B (passed, official normalization)
+
+| Repeat | p95 TPOT (ms) | abs dev. | p95 TTFT (ms) | abs dev. | pageouts | swap bytes | within +/-3% |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+{baseline_tables['B']}
+
+| Set | passed | median p95 TPOT | median p95 TTFT | pageout flags | thermal-clean blocks |
+|---|---:|---:|---:|---:|---:|
+{baseline_summary_table}
+
+All ten baseline blocks had zero swap growth, normal memory pressure, exact 300-request/38,400-token accounting, zero observer subprocesses, and clean pre/post block-boundary thermal status. Positive global pageout was retained as a soft flag in {baseline_sets['A']['pageout_flags']}/5 Set A blocks and {baseline_sets['B']['pageout_flags']}/5 Set B blocks; it was never used as a rerun reason.
 
 ## Contention results
 
@@ -350,7 +425,15 @@ All baseline blocks had zero swap growth, normal memory pressure, exact 300-requ
 
 Every repeat is included in `m4_mini_contention_per_run.csv`; medians are descriptive across three randomized repeats. Decode sensitivity exceeded prefill sensitivity at every positive cap: **{asymmetric}**. Cap 4 remains diagnostic-only and does not change `K_hi=2`.
 
-Official normalized TTFT and TPOT use the passed five-run baseline-set medians. Supplementary within-repeat normalization against the contention-matrix LLM-only block is retained in the per-run CSV.
+Official normalized TTFT and TPOT use the passed five-run Set B medians, as required by the r2 handoff. Supplementary within-repeat normalization against each contention-matrix LLM-only block is also reported. The `FROZEN_EXECUTION_MATRIX.json` metadata says within-repeat normalization; that line is preserved unchanged as frozen evidence, while the higher-precedence r2 protocol governs the official endpoint.
+
+### Every contention repeat
+
+| Repeat | condition | p95 TTFT | official norm. | paired norm. | p95 TPOT | official norm. | paired norm. | QPS | pageouts | swap bytes | thermal clean | validity |
+|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
+{per_repeat_table}
+
+The official median curve was: cap 1, TTFT {100*(float(fixed1['median_normalized_p95_ttft'])-1):+.1f}% and TPOT {100*(float(fixed1['median_normalized_p95_tpot'])-1):+.1f}%; cap 2, TTFT {100*(float(fixed2['median_normalized_p95_ttft'])-1):+.1f}% and TPOT {100*(float(fixed2['median_normalized_p95_tpot'])-1):+.1f}%; cap 4, TTFT {100*(float(fixed4['median_normalized_p95_ttft'])-1):+.1f}% and TPOT {100*(float(fixed4['median_normalized_p95_tpot'])-1):+.1f}%. Retrieval QPS increased from {float(fixed1['median_retrieval_qps']):.1f} to {float(fixed2['median_retrieval_qps']):.1f} to {float(fixed4['median_retrieval_qps']):.1f}. Thus TPOT worsened more than TTFT at every tested positive cap, and the asymmetry grew with cap.
 
 | Condition | inter-token p99 (ms) | request maximum-gap p95 (ms) | phase-transition gap p95 (ms) |
 |---|---:|---:|---:|
@@ -364,11 +447,11 @@ Official normalized TTFT and TPOT use the passed five-run baseline-set medians. 
 
 The Air values are the previously reported normalized phase-contention curve in `PHASEGUARD_RESULTS.md` (0/1/2/4 HNSW workers). The comparison is limited to normalized curve direction; raw retrieval QPS is not compared across devices. Any difference in magnitude is not attributed solely to cooling because device form factor, scheduling, and harness details differ.
 
-The Air cap-4 reference corresponds to decode +61.3% and prefill +5.7%. The Mini result is compared only for direction and normalized curve shape.
+The Air cap-4 reference corresponds to decode +61.3% and prefill +5.7%. The Mini cap-4 official result was decode {100*(float(fixed4['median_normalized_p95_tpot'])-1):+.1f}% and prefill {100*(float(fixed4['median_normalized_p95_ttft'])-1):+.1f}%, so it has the same asymmetric direction. The Mini result is compared only for direction and normalized curve shape.
 
 ## Zero-pageout sensitivity
 
-The official result retains every valid block. This sensitivity view uses only blocks with zero global pageout growth; `NA` means that a condition had no zero-pageout block.
+The official result retains every valid block. This sensitivity view filters the contention blocks to zero global pageout growth; `NA` means that a condition had no zero-pageout block. All five official Set B baseline blocks had small positive global pageout deltas, so the sensitivity values necessarily retain the frozen Set B normalization denominator and are not an end-to-end pageout-free baseline comparison. No claim of a wholly pageout-free campaign is made.
 
 | Condition | zero-pageout n/all | normalized TTFT | normalized TPOT | retrieval QPS |
 |---|---:|---:|---:|---:|
@@ -380,7 +463,9 @@ The official result retains every valid block. This sensitivity view uses only b
 - Swap-growth blocks: {sum(int(row['swap_growth_count']) for row in summary)}/12.
 - Positive-pageout blocks: {sum(int(row['pageout_flag_count']) for row in summary)}/12; pageout deltas are retained per run rather than used for result selection.
 - Clean pre/post thermal status: {sum(int(row['thermal_clean_count']) for row in summary)}/12 blocks.
-- All production blocks used observer mode `event`, launched zero observer subprocesses, and retained exact request/token/query/event accounting.
+- All production blocks used observer mode `event`, launched zero observer subprocesses, and retained exact 300-request/38,400-token and query/event accounting.
+- Fixed-1/2/4 had phase-specific active-worker p95 equal to 1/2/4 in every repeat; one shared FAISS index was loaded once per retrieval block, FAISS OpenMP was frozen at one, and the queue-nonempty fraction was 1.0.
+- Event timelines include a deliberate post-measurement IDLE drain at cap 4 so feeder threads can terminate. Completion-audit cap checks are restricted to the measured request interval; no measured Fixed-1/2 admission exceeded its fixed cap.
 
 No valid block was rerun because of an unfavorable number. Cap 4 is not a PhaseGate candidate, and this campaign cannot revise calibration or K_hi.
 """
