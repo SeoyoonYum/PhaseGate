@@ -1,22 +1,74 @@
-# kv-uma-research
+# PhaseGate
 
-Single-pool unified-memory (Apple Silicon) KV-cache *decision* policy — keep / recompute / evict — and the coordinate where PCIe-era cost models break. Phase 1 measures that the cost structure differs (Exp1–3); Phase 2 builds a policy that beats current frameworks. Every experiment must run on the target machine (M4 MacBook Air, 16 GB unified memory) because the hardware is the measurement subject.
+PhaseGate is a phase-aware CPU admission policy for on-device LLM systems with
+unified memory. It allows more concurrent retrieval work while the LLM processes
+the prompt (prefill), then lowers retrieval concurrency while the LLM generates
+tokens (decode). The caps are calibrated for each device and workload; `4 -> 1`
+is the selected policy for the primary configuration, not a universal constant.
 
-## Navigation
-- **[RESEARCH.md](RESEARCH.md)** — master context / source of truth. Read this first every session.
-- **[EXPERIMENTS.md](EXPERIMENTS.md)** — the full experiment program (Exp1–4 + Phase 2 policy).
-- **[DECISIONS.md](DECISIONS.md)** — dated decision log (research journal).
-- **[RELATED_WORK.md](RELATED_WORK.md)** — tiered reading list with notes.
-- `src/` — measurement code. `src/common/` = shared infra (timing, thermal, model registry, workloads).
-- `results/{csv,figures,logs}/` — outputs. `data/{raw,traces}/` — inputs (raw is gitignored).
-- `policy/` — Phase 2 adaptive policy (after the Go/No-Go gate). `paper/` — outline.
+The central comparison is against the strongest fixed concurrency that satisfies
+the same p95 time-per-output-token (TPOT) and time-to-first-token (TTFT) limits.
+On the fan-cooled base-M4 Mac mini, PhaseGate delivers 2.01x the retrieval
+throughput of Fixed-1 while both satisfy the latency limits in all seven held-out
+comparisons. A phase-blind control that replays the same high/low cap durations
+has similar raw retrieval throughput but violates the TPOT limit in all seven.
 
-## Quickstart
-```bash
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-python src/exp1_costcurve.py --model 1.5B          # -> results/csv + results/figures
-python src/exp1_costcurve.py --model 1.5B --smoke  # fast sanity (N=128,256)
-```
+## What Is Included
 
-Verified environment: mlx 0.31.2 / mlx-lm 0.31.3 / numpy 2.4.6 / matplotlib 3.11.0 / Python 3.13 (see RESEARCH.md §7 STATUS). mlx-lm APIs are version-sensitive (RESEARCH.md §6) — `src/common/measure.py` resolves them defensively.
+| Evidence | Device | Role | Result location |
+|---|---|---|---|
+| Primary policy campaign and output-length sweep | Mac mini, base Apple M4, 16 GB | Primary result | [`fanmac_m4_causal_shape_20260805_r5`](experiments/static_phaseaware/fanmac_m4_causal_shape_20260805_r5/) |
+| Prefill/decode contention replication | Mac mini, base Apple M4, 16 GB | Mechanism check | [`fanmac_m4_contention_20260806_r2`](experiments/static_phaseaware/fanmac_m4_contention_20260806_r2/) |
+| Cross-device policy replication | Mac mini, Apple M2, 16 GB | Replication | [`fanmac_m2mini_replication_20260805`](experiments/static_phaseaware/fanmac_m2mini_replication_20260805/) |
+| Intermittent retrieval-demand sweep | Mac mini, base Apple M4, 16 GB | Workload sensitivity | [`fanmac_m4_bursty_hnsw_20260822_r3`](experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/) |
+| Original policy campaign | Mac mini, Apple M2 Pro, 16 GB | Earlier supporting evidence | [`fanmac_main_apple_m2_pro_20260801`](experiments/static_phaseaware/fanmac_main_apple_m2_pro_20260801/) |
+| Access-pattern and contention controls | fanless M4 MacBook Air and M1 MacBook Air | Mechanism controls | [`PHASEGUARD_RESULTS.md`](PHASEGUARD_RESULTS.md) |
+
+The base-M4 Mini contention campaign reproduces the phase asymmetry seen on the
+fanless M4 Air: at four concurrent HNSW searches, p95 TTFT rises by 6.9% while
+p95 TPOT rises by 59.8%. The intermittent-demand study is deliberately scoped as
+a synthetic sensitivity test, not an end-to-end agent benchmark. At 5%, 25%,
+and 100% scheduled demand, PhaseGate retains about 2x the Fixed-1 retrieval
+throughput while both pass the frozen SLO; the phase-blind control passes none.
+
+## Repository Guide
+
+- [`paper/submission_v21`](paper/submission_v21/) contains the current anonymous
+  workshop-paper PDF, self-contained LaTeX source, figures, and build notes.
+- [`experiments/static_phaseaware`](experiments/static_phaseaware/) contains
+  protocol freezes, processed measurements, reports, audits, and figures.
+- [`scripts`](scripts/) and [`src/phaseguard`](src/phaseguard/) contain the main
+  experimental harness and policy implementation.
+- Each newer M4 campaign carries the implementation used for that campaign in
+  its result bundle or `implementation/` directory. This preserves exact
+  provenance where campaign branches evolved independently.
+- [`ARTIFACTS.md`](ARTIFACTS.md) explains what is tracked, what remains in the
+  checksum-verified offline archives, and how the histories were integrated.
+
+## Reproduction Notes
+
+The measurement target is part of the experiment: results should not be
+reproduced on an arbitrary machine and interpreted as the reported device
+result. The campaign reports freeze the machine, model revision, sequence
+lengths, HNSW index parameters, seeds, latency budget, retry rules, and policy
+selection before held-out evaluation.
+
+Start with the final report and protocol freeze in the campaign directory. The
+M4 campaign snapshots preserve the exact scripts used on the measurement host;
+local model and index paths in the frozen manifests are provenance records and
+must be changed to valid local paths for a new campaign. A new configuration is
+a new campaign, not a continuation of an existing frozen result.
+
+The repository retains earlier KV-cache and PhaseGuard investigations because
+they document how the project reached the phase-aware scheduling question.
+[`RESEARCH.md`](RESEARCH.md), [`EXPERIMENTS.md`](EXPERIMENTS.md), and
+[`DECISIONS.md`](DECISIONS.md) are the historical research record.
+
+## Scope
+
+The reported throughput is HNSW retrieval throughput under offered work, not
+end-to-end assistant throughput. Gains depend on the device, model, prompt and
+output lengths, retrieval configuration, and demand. The bursty sweep supports
+robustness to three synthetic duty levels; it does not establish a typical-user
+arrival distribution or generalize to embedding, indexing, file, or network
+tools.

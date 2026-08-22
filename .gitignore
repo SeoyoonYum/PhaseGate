@@ -22,3 +22,12 @@ experiments/phaseguard/index/*.faiss
 # Scratch
 *.tmp
 *.swp
+
+# Large campaign artifacts are preserved outside Git with recorded checksums.
+*_full.zip
+**/raw/timelines/
+**/raw/token_timestamps.jsonl.gz
+
+# Reproducible model and vector-index payloads.
+*.faiss
+*.safetensors
