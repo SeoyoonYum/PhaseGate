@@ -1,0 +1,3025 @@
+{
+  "created_utc": "2026-08-06T07:59:38.903970+00:00",
+  "repository_commit": "c1a2b5f51a6a0a63428c306bfb1d85402a51a9cd",
+  "construction": "calibration interval replay with frozen circular shift",
+  "selected_phasegate": "phasegate4to1",
+  "high_cap": 4,
+  "low_cap": 1,
+  "phase_access_for_cap_selection": false,
+  "phase_state_consulted": false,
+  "intervals": [
+    {
+      "cap": 4,
+      "duration_s": 1.7541552079928806,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7184291250014212,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.7883682079991559,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7183623329910915,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.806901417003246,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7231140829971991,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8120853750006063,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7279577500012238,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.816116707996116,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7217368749988964,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8215813749993686,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7256954589975066,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.817798167001456,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7275905830028933,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.822578750012326,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7268736659898423,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8194370409910334,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.726546000005328,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8241261250077514,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7306313750013942,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8205447920045117,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7336693329998525,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8258639580017189,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7271413749986095,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8238675839966163,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7346609160013031,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8216908340109512,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7458562909887405,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8722480840078788,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7336590829945635,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8231497499946272,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.734988959011389,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8283309580001514,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7363604170095641,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8261114999913843,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7390872500109253,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8245668339950498,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.738530875009019,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8314613749971613,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7419145830062917,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.830168207990937,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7341575830068905,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.828925583002274,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7327677089924691,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8308967079938157,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7400455000024522,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.833969999992405,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7318962910067057,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8328999579971423,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.740022083002259,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8312214170000516,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.736792833005893,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.834219167008996,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.734031457992387,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8355152500007534,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.734276791990851,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.834058249994996,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7381624999979977,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8358736249938374,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7334181660116883,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8354990420048125,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7885275829903549,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.842519791011,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.73980179199134,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.835480791007285,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.740777667000657,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8390196669934085,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7398333750024904,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8392917500023032,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7373561669955961,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8391492090013344,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7384017500007758,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8393840420030756,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7381897079903865,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8402292500104522,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.735598540995852,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.84113349999825,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7371456670080079,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8406063340080436,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7373308329988504,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.841752665990498,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7393340840062592,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8422938339936081,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.738636291003786,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8409485000011045,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7340601250034524,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8390116249938728,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7359839160053525,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8423387910006568,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7379659169964725,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8416536670119967,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7374462079897057,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8414563750120578,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7388064169936115,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8486007090104977,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7992794579913607,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8399033749883529,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7370222090103198,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.843359040998621,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7376703339978121,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8425209999986691,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7352686249942053,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8406021669943584,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7359694159968058,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.841122333004023,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7398356670018984,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8431211660063127,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.740593333990546,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8432654589996673,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7414047079946613,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8439339169999585,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7385239579889458,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.840682416994241,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7373500829999102,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.841994333997718,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7381042079941835,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8394426659942837,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7416195840050932,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.844778208003845,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7367415839980822,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.842393582992372,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7417130829999223,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.844582082994748,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7420854170050006,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8448204589949455,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7376907910074806,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8438268330064602,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7378759169951081,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8653697090048809,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7544861249916721,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8436390830029268,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7386157500004629,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8438909999968018,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7408277089998592,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8435662910051178,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7392993749963352,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8438134580064798,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7390338340046583,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8439896659983788,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7355864999990445,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8442271659878315,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7366495840105927,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8431351249892032,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7415747080085566,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.843112000002293,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7399433329992462,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8414592089975486,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.742707249999512,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8406255000008969,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7388242080050986,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8472638340026606,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7380720410001231,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8468211250001332,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7369427920057205,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8435551669972483,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7345425420062384,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8434270420111716,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7366865419899113,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8428303339896956,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7350760830013314,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.843172416993184,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.768372582999291,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8549603749997914,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7384319580014562,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8448507499997504,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7403525410045404,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8443984999903478,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.741343666013563,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8441226249997271,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7375809170043794,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8455527079931926,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7374628340039635,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8428653340088204,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7411034579999978,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.844414791004965,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7395980000001146,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8455351250013337,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7392674169968814,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8445665409963112,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7397920840012375,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8447950420086272,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7377202499919804,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8455308749980759,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7364557919936487,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.84347604199138,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.737796708010137,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8433920410025166,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7409585419954965,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.845446292005363,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7356537909945473,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8442153329961002,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7389464170119027,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8449905830057105,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7350090419931803,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8444841250020545,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.8093441249948228,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.844533458002843,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7373119170079008,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.844208541995613,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7409961249941261,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.7431899170042016,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7213261659926502,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.7789255829993635,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7194815419934457,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8031260409916285,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.72237312499783,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8128394590021344,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7245909580087755,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8143971669924213,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.72834691600292,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8194727079971926,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7298063750058645,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8206563749990892,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7290469580038916,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8215489169961074,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7272447499999544,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8332372500008205,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7676775830041151,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8241285409894772,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7360030420095427,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.824780999988434,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.736039958006586,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8216195419954602,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7423695420002332,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.826436040995759,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7378735840029549,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8265191659884294,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.739974792013527,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.824362083003507,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7357780830061529,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.825936583991279,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.735489166007028,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8283364579983754,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.739178499992704,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8256494160013972,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7387709169997834,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8269622080115369,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7398948749905685,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8297417499998119,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7372819580050418,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8300106250098906,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.73974016700231,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8286422090022825,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7392077499971492,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8291634589986643,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.735627875008504,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8337094169983175,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.735065457993187,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.834312790990225,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.740104958997108,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8550973340024939,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7499953329970594,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8336140839965083,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7402607500116574,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8317071659985231,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7408773750066757,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8352272500051185,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7399676670029294,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8357587920036167,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.73908216599375,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8336069590004627,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7437197499966715,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.836013209001976,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7381270409969147,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8330676250043325,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7383426250016782,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.835989667000831,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7398572910024086,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8355319170077564,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7417741660028696,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8352216250059428,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.739216915986617,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8364194170135306,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7386511660006363,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8330250419967342,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.738484375004191,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.836374042002717,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7380998330045259,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8359156660008011,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7403675419918727,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.836739790989668,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.73662179200619,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8355756670061965,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7804445829970064,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.843752291999408,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.742180625005858,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8353642500005662,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7411313750053523,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8355396249971818,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7377359999954933,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8358286670118105,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7376551659981487,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8384110830083955,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7386896249954589,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8352566249959636,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7393687090079766,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8357044580043294,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7375572089949856,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8351034579973202,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7362347919988679,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8390947500010952,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7369608339940896,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.836652875004802,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7351955420017475,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8375181250012247,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7369750420039054,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8354183329938678,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7407659169984981,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8374540420045378,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7411819169938099,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.839954959010356,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.73888987499231,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8377702090074308,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.740797582999221,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8350047919957433,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.741914291997091,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8377388750086538,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.8012575000029756,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8373212500009686,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7388980830000946,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8351238750037737,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7380409170000348,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.834878249996109,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7418329999927664,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.839138457988156,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7373546670132782,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.837849167000968,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7360862500063377,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8354968749918044,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7394442920049187,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8376433749945136,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.738324416000978,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8339515420084354,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7432197500020266,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.839482166004018,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.737193417007802,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8387602920120116,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.741593250000733,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8399260000005597,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7409720830037259,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8396307090006303,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7385380410123616,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8367196670005796,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7391254579997621,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8379745000129333,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7391560830001254,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8387755419971654,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7367632079985924,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8409284170047613,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7410691249970114,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8538885000016307,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7639865829987684,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8407515840081032,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.743762957994477,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8386607080028625,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7386201670014998,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8359448749979492,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.742229541996494,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8376317499933066,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7389141250023386,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8403312919981545,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7358134579990292,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8393161249987315,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7388076670031296,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8407372920046328,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7399399159912718,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8375660000019707,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7426268749986775,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8394940419966588,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7422820000065258,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8368461249920074,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7390897500008577,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8390611659997376,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7406015419983305,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8394963330065366,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.737831541991909,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8394764170079725,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7456795829930343,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.838276209004107,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7348663329903502,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8377682080026716,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7378302919969428,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8382162920024712,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7487760829972103,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.860910082992632,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7429612499981886,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.838940209010616,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7412106659903657,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8396898329956457,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7401920840056846,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8394166670041159,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7386086659971625,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8391406250011642,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7463782080012606,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.839556958002504,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7398387920111418,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.839478624999174,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.73907004200737,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8396473329921719,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7421668750030221,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.7659284169931198,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7234937500033993,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8018294170033187,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.724777666007867,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8140965000056894,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7247453329910059,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.819323040996096,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7241088339942507,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8212036670011003,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7269004580011824,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8210853330092505,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.726929457989172,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8262211669934914,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7262885000091046,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8227103329991223,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7290416670002742,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8215983329864684,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7323320420109667,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.825602875003824,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7623448329977691,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8428662910009734,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7336156249948544,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8260553749860264,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.733027458001743,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8275674160104245,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7312848749861587,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8292129159963224,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7330154170049354,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8310285409970675,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.737363334003021,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8304902499949094,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.737581790992408,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8346814999968046,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7386613749986282,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8348554580006748,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7352539169951342,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8367467909993138,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7336054170009447,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8351082089939155,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.734981790999882,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8406455410004128,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7342296249989886,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8431732500030193,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7395502499857685,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.842223625004408,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7350210419972427,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8417654160002712,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7372387089999393,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8430079590034438,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7383871659985743,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8432665419968544,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7360614159988472,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8449380829988513,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.8033733750053216,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8458275419980055,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7370484580023913,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.843772916996386,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7389297079935204,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8468582089990377,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7367334160080645,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8466678750119172,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7351263749878854,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8444517919997452,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.737481290998403,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8469794580014423,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.735290625001653,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8461901249975199,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.738322999997763,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8442857500049286,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7336154999939026,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8467986670002574,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.737538208006299,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8494482079986483,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7386147499928484,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8472344579931814,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7406260420102626,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8486785000131931,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7395729579875479,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8481066249951255,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7406549160077702,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8490060420008376,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.738282624995918,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8486932090017945,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.739056749996962,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.849069874995621,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.737992166003096,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8588388329953887,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7775629590032622,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.850963791992399,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7400307500065537,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8494634170056088,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7349942500004545,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.848886207997566,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7392905840097228,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8481711249914952,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7326588750001974,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8474936250131577,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.742627542000264,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.848126749988296,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7374426669994136,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8502271250035847,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7369894589937758,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8518122919922462,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7412150409945752,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8456492080003954,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7363358339935075,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8495345000119414,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7400192499917466,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8463805840001442,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7373294999997597,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.84911287498835,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7388326250074897,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8478945840033703,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7369082499935757,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8490615410119062,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7368516669957899,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.849722583006951,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7396093339921208,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8506958749931073,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7390787500044098,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.871955082999193,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7372744580061408,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8491217910050182,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7387969999981578,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8500291249947622,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7380290000000969,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8504941669962136,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.739523124997504,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8500950420129811,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7382367079990217,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.847370374991442,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.734569709005882,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8512811249966035,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.737842417001957,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8495375419879565,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7362595000013243,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8474749160086503,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7423391669872217,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8477425419987412,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7352636249997886,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8491630419885041,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7364785829995526,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8476544580043992,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7393227919965284,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8497448330017505,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7361120419955114,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.850213249999797,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7386827090085717,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8490774999954738,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7358375000039814,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8505781669955468,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7408517919975566,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8482409169955645,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7923014999978477,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8510430829919642,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7362721670069732,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8489486670005135,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7416983750008512,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8488825829990674,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.738564667000901,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.851317915992695,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.736454291996779,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8508616670005722,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7402934999990975,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8466268750053132,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7344630419975147,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8497416250029346,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7396171250002226,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8488396659959108,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7383758750074776,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8491138339886675,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7378153750032652,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.852292416995624,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7347667909925804,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8499549999978626,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7388887080014683,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.850923124991823,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7406954589969246,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8486060409923084,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.737668041998404,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8494593749928754,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7385267089994159,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8483117910072906,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7376285420032218,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.847689166010241,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7379445839906111,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8639845830039121,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7855171249975683,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8493984589877073,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.739874165999936,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8500901670049643,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7373477079963777,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.849582750000991,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7362730000022566,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.8503468330018222,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7377800829999615,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.851751541995327,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.740865333005786,
+      "calibration_source_phase": "DECODE"
+    },
+    {
+      "cap": 4,
+      "duration_s": 1.849801166987163,
+      "calibration_source_phase": "PREFILL"
+    },
+    {
+      "cap": 1,
+      "duration_s": 1.7367217500141123,
+      "calibration_source_phase": "DECODE"
+    }
+  ],
+  "period_s": 1073.2350832489465,
+  "high_duty_fraction": 0.5138355761419262,
+  "transition_rate_hz": 0.5590573858093163,
+  "offset_seed": 2026088107,
+  "heldout_offsets_s": [
+    931.6322415850486,
+    443.34799300084956,
+    886.5533864163509,
+    528.273737294759,
+    800.1366484638074,
+    274.0754714289042,
+    421.5184509213975
+  ]
+}

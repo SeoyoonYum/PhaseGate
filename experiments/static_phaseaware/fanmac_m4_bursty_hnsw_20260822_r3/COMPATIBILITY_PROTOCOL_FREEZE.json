@@ -1,0 +1,37 @@
+{
+  "created_utc": "2026-08-21T20:45:17.442026+00:00",
+  "repository_commit": "9eb88e9a95844a2a37d021a221eab72373e11f16",
+  "requests": 100,
+  "policy": "fixed1",
+  "trace": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260821_compat_r4/frozen_traces/compatibility_100pct.json",
+  "trace_seed": 2026082200,
+  "repeats": [
+    {
+      "repeat": 0,
+      "order": [
+        "demand100",
+        "original"
+      ],
+      "prompt_seed": 4210000011,
+      "query_seed": 4210500014
+    },
+    {
+      "repeat": 1,
+      "order": [
+        "original",
+        "demand100"
+      ],
+      "prompt_seed": 4210010018,
+      "query_seed": 4210510021
+    },
+    {
+      "repeat": 2,
+      "order": [
+        "demand100",
+        "original"
+      ],
+      "prompt_seed": 4210020025,
+      "query_seed": 4210520028
+    }
+  ]
+}

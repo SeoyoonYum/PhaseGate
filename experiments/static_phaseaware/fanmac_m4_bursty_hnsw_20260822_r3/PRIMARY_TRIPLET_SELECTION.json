@@ -1,0 +1,259 @@
+{
+  "selected": [
+    {
+      "repeat": 0,
+      "duty": "100",
+      "trace_role": "primary",
+      "trace_seed": 4330020000,
+      "run_keys": [
+        "static_primary_event_phasegate4to1_r00_a01_d100_s4330020000",
+        "static_primary_event_timegate4to1_r00_a01_d100_s4330020000",
+        "static_primary_event_fixed1_r00_a01_d100_s4330020000"
+      ],
+      "scheduled_on_fractions": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "max_difference": 0.0
+    },
+    {
+      "repeat": 0,
+      "duty": "25",
+      "trace_role": "primary",
+      "trace_seed": 4330010000,
+      "run_keys": [
+        "static_primary_event_fixed1_r00_a01_d025_s4330010000",
+        "static_primary_event_timegate4to1_r00_a01_d025_s4330010000",
+        "static_primary_event_phasegate4to1_r00_a01_d025_s4330010000"
+      ],
+      "scheduled_on_fractions": [
+        0.25022593751546085,
+        0.2488148716443543,
+        0.2514822990813731
+      ],
+      "max_difference": 0.0026674274370187823
+    },
+    {
+      "repeat": 0,
+      "duty": "5",
+      "trace_role": "primary",
+      "trace_seed": 4330000000,
+      "run_keys": [
+        "static_primary_event_phasegate4to1_r00_a01_d005_s4330000000",
+        "static_primary_event_fixed1_r00_a01_d005_s4330000000",
+        "static_primary_event_timegate4to1_r00_a01_d005_s4330000000"
+      ],
+      "scheduled_on_fractions": [
+        0.05072692897332816,
+        0.050645040679913586,
+        0.05047840261286472
+      ],
+      "max_difference": 0.0002485263604634358
+    },
+    {
+      "repeat": 1,
+      "duty": "25",
+      "trace_role": "primary",
+      "trace_seed": 4330010001,
+      "run_keys": [
+        "static_primary_event_fixed1_r01_a01_d025_s4330010001",
+        "static_primary_event_timegate4to1_r01_a01_d025_s4330010001",
+        "static_primary_event_phasegate4to1_r01_a01_d025_s4330010001"
+      ],
+      "scheduled_on_fractions": [
+        0.2496611294465596,
+        0.2474148028831878,
+        0.24911008097148862
+      ],
+      "max_difference": 0.0022463265633718144
+    },
+    {
+      "repeat": 1,
+      "duty": "5",
+      "trace_role": "primary",
+      "trace_seed": 4330000001,
+      "run_keys": [
+        "static_primary_event_phasegate4to1_r01_a01_d005_s4330000001",
+        "static_primary_event_timegate4to1_r01_a01_d005_s4330000001",
+        "static_primary_event_fixed1_r01_a01_d005_s4330000001"
+      ],
+      "scheduled_on_fractions": [
+        0.05044685077714979,
+        0.05030991489057141,
+        0.05048600452825808
+      ],
+      "max_difference": 0.0001760896376866647
+    },
+    {
+      "repeat": 1,
+      "duty": "100",
+      "trace_role": "primary",
+      "trace_seed": 4330020001,
+      "run_keys": [
+        "static_primary_event_timegate4to1_r01_a02_d100_s4330020001",
+        "static_primary_event_phasegate4to1_r01_a01_d100_s4330020001",
+        "static_primary_event_fixed1_r01_a01_d100_s4330020001"
+      ],
+      "scheduled_on_fractions": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "max_difference": 0.0
+    },
+    {
+      "repeat": 2,
+      "duty": "25",
+      "trace_role": "primary",
+      "trace_seed": 4330010002,
+      "run_keys": [
+        "static_primary_event_fixed1_r02_a02_d025_s4330010002",
+        "static_primary_event_timegate4to1_r02_a01_d025_s4330010002",
+        "static_primary_event_phasegate4to1_r02_a01_d025_s4330010002"
+      ],
+      "scheduled_on_fractions": [
+        0.24999881939508206,
+        0.2482427011629235,
+        0.2501661036967223
+      ],
+      "max_difference": 0.0019234025337988292
+    },
+    {
+      "repeat": 2,
+      "duty": "100",
+      "trace_role": "primary",
+      "trace_seed": 4330020002,
+      "run_keys": [
+        "static_primary_event_fixed1_r02_a01_d100_s4330020002",
+        "static_primary_event_phasegate4to1_r02_a01_d100_s4330020002",
+        "static_primary_event_timegate4to1_r02_a01_d100_s4330020002"
+      ],
+      "scheduled_on_fractions": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "max_difference": 0.0
+    },
+    {
+      "repeat": 2,
+      "duty": "5",
+      "trace_role": "primary",
+      "trace_seed": 4330000002,
+      "run_keys": [
+        "static_primary_event_timegate4to1_r02_a01_d005_s4330000002",
+        "static_primary_event_fixed1_r02_a01_d005_s4330000002",
+        "static_primary_event_phasegate4to1_r02_a01_d005_s4330000002"
+      ],
+      "scheduled_on_fractions": [
+        0.051156907843749426,
+        0.050617923992030744,
+        0.050614106666492534
+      ],
+      "max_difference": 0.0005428011772568922
+    },
+    {
+      "repeat": 3,
+      "duty": "100",
+      "trace_role": "primary",
+      "trace_seed": 4330020003,
+      "run_keys": [
+        "static_primary_event_phasegate4to1_r03_a01_d100_s4330020003",
+        "static_primary_event_timegate4to1_r03_a01_d100_s4330020003",
+        "static_primary_event_fixed1_r03_a01_d100_s4330020003"
+      ],
+      "scheduled_on_fractions": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "max_difference": 0.0
+    },
+    {
+      "repeat": 3,
+      "duty": "5",
+      "trace_role": "primary",
+      "trace_seed": 4330000003,
+      "run_keys": [
+        "static_primary_event_timegate4to1_r03_a01_d005_s4330000003",
+        "static_primary_event_fixed1_r03_a01_d005_s4330000003",
+        "static_primary_event_phasegate4to1_r03_a01_d005_s4330000003"
+      ],
+      "scheduled_on_fractions": [
+        0.050593025798313006,
+        0.05065161998294412,
+        0.05049327793314603
+      ],
+      "max_difference": 0.00015834204979808808
+    },
+    {
+      "repeat": 3,
+      "duty": "25",
+      "trace_role": "primary",
+      "trace_seed": 4330010003,
+      "run_keys": [
+        "static_primary_event_fixed1_r03_a01_d025_s4330010003",
+        "static_primary_event_timegate4to1_r03_a01_d025_s4330010003",
+        "static_primary_event_phasegate4to1_r03_a01_d025_s4330010003"
+      ],
+      "scheduled_on_fractions": [
+        0.24997453126062028,
+        0.25383651686500747,
+        0.24954927896142076
+      ],
+      "max_difference": 0.004287237903586705
+    },
+    {
+      "repeat": 4,
+      "duty": "5",
+      "trace_role": "primary",
+      "trace_seed": 4330000004,
+      "run_keys": [
+        "static_primary_event_phasegate4to1_r04_a01_d005_s4330000004",
+        "static_primary_event_fixed1_r04_a01_d005_s4330000004",
+        "static_primary_event_timegate4to1_r04_a01_d005_s4330000004"
+      ],
+      "scheduled_on_fractions": [
+        0.05070365527076968,
+        0.05061789780821343,
+        0.050439068721750156
+      ],
+      "max_difference": 0.0002645865490195215
+    },
+    {
+      "repeat": 4,
+      "duty": "25",
+      "trace_role": "primary",
+      "trace_seed": 4330010004,
+      "run_keys": [
+        "static_primary_event_phasegate4to1_r04_a01_d025_s4330010004",
+        "static_primary_event_timegate4to1_r04_a01_d025_s4330010004",
+        "static_primary_event_fixed1_r04_a01_d025_s4330010004"
+      ],
+      "scheduled_on_fractions": [
+        0.251471933872888,
+        0.2532712054784662,
+        0.25072768455429395
+      ],
+      "max_difference": 0.00254352092417226
+    },
+    {
+      "repeat": 4,
+      "duty": "100",
+      "trace_role": "primary",
+      "trace_seed": 4330020004,
+      "run_keys": [
+        "static_primary_event_timegate4to1_r04_a02_d100_s4330020004",
+        "static_primary_event_phasegate4to1_r04_a01_d100_s4330020004",
+        "static_primary_event_fixed1_r04_a01_d100_s4330020004"
+      ],
+      "scheduled_on_fractions": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "max_difference": 0.0
+    }
+  ]
+}

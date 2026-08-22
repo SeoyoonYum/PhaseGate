@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "demand_level": 1.0,
+  "seed": 4330020003,
+  "duration_s": 7200.0,
+  "generator": {
+    "kind": "continuous",
+    "minimum_interval_s": 0.25
+  },
+  "intervals": [
+    {
+      "start_s": 0.0,
+      "end_s": 7200.0,
+      "demand_on": true
+    }
+  ]
+}

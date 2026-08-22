@@ -1,0 +1,6 @@
+baseline_set,repeat,run_key,p95_tpot_ms,p95_ttft_ms,tpot_abs_deviation,ttft_abs_deviation,baseline_stability_tolerance,within_frozen_tolerance_both,duration_s,pageouts_delta,swap_used_delta_bytes,memory_pressure_clean,observer_subprocess_count
+A,0,static_baseline_A_event_llm-only_r00_a01,12.350280054524772,1805.0234958580404,0.010112675341060529,0.000516274230148106,0.05,True,984.7784199160087,0,0,True,0
+A,1,static_baseline_A_event_llm-only_r01_a01,12.274136115083817,1804.3785229492642,0.0038849656826442924,0.00015876869454212184,0.05,True,985.9821448329894,0,0,True,0
+A,2,static_baseline_A_event_llm-only_r02_a01,12.226636053601394,1804.092089603364,0.0,0.0,0.05,True,986.7536894579971,0,0,True,0
+A,3,static_baseline_A_event_llm-only_r03_a01,12.210124840130446,1803.392361047736,0.0013504297828580425,0.0003878563404055013,0.05,True,986.0538716250012,0,0,True,0
+A,4,static_baseline_A_event_llm-only_r04_a01,12.153319685676253,1803.5449288508971,0.005996446414510359,0.00030328870439599864,0.05,True,987.0614434579911,0,0,True,0

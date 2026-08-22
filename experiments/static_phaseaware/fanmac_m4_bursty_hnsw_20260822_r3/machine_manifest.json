@@ -1,0 +1,108 @@
+{
+  "created_utc": "2026-08-21T22:06:12.495538+00:00",
+  "hardware_reference": {
+    "model_name": "Mac mini",
+    "model_identifier": "Mac16,10",
+    "model_number": "MU9D3FN/A",
+    "chip": "Apple M4",
+    "total_cpu_cores": 10,
+    "performance_cores": 4,
+    "efficiency_cores": 6,
+    "gpu_cores": 10,
+    "unified_memory": "16 GB"
+  },
+  "hardware_raw": "Hardware:\n\n    Hardware Overview:\n\n      Model Name: Mac mini\n      Model Identifier: Mac16,10\n      Model Number: MU9D3FN/A\n      Chip: Apple M4\n      Total Number of Cores: 10 (4 Performance and 6 Efficiency)\n      Memory: 16 GB\n      System Firmware Version: 18000.161.9\n      OS Loader Version: 18000.161.9\n      Serial Number (system): WJ4J9LRXVK\n      Hardware UUID: CA68F99A-60CD-51F2-B45F-1A89CC2C0B59\n      Provisioning UDID: 00008132-000A49D10CB9001C\n      Activation Lock Status: Disabled\n\nGraphics/Displays:\n\n    Apple M4:\n\n      Chipset Model: Apple M4\n      Type: GPU\n      Bus: Built-In\n      Total Number of Cores: 10\n      Vendor: Apple (0x106b)\n      Metal Support: Metal 4\n\n",
+  "macos_raw": "ProductName:\t\tmacOS\nProductVersion:\t\t26.6.1\nBuildVersion:\t\t25G76\n",
+  "power_raw": "AC Power:\n Sleep On Power Button 1\n autorestartatconnect 0\n lowpowermode         0\n standby              0\n ttyskeepawake        1\n powernap             1\n displaysleep         0\n womp                 1\n networkoversleep     0\n sleep                0\n tcpkeepalive         1\n autorestart          1\n disksleep            0\n",
+  "power_source_raw": "Now drawing from 'AC Power'\n",
+  "platform": "macOS-26.6.1-arm64-arm-64bit-Mach-O",
+  "python": "3.13.14",
+  "packages": {
+    "mlx": "0.31.2",
+    "mlx-lm": "0.31.3",
+    "numpy": "2.4.6",
+    "faiss-cpu": "1.14.3",
+    "matplotlib": "3.11.0"
+  },
+  "repository_commit": "9eb88e9a95844a2a37d021a221eab72373e11f16",
+  "repository_branch": "exp/m4-bursty-hnsw-20260821-r3",
+  "starting_r5_commit": "d5868e14e7e7dccc04dd5215dc76619891398da3",
+  "model": {
+    "identifier": "mlx-community/Qwen2.5-1.5B-Instruct-4bit",
+    "revision": "8b403126fc14f14cfc99bb4cfa72ecbc129ea677",
+    "path": "/Users/m1/.cache/huggingface/hub/models--mlx-community--Qwen2.5-1.5B-Instruct-4bit/snapshots/8b403126fc14f14cfc99bb4cfa72ecbc129ea677",
+    "files": {
+      ".gitattributes": {
+        "size": 1519,
+        "sha256": "11ad7efa24975ee4b0c3c3a38ed18737f0658a5f75a0a96787b576a78a023361",
+        "matches_r5": true
+      },
+      "README.md": {
+        "size": 748,
+        "sha256": "a92215db397e14395a74b850e8e83d4f15d87551ecc4adc0093b671d556308ce",
+        "matches_r5": true
+      },
+      "added_tokens.json": {
+        "size": 605,
+        "sha256": "58b54bbe36fc752f79a24a271ef66a0a0830054b4dfad94bde757d851968060b",
+        "matches_r5": true
+      },
+      "config.json": {
+        "size": 784,
+        "sha256": "636d3e2a15e8914b8cf82b05cc2288a811f9bd93c3bf1afc00cab701a70b47c0",
+        "matches_r5": true
+      },
+      "merges.txt": {
+        "size": 1671853,
+        "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+        "matches_r5": true
+      },
+      "model.safetensors": {
+        "size": 868628559,
+        "sha256": "0979f33d1bc58afcf696d13f57977644e7b11a6f0eec3e631d8e9463d18c0717",
+        "matches_r5": true
+      },
+      "model.safetensors.index.json": {
+        "size": 51569,
+        "sha256": "6b98634d5044f0e2ad45228a374f8445904e571f1082392d08a6ce54f5d517ca",
+        "matches_r5": true
+      },
+      "special_tokens_map.json": {
+        "size": 613,
+        "sha256": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+        "matches_r5": true
+      },
+      "tokenizer.json": {
+        "size": 7031673,
+        "sha256": "a8506e7111b80c6d8635951a02eab0f4e1a8e4e5772da83846579e97b16f61bf",
+        "matches_r5": true
+      },
+      "tokenizer_config.json": {
+        "size": 7308,
+        "sha256": "f7c61e32b7a17d19bf8e7037dcb74079a833e53ea9801f24008cac68458f03b7",
+        "matches_r5": true
+      },
+      "vocab.json": {
+        "size": 2776833,
+        "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+        "matches_r5": true
+      }
+    }
+  },
+  "index": {
+    "path": "/Users/m1/work/kv-uma-research-bursty/experiments/phaseguard/index/hnsw_100k_d384.faiss",
+    "file_size": 180820834,
+    "sha256": "4c65bde676235523dbba2f1dc78a44de3f447470d38105488586d7ca486a51f0",
+    "vectors": 100000,
+    "dimensions": 384,
+    "graph_degree": 32,
+    "ef_construction": 80,
+    "ef_search": 128,
+    "top_k": 10
+  },
+  "observer": {
+    "mode": "event",
+    "memory_sampling_max_hz": 1,
+    "production_subprocess_polling": false
+  }
+}

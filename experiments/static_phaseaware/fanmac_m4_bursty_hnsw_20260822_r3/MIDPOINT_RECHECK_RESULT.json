@@ -1,0 +1,7 @@
+{
+  "median_p95_tpot_ms": 12.234601461968849,
+  "median_p95_ttft_ms": 1801.1783729001763,
+  "tpot_relative_drift": 0.0006514799600261245,
+  "ttft_relative_drift": -0.0016150598519769632,
+  "passed": true
+}

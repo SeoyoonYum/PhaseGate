@@ -1,0 +1,14 @@
+{
+  "set": "A",
+  "passed": true,
+  "median_p95_tpot_ms": 12.226636053601394,
+  "median_p95_ttft_ms": 1804.092089603364,
+  "baseline_stability_tolerance": 0.05,
+  "run_keys": [
+    "static_baseline_A_event_llm-only_r00_a01",
+    "static_baseline_A_event_llm-only_r01_a01",
+    "static_baseline_A_event_llm-only_r02_a01",
+    "static_baseline_A_event_llm-only_r03_a01",
+    "static_baseline_A_event_llm-only_r04_a01"
+  ]
+}

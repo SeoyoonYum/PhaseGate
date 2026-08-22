@@ -1,0 +1,42 @@
+PhaseGate bursty HNSW r3 pre-baseline test output
+Generated UTC: 2026-08-21T22:06:56Z
+Starting r5 commit: d5868e14e7e7dccc04dd5215dc76619891398da3
+Final frozen implementation commit: 9eb88e9a95844a2a37d021a221eab72373e11f16
+
+observer semantics: PASS
+M4 PhaseGate semantics: PASS
+static phase-aware policy semantics: PASS
+bursty DemandGate semantics: PASS
+m4 bursty campaign protocol tests: PASS
+Python compileall: PASS
+git diff --check: PASS
+
+Baseline protocol tests verify:
+  exact 5.000% boundary passes
+  5.010% deviation fails
+  TPOT and TTFT are both gated
+  exactly five rows are required
+  non-default tolerance requires a frozen rationale
+  immutable freeze rejects changed tolerance or seed offset
+  stopped r2-B (+5.297%) does not pass the new 5% gate
+
+r3 mechanics smoke:
+  commit: 9eb88e9a95844a2a37d021a221eab72373e11f16
+  mechanics gate: PASS, 9/9 cells
+  diagnostic performance status: 8 valid, 1 preserved invalid
+  invalid: TimeGate 25%, reason within_block_drift_clean
+  matched duty max difference: 5%=0.0013234253472228438, 25%=0.0067842229721149505, 100%=0
+  median measured 20-request block: 66.9861705420044 seconds
+
+r3 clean compatibility:
+  commit: 9eb88e9a95844a2a37d021a221eab72373e11f16
+  semantic/accounting agreement: PASS, 6/6 runtime-valid
+  paired-median request-median TPOT change: -0.0014302058644001248
+  paired-median all-token mean-gap change: -0.0019458817780076965
+  absolute 1% gates: PASS, PASS
+  swap growth: 0/6; observer subprocess launches: 0/6
+
+Protocol freeze SHA-256: 1e53ec964da167835f320572f71c18995128c6c0603d01ecd5b32e304704f6f0
+Machine manifest SHA-256: 28c0a37133aa7eb5c70027020067a425eb40c39e557f3ae70e94c7dbe5b7aad8
+Protocol seed offset: 30000000
+r2/r3 frozen seed intersection: 0

@@ -1,0 +1,58 @@
+{
+  "semantic_accounting_agreement": true,
+  "median_paired_request_median_tpot_relative_change": -0.0014302058644001248,
+  "median_paired_all_token_mean_gap_relative_change": -0.0019458817780076965,
+  "request_median_gate_pass": true,
+  "all_token_mean_gate_pass": true,
+  "passed": true,
+  "pairs": [
+    {
+      "repeat": 0,
+      "original_run_key": "static_compatibility_event_fixed1_r00_a01",
+      "demand100_run_key": "static_compatibility_event_fixed1_r00_a01_d100_s2026082200",
+      "request_median_tpot_relative_change": -0.0014302058644001248,
+      "all_token_mean_gap_relative_change": -0.0021914966216687315,
+      "original_official_p95_tpot_ms": 14.995587308803806,
+      "demand100_official_p95_tpot_ms": 14.713806879663025,
+      "original_official_p95_ttft_ms": 1817.1936229526182,
+      "demand100_official_p95_ttft_ms": 1816.418560409511,
+      "original_accounting_exact": true,
+      "demand100_accounting_exact": true,
+      "demand100_admissions_within_demand": true,
+      "original_policy_cap_exact": true,
+      "demand100_policy_cap_exact": true
+    },
+    {
+      "repeat": 1,
+      "original_run_key": "static_compatibility_event_fixed1_r01_a01",
+      "demand100_run_key": "static_compatibility_event_fixed1_r01_a01_d100_s2026082200",
+      "request_median_tpot_relative_change": 4.6291781987450875e-05,
+      "all_token_mean_gap_relative_change": 0.00010352515653400118,
+      "original_official_p95_tpot_ms": 14.064062927791383,
+      "demand100_official_p95_tpot_ms": 14.170983556541612,
+      "original_official_p95_ttft_ms": 1817.6088444000925,
+      "demand100_official_p95_ttft_ms": 1820.2154350969067,
+      "original_accounting_exact": true,
+      "demand100_accounting_exact": true,
+      "demand100_admissions_within_demand": true,
+      "original_policy_cap_exact": true,
+      "demand100_policy_cap_exact": true
+    },
+    {
+      "repeat": 2,
+      "original_run_key": "static_compatibility_event_fixed1_r02_a01",
+      "demand100_run_key": "static_compatibility_event_fixed1_r02_a01_d100_s2026082200",
+      "request_median_tpot_relative_change": -0.0029968039128139834,
+      "all_token_mean_gap_relative_change": -0.0019458817780076965,
+      "original_official_p95_tpot_ms": 14.145783747080714,
+      "demand100_official_p95_tpot_ms": 14.866419807804048,
+      "original_official_p95_ttft_ms": 1817.853489596746,
+      "demand100_official_p95_ttft_ms": 1818.0975597519136,
+      "original_accounting_exact": true,
+      "demand100_accounting_exact": true,
+      "demand100_admissions_within_demand": true,
+      "original_policy_cap_exact": true,
+      "demand100_policy_cap_exact": true
+    }
+  ]
+}

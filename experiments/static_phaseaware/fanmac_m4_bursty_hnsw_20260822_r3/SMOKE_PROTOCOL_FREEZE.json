@@ -1,0 +1,129 @@
+{
+  "created_utc": "2026-08-21T20:01:24.999962+00:00",
+  "repository_commit": "9eb88e9a95844a2a37d021a221eab72373e11f16",
+  "order_seed": 2026082191,
+  "requests": 20,
+  "context_tokens": 2048,
+  "output_tokens": 128,
+  "observer_mode": "event",
+  "traces": {
+    "5": {
+      "demand_level": 0.05,
+      "seed": 2026082105,
+      "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260821_smoke_r3/frozen_traces/smoke_duty5_seed2026082105.json",
+      "offset_s": 4856.5,
+      "offset_selection": "minimum scheduled-duty error at a fixed 72-second design window; selected before smoke performance"
+    },
+    "25": {
+      "demand_level": 0.25,
+      "seed": 2026082125,
+      "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260821_smoke_r3/frozen_traces/smoke_duty25_seed2026082125.json",
+      "offset_s": 5330.0,
+      "offset_selection": "minimum scheduled-duty error at a fixed 72-second design window; selected before smoke performance"
+    },
+    "100": {
+      "demand_level": 1.0,
+      "seed": 2026082100,
+      "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260821_smoke_r3/frozen_traces/smoke_duty100_seed2026082100.json",
+      "offset_s": 0.0,
+      "offset_selection": "minimum scheduled-duty error at a fixed 72-second design window; selected before smoke performance"
+    }
+  },
+  "randomized_cells": [
+    {
+      "duty": "5",
+      "policy": {
+        "name": "timegate4to1",
+        "family": "timegate",
+        "high": 4,
+        "low": 1
+      }
+    },
+    {
+      "duty": "100",
+      "policy": {
+        "name": "fixed1",
+        "family": "fixed",
+        "high": 1,
+        "low": 1
+      }
+    },
+    {
+      "duty": "5",
+      "policy": {
+        "name": "phasegate4to1",
+        "family": "phasegate",
+        "high": 4,
+        "low": 1
+      }
+    },
+    {
+      "duty": "100",
+      "policy": {
+        "name": "phasegate4to1",
+        "family": "phasegate",
+        "high": 4,
+        "low": 1
+      }
+    },
+    {
+      "duty": "25",
+      "policy": {
+        "name": "fixed1",
+        "family": "fixed",
+        "high": 1,
+        "low": 1
+      }
+    },
+    {
+      "duty": "100",
+      "policy": {
+        "name": "timegate4to1",
+        "family": "timegate",
+        "high": 4,
+        "low": 1
+      }
+    },
+    {
+      "duty": "25",
+      "policy": {
+        "name": "timegate4to1",
+        "family": "timegate",
+        "high": 4,
+        "low": 1
+      }
+    },
+    {
+      "duty": "5",
+      "policy": {
+        "name": "fixed1",
+        "family": "fixed",
+        "high": 1,
+        "low": 1
+      }
+    },
+    {
+      "duty": "25",
+      "policy": {
+        "name": "phasegate4to1",
+        "family": "phasegate",
+        "high": 4,
+        "low": 1
+      }
+    }
+  ],
+  "prompt_query_seeds": {
+    "5": {
+      "prompt_seed": 4200000011,
+      "query_seed": 4200500014
+    },
+    "25": {
+      "prompt_seed": 4200010018,
+      "query_seed": 4200510021
+    },
+    "100": {
+      "prompt_seed": 4200020025,
+      "query_seed": 4200520028
+    }
+  }
+}

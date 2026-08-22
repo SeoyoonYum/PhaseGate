@@ -1,0 +1,942 @@
+{
+  "schema_version": 2,
+  "created_utc": "2026-08-21T22:06:30.029187+00:00",
+  "repository_commit": "9eb88e9a95844a2a37d021a221eab72373e11f16",
+  "starting_r5_commit": "d5868e14e7e7dccc04dd5215dc76619891398da3",
+  "protocol_seed_offset": 30000000,
+  "baseline_stability_gate": {
+    "absolute_relative_tolerance": 0.05,
+    "selection_rationale": "User-authorized relaxation from 3% to 5% after stopped r2; 5% remains below the observed r2-B +5.297% failure and therefore does not retroactively pass observed data.",
+    "applies_to": "every run-level p95 TPOT and p95 TTFT versus its five-run median"
+  },
+  "machine_manifest": "machine_manifest.json",
+  "model": {
+    "path": "/Users/m1/.cache/huggingface/hub/models--mlx-community--Qwen2.5-1.5B-Instruct-4bit/snapshots/8b403126fc14f14cfc99bb4cfa72ecbc129ea677",
+    "revision": "8b403126fc14f14cfc99bb4cfa72ecbc129ea677"
+  },
+  "index": {
+    "path": "/Users/m1/work/kv-uma-research-bursty/experiments/phaseguard/index/hnsw_100k_d384.faiss",
+    "size": 180820834,
+    "sha256": "4c65bde676235523dbba2f1dc78a44de3f447470d38105488586d7ca486a51f0"
+  },
+  "observer_mode": "event",
+  "production_subprocess_polling": false,
+  "memory_sampling_interval_s": 1.0,
+  "latency_definitions": {
+    "token_timestamp_position": "after model() and mx.eval(), unchanged from r5",
+    "p95_tpot": "p95 across request-level p95 token gaps",
+    "p95_ttft": "p95 across request TTFT"
+  },
+  "B": 1.25,
+  "context_tokens": 2048,
+  "output_tokens": 128,
+  "llm_requests_per_block": 300,
+  "faiss_internal_threads": 1,
+  "maximum_application_workers": 4,
+  "mlx_memory_limit_gb": 5.5,
+  "policies": [
+    {
+      "name": "fixed1",
+      "family": "fixed",
+      "high": 1,
+      "low": 1,
+      "exact_semantics": "cap=1 in PREFILL and DECODE"
+    },
+    {
+      "name": "phasegate4to1",
+      "family": "phasegate",
+      "high": 4,
+      "low": 1,
+      "exact_semantics": "cap=4 in PREFILL; cap=1 in DECODE"
+    },
+    {
+      "name": "timegate4to1",
+      "family": "timegate",
+      "high": 4,
+      "low": 1,
+      "exact_semantics": "phase-blind r5 wall-clock schedule using caps 4 and 1"
+    }
+  ],
+  "demand_gate_exact_semantics": "a chunk may start iff demand is ON AND worker index is below the current policy cap AND active chunks are below that cap; OFF cannot raise the cap",
+  "timegate_schedule": "timegate_schedule_freeze.json",
+  "demand_levels": [
+    0.05,
+    0.25,
+    1.0
+  ],
+  "demand_generator": {
+    "minimum_interval_s": 0.25,
+    "on": {
+      "shift_s": 0.25,
+      "gamma_shape": 2,
+      "gamma_scale": 0.875
+    },
+    "off_5pct": {
+      "shift_s": 0.25,
+      "gamma_shape": 2,
+      "gamma_scale": 18.875
+    },
+    "off_25pct": {
+      "shift_s": 0.25,
+      "gamma_shape": 2,
+      "gamma_scale": 2.875
+    },
+    "continuous_100pct": true,
+    "minimum_trace_duration_s": 7200
+  },
+  "runtime_estimate_basis": {
+    "measured_20_request_median_s": 66.9861705420044,
+    "linear_300_request_estimate_s": 1004.792558130066,
+    "policy_blocks_estimate_hours": 12.559906976625825
+  },
+  "traces": {
+    "5": [
+      {
+        "repeat": 0,
+        "primary": {
+          "seed": 4330000000,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty5_r0_primary_seed4330000000.json",
+          "offset_s": 3789.25,
+          "duration_s": 7265.457965687256,
+          "sha256": "01c311bab1cfc6f4234ed2e9d4f0ee215c1e56e655f02523d20bfaa5240def7d"
+        },
+        "backup": {
+          "seed": 4331000000,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty5_r0_backup_seed4331000000.json",
+          "offset_s": 4045.75,
+          "duration_s": 7230.732157757786,
+          "sha256": "ffe3678fe003a07979b7696a9d699bfac062b4037c349337037566dc8014daf9"
+        }
+      },
+      {
+        "repeat": 1,
+        "primary": {
+          "seed": 4330000001,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty5_r1_primary_seed4330000001.json",
+          "offset_s": 4258.0,
+          "duration_s": 7215.874387260547,
+          "sha256": "5f3d224fec170701017a3827089e1e08b653362bbe3c300dd268c2233f7e37f6"
+        },
+        "backup": {
+          "seed": 4331000001,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty5_r1_backup_seed4331000001.json",
+          "offset_s": 3569.75,
+          "duration_s": 7236.2674574404045,
+          "sha256": "bda56b2fca24fbaa339390183991bc3a23716f7b1fda6093180389fd718a8bb4"
+        }
+      },
+      {
+        "repeat": 2,
+        "primary": {
+          "seed": 4330000002,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty5_r2_primary_seed4330000002.json",
+          "offset_s": 5170.75,
+          "duration_s": 7262.008321037571,
+          "sha256": "4521c5821781778115c7cf24fc7d615058a1512400d2429b033cadc8d9d792ff"
+        },
+        "backup": {
+          "seed": 4331000002,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty5_r2_backup_seed4331000002.json",
+          "offset_s": 2432.75,
+          "duration_s": 7201.591727369358,
+          "sha256": "623dbef0a4eaab10817f6de395d793386e673da5b44314aaf6c8eee05fe9670b"
+        }
+      },
+      {
+        "repeat": 3,
+        "primary": {
+          "seed": 4330000003,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty5_r3_primary_seed4330000003.json",
+          "offset_s": 3452.75,
+          "duration_s": 7235.137280921433,
+          "sha256": "7311256610e2e9d2a7a7d5328df573982d1f3acd4cc23618b35364b998a447dc"
+        },
+        "backup": {
+          "seed": 4331000003,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty5_r3_backup_seed4331000003.json",
+          "offset_s": 797.25,
+          "duration_s": 7214.500511520031,
+          "sha256": "4966f94188e9e4aa4b80c93bf21a7169a1b95bc7a7b4f279dec910d191c6e8ab"
+        }
+      },
+      {
+        "repeat": 4,
+        "primary": {
+          "seed": 4330000004,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty5_r4_primary_seed4330000004.json",
+          "offset_s": 7088.5,
+          "duration_s": 7296.556062396752,
+          "sha256": "8edb7acd4dc11ae4888baf8899d8a3a6866042671f015104f77a63462102a4f9"
+        },
+        "backup": {
+          "seed": 4331000004,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty5_r4_backup_seed4331000004.json",
+          "offset_s": 7201.0,
+          "duration_s": 7221.69925281622,
+          "sha256": "7f682e92b8ce10ee96fbbb349c69b520ff6d01344267aa1b52bd29d7dca1dee6"
+        }
+      }
+    ],
+    "25": [
+      {
+        "repeat": 0,
+        "primary": {
+          "seed": 4330010000,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty25_r0_primary_seed4330010000.json",
+          "offset_s": 6365.25,
+          "duration_s": 7206.046957650991,
+          "sha256": "c54035df674d92395f6d1131da1c5b24f6215100c60bc545d9da5ffc2786f0c4"
+        },
+        "backup": {
+          "seed": 4331010000,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty25_r0_backup_seed4331010000.json",
+          "offset_s": 2247.5,
+          "duration_s": 7200.729972783264,
+          "sha256": "30bb487dd55acecafb2fc2508cc4d05671a3428ea72b044f47cb6821e9425bbb"
+        }
+      },
+      {
+        "repeat": 1,
+        "primary": {
+          "seed": 4330010001,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty25_r1_primary_seed4330010001.json",
+          "offset_s": 1978.5,
+          "duration_s": 7204.304492994371,
+          "sha256": "a3676dab897839c735f84d5041e1161ea37630ddfe05d1e969e076b6ac01c8fe"
+        },
+        "backup": {
+          "seed": 4331010001,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty25_r1_backup_seed4331010001.json",
+          "offset_s": 197.75,
+          "duration_s": 7206.110593887897,
+          "sha256": "1fed3ec728d1d75f950a0905f11b793ebd7ebbca6c950ffaeb983fce0cdeff98"
+        }
+      },
+      {
+        "repeat": 2,
+        "primary": {
+          "seed": 4330010002,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty25_r2_primary_seed4330010002.json",
+          "offset_s": 4392.25,
+          "duration_s": 7206.6761702543245,
+          "sha256": "404cebe9f642ed56690914022b3298c53838b198c9e30abb321098bdc043abc2"
+        },
+        "backup": {
+          "seed": 4331010002,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty25_r2_backup_seed4331010002.json",
+          "offset_s": 2686.0,
+          "duration_s": 7207.034298196523,
+          "sha256": "1edf89f31b49718c1964c5bb39f0a857d05035055d00aacc686c22be8d49a96e"
+        }
+      },
+      {
+        "repeat": 3,
+        "primary": {
+          "seed": 4330010003,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty25_r3_primary_seed4330010003.json",
+          "offset_s": 6814.75,
+          "duration_s": 7213.768479409654,
+          "sha256": "30f82649dd0a2ad999965d182c4c6b308bda6f509d0648d36c17823955c7e293"
+        },
+        "backup": {
+          "seed": 4331010003,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty25_r3_backup_seed4331010003.json",
+          "offset_s": 3327.75,
+          "duration_s": 7204.620090752096,
+          "sha256": "301fc67a55f8542880a3f6587422190d5cc17634fdeffa003e8ca73fb264eed9"
+        }
+      },
+      {
+        "repeat": 4,
+        "primary": {
+          "seed": 4330010004,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty25_r4_primary_seed4330010004.json",
+          "offset_s": 3372.5,
+          "duration_s": 7202.0562774706705,
+          "sha256": "80dd73013de1bb24b091695211c71e34463ee69dcbc1f14b975bcbd32bb4d070"
+        },
+        "backup": {
+          "seed": 4331010004,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty25_r4_backup_seed4331010004.json",
+          "offset_s": 4742.25,
+          "duration_s": 7207.191321953977,
+          "sha256": "4c6ccad13010497adc52a34c57d56623f73342aa7602410403cbf07cb7b7cf78"
+        }
+      }
+    ],
+    "100": [
+      {
+        "repeat": 0,
+        "primary": {
+          "seed": 4330020000,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty100_r0_primary_seed4330020000.json",
+          "offset_s": 0.0,
+          "duration_s": 7200.0,
+          "sha256": "9def3cba1c859196c84ff03364da894bb5d3a0f2d9e096a41b1f510d736d206f"
+        },
+        "backup": {
+          "seed": 4331020000,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty100_r0_backup_seed4331020000.json",
+          "offset_s": 0.0,
+          "duration_s": 7200.0,
+          "sha256": "771e8fd31aa21f63556cf2abae64de69337c349fda07893536a5ef5916236be4"
+        }
+      },
+      {
+        "repeat": 1,
+        "primary": {
+          "seed": 4330020001,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty100_r1_primary_seed4330020001.json",
+          "offset_s": 0.0,
+          "duration_s": 7200.0,
+          "sha256": "3cf6ebe25ee11cb079e33c2735566e514d0c44464323d8ed297c4725d6ac54b7"
+        },
+        "backup": {
+          "seed": 4331020001,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty100_r1_backup_seed4331020001.json",
+          "offset_s": 0.0,
+          "duration_s": 7200.0,
+          "sha256": "e8eb44ba8b938f25b17bfff7aa66c8ef0fae83460307bea38e0a4a7f6deab115"
+        }
+      },
+      {
+        "repeat": 2,
+        "primary": {
+          "seed": 4330020002,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty100_r2_primary_seed4330020002.json",
+          "offset_s": 0.0,
+          "duration_s": 7200.0,
+          "sha256": "db06dfa3b27824fc77487f5dcfbb3c7cb89fa706e052334bf4978a0019393e47"
+        },
+        "backup": {
+          "seed": 4331020002,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty100_r2_backup_seed4331020002.json",
+          "offset_s": 0.0,
+          "duration_s": 7200.0,
+          "sha256": "b8d76cfa6a5667c792b3effe1efebd6866143acaa86c4f81d09b4f84f6a65141"
+        }
+      },
+      {
+        "repeat": 3,
+        "primary": {
+          "seed": 4330020003,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty100_r3_primary_seed4330020003.json",
+          "offset_s": 0.0,
+          "duration_s": 7200.0,
+          "sha256": "fd4e3afe779a74e1cbd638af157a30ca8c99d16f2b898facb2323e1656c847f7"
+        },
+        "backup": {
+          "seed": 4331020003,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty100_r3_backup_seed4331020003.json",
+          "offset_s": 0.0,
+          "duration_s": 7200.0,
+          "sha256": "3d454b9459903245fb0d646c0ad5a2e3d60eb75be841719336e799379c3d644d"
+        }
+      },
+      {
+        "repeat": 4,
+        "primary": {
+          "seed": 4330020004,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty100_r4_primary_seed4330020004.json",
+          "offset_s": 0.0,
+          "duration_s": 7200.0,
+          "sha256": "32d8718fea9a909fca7591d680aa990870715632ee97260b455d1620767d8771"
+        },
+        "backup": {
+          "seed": 4331020004,
+          "path": "/Users/m1/work/kv-uma-research-bursty/experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/frozen_traces/duty100_r4_backup_seed4331020004.json",
+          "offset_s": 0.0,
+          "duration_s": 7200.0,
+          "sha256": "eb677b1e3ba5245ce099afe7471e43a5d3abe089f22db71125caeca4d13c9983"
+        }
+      }
+    ]
+  },
+  "baseline_sets": {
+    "A": [
+      {
+        "repeat": 0,
+        "prompt_seed": 4350000011,
+        "query_seed": 4350500014
+      },
+      {
+        "repeat": 1,
+        "prompt_seed": 4350010018,
+        "query_seed": 4350510021
+      },
+      {
+        "repeat": 2,
+        "prompt_seed": 4350020025,
+        "query_seed": 4350520028
+      },
+      {
+        "repeat": 3,
+        "prompt_seed": 4350030032,
+        "query_seed": 4350530035
+      },
+      {
+        "repeat": 4,
+        "prompt_seed": 4350040039,
+        "query_seed": 4350540042
+      }
+    ],
+    "B": [
+      {
+        "repeat": 0,
+        "prompt_seed": 4351000011,
+        "query_seed": 4351500014
+      },
+      {
+        "repeat": 1,
+        "prompt_seed": 4351010018,
+        "query_seed": 4351510021
+      },
+      {
+        "repeat": 2,
+        "prompt_seed": 4351020025,
+        "query_seed": 4351520028
+      },
+      {
+        "repeat": 3,
+        "prompt_seed": 4351030032,
+        "query_seed": 4351530035
+      },
+      {
+        "repeat": 4,
+        "prompt_seed": 4351040039,
+        "query_seed": 4351540042
+      }
+    ]
+  },
+  "midpoint_recheck": [
+    {
+      "repeat": 0,
+      "prompt_seed": 4360000011,
+      "query_seed": 4360500014
+    },
+    {
+      "repeat": 1,
+      "prompt_seed": 4360010018,
+      "query_seed": 4360510021
+    },
+    {
+      "repeat": 2,
+      "prompt_seed": 4360020025,
+      "query_seed": 4360520028
+    }
+  ],
+  "repeats": [
+    {
+      "repeat": 0,
+      "duty_order": [
+        "100",
+        "25",
+        "5"
+      ],
+      "cells": [
+        {
+          "duty": "100",
+          "policy_order": [
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "timegate4to1",
+              "family": "timegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            }
+          ],
+          "prompt_seed": 4340010011,
+          "query_seed": 4340510014,
+          "timegate_offset_s": 585.7415808271253
+        },
+        {
+          "duty": "25",
+          "policy_order": [
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            },
+            {
+              "name": "timegate4to1",
+              "family": "timegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            }
+          ],
+          "prompt_seed": 4340002511,
+          "query_seed": 4340502514,
+          "timegate_offset_s": 919.7810883218762
+        },
+        {
+          "duty": "5",
+          "policy_order": [
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            },
+            {
+              "name": "timegate4to1",
+              "family": "timegate",
+              "high": 4,
+              "low": 1
+            }
+          ],
+          "prompt_seed": 4340000511,
+          "query_seed": 4340500514,
+          "timegate_offset_s": 947.9349191372748
+        }
+      ]
+    },
+    {
+      "repeat": 1,
+      "duty_order": [
+        "25",
+        "5",
+        "100"
+      ],
+      "cells": [
+        {
+          "duty": "25",
+          "policy_order": [
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            },
+            {
+              "name": "timegate4to1",
+              "family": "timegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            }
+          ],
+          "prompt_seed": 4340102511,
+          "query_seed": 4340602514,
+          "timegate_offset_s": 485.53561431774295
+        },
+        {
+          "duty": "5",
+          "policy_order": [
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "timegate4to1",
+              "family": "timegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            }
+          ],
+          "prompt_seed": 4340100511,
+          "query_seed": 4340600514,
+          "timegate_offset_s": 780.9179563923695
+        },
+        {
+          "duty": "100",
+          "policy_order": [
+            {
+              "name": "timegate4to1",
+              "family": "timegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            }
+          ],
+          "prompt_seed": 4340110011,
+          "query_seed": 4340610014,
+          "timegate_offset_s": 298.8042639733849
+        }
+      ]
+    },
+    {
+      "repeat": 2,
+      "duty_order": [
+        "25",
+        "100",
+        "5"
+      ],
+      "cells": [
+        {
+          "duty": "25",
+          "policy_order": [
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            },
+            {
+              "name": "timegate4to1",
+              "family": "timegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            }
+          ],
+          "prompt_seed": 4340202511,
+          "query_seed": 4340702514,
+          "timegate_offset_s": 443.8850743158651
+        },
+        {
+          "duty": "100",
+          "policy_order": [
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            },
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "timegate4to1",
+              "family": "timegate",
+              "high": 4,
+              "low": 1
+            }
+          ],
+          "prompt_seed": 4340210011,
+          "query_seed": 4340710014,
+          "timegate_offset_s": 638.3059223656163
+        },
+        {
+          "duty": "5",
+          "policy_order": [
+            {
+              "name": "timegate4to1",
+              "family": "timegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            },
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            }
+          ],
+          "prompt_seed": 4340200511,
+          "query_seed": 4340700514,
+          "timegate_offset_s": 1049.0221837473935
+        }
+      ]
+    },
+    {
+      "repeat": 3,
+      "duty_order": [
+        "100",
+        "5",
+        "25"
+      ],
+      "cells": [
+        {
+          "duty": "100",
+          "policy_order": [
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "timegate4to1",
+              "family": "timegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            }
+          ],
+          "prompt_seed": 4340310011,
+          "query_seed": 4340810014,
+          "timegate_offset_s": 485.9349543233668
+        },
+        {
+          "duty": "5",
+          "policy_order": [
+            {
+              "name": "timegate4to1",
+              "family": "timegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            },
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            }
+          ],
+          "prompt_seed": 4340300511,
+          "query_seed": 4340800514,
+          "timegate_offset_s": 607.9858347321607
+        },
+        {
+          "duty": "25",
+          "policy_order": [
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            },
+            {
+              "name": "timegate4to1",
+              "family": "timegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            }
+          ],
+          "prompt_seed": 4340302511,
+          "query_seed": 4340802514,
+          "timegate_offset_s": 859.3373297328209
+        }
+      ]
+    },
+    {
+      "repeat": 4,
+      "duty_order": [
+        "5",
+        "25",
+        "100"
+      ],
+      "cells": [
+        {
+          "duty": "5",
+          "policy_order": [
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            },
+            {
+              "name": "timegate4to1",
+              "family": "timegate",
+              "high": 4,
+              "low": 1
+            }
+          ],
+          "prompt_seed": 4340400511,
+          "query_seed": 4340900514,
+          "timegate_offset_s": 830.2147908398255
+        },
+        {
+          "duty": "25",
+          "policy_order": [
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "timegate4to1",
+              "family": "timegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            }
+          ],
+          "prompt_seed": 4340402511,
+          "query_seed": 4340902514,
+          "timegate_offset_s": 548.7122047039176
+        },
+        {
+          "duty": "100",
+          "policy_order": [
+            {
+              "name": "timegate4to1",
+              "family": "timegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            }
+          ],
+          "prompt_seed": 4340410011,
+          "query_seed": 4340910014,
+          "timegate_offset_s": 432.8585612943206
+        }
+      ]
+    }
+  ],
+  "paired_repeat_seeds": [
+    2056082300,
+    2056082301,
+    2056082302,
+    2056082303,
+    2056082304
+  ],
+  "execution": {
+    "fresh_process_per_block": true,
+    "baseline_valid_repeats": 5,
+    "primary_paired_repeats_per_duty": 5,
+    "total_primary_policy_blocks": 45,
+    "midpoint_after_completed_repeat_index": 1,
+    "block_timeout_s": 7200
+  },
+  "validity": {
+    "scheduled_duty_tolerance_absolute": 0.03,
+    "matched_triplet_duty_max_difference_absolute": 0.02,
+    "individual_hard_invalid_retry_limit": 1,
+    "triplet_trace_retry_limit": 1,
+    "baseline_stability_absolute_relative_tolerance": 0.05,
+    "midpoint_drift_absolute_relative_tolerance": 0.03,
+    "pageout_with_zero_swap_normal_pressure": "soft flag",
+    "slo_failure": "valid performance result",
+    "hard_invalid_conditions": [
+      "crash, hang, or process failure",
+      "wrong machine or changed software/model/index identity",
+      "swap growth",
+      "warning or critical memory pressure",
+      "thermal or power warning",
+      "corrupt, missing, duplicated, or truncated request/token/event data",
+      "wrong output-token count",
+      "non-monotonic timestamps or event sequence",
+      "event reconstruction mismatch",
+      "incorrect Fixed, PhaseGate, TimeGate, or DemandGate semantics",
+      "TimeGate consulting phase",
+      "DemandGate consulting phase or policy identity",
+      "new HNSW chunk beginning during OFF",
+      "production observer subprocess launch",
+      "realized duty outside the frozen tolerance",
+      "matched-triplet duty imbalance outside the frozen tolerance",
+      "severe within-block drift under the unchanged r5 rule"
+    ]
+  },
+  "stop_rules": {
+    "baseline_A_failure": "diagnose and permit exactly one documented environmental correction before frozen B",
+    "baseline_B_failure": "stop campaign",
+    "midpoint_drift_failure": "stop before remaining repeats",
+    "implementation_change_after_freeze": "new campaign directory"
+  },
+  "analysis": {
+    "unit": "run-level matched comparison",
+    "paired_bootstrap_resamples": 10000,
+    "request_bootstrap_for_primary_ci": false,
+    "metrics": [
+      "median retrieval QPS over full block wall time",
+      "median retrieval QPS over scheduled-ON time",
+      "completed retrieval queries per LLM request",
+      "normalized p95 TPOT",
+      "normalized p95 TTFT",
+      "joint SLO pass count",
+      "scheduled and actual retrieval-active fractions",
+      "prefill and decode active-worker time",
+      "cap-binding fraction during ON",
+      "ON-to-OFF drain time",
+      "pageout, swap, pressure, power, thermal proxy and soft flags",
+      "PhaseGate/Fixed QPS ratio",
+      "PhaseGate/TimeGate QPS ratio",
+      "absolute PhaseGate-minus-Fixed QPS",
+      "SLO pass-count contrast"
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+run_key,status,invalid_reason,policy,demand_level,duration_s,scheduled_on_fraction,actual_hnsw_active_fraction,new_chunk_starts_during_off,off_active_excluding_bounded_drain_s,query_accounting_exact,admissions_within_demand,token_data_clean,policy_cap_exact,demand_semantics_clean,demand_duty_clean,timegate_phase_blind,demand_phase_blind,demand_policy_blind,observer_subprocess_count
+static_mechanics_event_timegate4to1_r05_a01_d005_s2026082105,valid,,timegate4to1,0.05,65.4861648340011,0.05493922929332151,0.055590226061455104,0,0.0,True,True,True,True,True,True,True,True,True,0
+static_mechanics_event_fixed1_r100_a01_d100_s2026082100,valid,,fixed1,1.0,70.64710333300172,1.0,0.9965997440165696,0,0.0,True,True,True,True,True,True,True,True,True,0
+static_mechanics_event_phasegate4to1_r05_a01_d005_s2026082105,valid,,phasegate4to1,0.05,65.84334912498889,0.054641197222909964,0.05530460756275615,0,0.0,True,True,True,True,True,True,True,True,True,0
+static_mechanics_event_phasegate4to1_r100_a01_d100_s2026082100,valid,,phasegate4to1,1.0,73.3941960420052,1.0,0.9986602620213316,0,0.0,True,True,True,True,True,True,True,True,True,0
+static_mechanics_event_fixed1_r25_a01_d025_s2026082125,valid,,fixed1,0.25,65.87293349999527,0.2499275101559342,0.25042003268652724,0,0.0,True,True,True,True,True,True,True,True,True,0
+static_mechanics_event_timegate4to1_r100_a01_d100_s2026082100,valid,,timegate4to1,1.0,73.51295704099175,1.0,0.9984776528905985,0,0.0,True,True,True,True,True,True,True,True,True,0
+static_mechanics_event_timegate4to1_r25_a01_d025_s2026082125,invalid,within_block_drift_clean,timegate4to1,0.25,67.79527849999431,0.25255821069391876,0.253775932212491,0,0.0,True,True,True,True,True,True,True,True,True,0
+static_mechanics_event_fixed1_r05_a01_d005_s2026082105,valid,,fixed1,0.05,64.2863162499998,0.05596462257013281,0.0565155846833797,0,0.0,True,True,True,True,True,True,True,True,True,0
+static_mechanics_event_phasegate4to1_r25_a01_d025_s2026082125,valid,,phasegate4to1,0.25,66.9861705420044,0.2457739877218038,0.2478505840478335,0,0.0,True,True,True,True,True,True,True,True,True,0
