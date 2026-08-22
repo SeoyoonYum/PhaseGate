@@ -1,0 +1,108 @@
+% Local compilation copy of the NeurIPS 2026 submission style.
+% Replace this file with the official neurips_2026.sty from the NeurIPS
+% author kit before submission.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{neurips_2026}[2026/05/01 NeurIPS 2026 submission package]
+
+\newif\if@preprint\@preprintfalse
+\newif\if@final\@finalfalse
+\newif\if@nonatbib\@nonatbibfalse
+\DeclareOption{preprint}{\@preprinttrue}
+\DeclareOption{final}{\@finaltrue}
+\DeclareOption{nonatbib}{\@nonatbibtrue}
+\DeclareOption{main}{}
+\DeclareOption{position}{}
+\DeclareOption{eandd}{}
+\DeclareOption{creativeai}{}
+\DeclareOption{sglblindworkshop}{}
+\DeclareOption{dblblindworkshop}{}
+\DeclareOption{education}{}
+\ProcessOptions\relax
+
+\def\@workshoptitle{NeurIPS 2026 Workshop}
+\newcommand{\workshoptitle}[1]{\gdef\@workshoptitle{#1}}
+
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{times}
+\RequirePackage[verbose=true,letterpaper]{geometry}
+\AtBeginDocument{\newgeometry{textheight=9in,textwidth=5.5in,top=1in,headheight=12pt,headsep=25pt,footskip=30pt}}
+
+\if@final\else
+  \if@preprint\else
+    \RequirePackage{lineno}
+    \linenumbers
+  \fi
+\fi
+
+\if@nonatbib\else
+  \RequirePackage[numbers,sort&compress]{natbib}
+\fi
+
+\RequirePackage{hyperref}
+\RequirePackage{url}
+\RequirePackage{booktabs}
+\RequirePackage{amsfonts}
+\RequirePackage{nicefrac}
+\RequirePackage{microtype}
+\RequirePackage{xcolor}
+\RequirePackage{titlesec}
+\RequirePackage{fancyhdr}
+
+\definecolor{mydarkblue}{rgb}{0,0.08,0.45}
+\hypersetup{colorlinks=true,linkcolor=mydarkblue,citecolor=mydarkblue,urlcolor=mydarkblue}
+
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\itshape}{\thesubsubsection}{1em}{}
+\titlespacing*{\section}{0pt}{2.0ex plus .5ex minus .2ex}{0.8ex}
+\titlespacing*{\subsection}{0pt}{1.5ex plus .4ex minus .2ex}{0.5ex}
+
+\renewenvironment{abstract}{\centerline{\large\bfseries Abstract}\vspace{0.5ex}\begin{quote}}{\end{quote}}
+
+\newlength\titlebox
+\setlength\titlebox{2.35in}
+\def\@maketitle{%
+  \vbox to \titlebox{%
+    \vskip 0.25in%
+    \begin{center}%
+      {\LARGE\bfseries \@title \par}%
+      \vskip 0.22in%
+      \if@final%
+        {\large\lineskip .5em\begin{tabular}[t]{c}\@author\end{tabular}\par}%
+      \else%
+        \if@preprint%
+          {\large\lineskip .5em\begin{tabular}[t]{c}\@author\end{tabular}\par}%
+        \else%
+          {\large Anonymous Author(s)\par}%
+          {\normalsize Submitted to \@workshoptitle. Do not distribute.\par}%
+        \fi%
+      \fi%
+      \vskip 0.2in%
+    \end{center}%
+  }%
+}
+
+\renewcommand\footnoterule{\kern-3\p@\hrule width 2in\kern 2.6\p@}
+\fancyhf{}
+\if@final
+  \fancyhead[C]{}
+\else
+  \if@preprint
+    \fancyhead[C]{Preprint. Work in progress.}
+  \else
+    \fancyhead[C]{Submitted to \@workshoptitle}
+  \fi
+\fi
+\fancyfoot[C]{\thepage}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+
+\newenvironment{ack}{\section*{Acknowledgments}}{}
+\if@final\else
+  \if@preprint\else
+    \RequirePackage{comment}
+    \renewenvironment{ack}{\comment}{\endcomment}
+  \fi
+\fi
+\endinput
