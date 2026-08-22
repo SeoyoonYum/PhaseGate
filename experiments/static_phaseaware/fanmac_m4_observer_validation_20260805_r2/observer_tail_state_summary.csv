@@ -1,0 +1,5 @@
+stage,observer_mode,valid_runs,median_requests_above_14ms,range_requests_above_14ms,median_fraction_above_14ms,median_official_p95_tpot_ms,median_request_p95_ms,median_all_token_gap_mean_ms
+observer_minimal_event,event,3,1,0-1,0.006666666666666667,12.122404945839657,11.74353750066075,11.533735428768038
+observer_minimal_event,minimal,3,1,1-4,0.006666666666666667,12.283850549465564,11.738512299052672,11.55110007632671
+observer_legacy_event,event,5,0,0-2,0.0,12.140535650505623,11.746164600117481,11.533707755643311
+observer_legacy_event,legacy,5,0,0-0,0.0,12.476813119101278,12.128202150051944,11.599444332862198

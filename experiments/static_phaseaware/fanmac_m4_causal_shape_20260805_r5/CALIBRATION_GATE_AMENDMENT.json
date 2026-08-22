@@ -1,0 +1,48 @@
+{
+  "created_date": "2026-08-06",
+  "repository_commit": "c1a2b5f51a6a0a63428c306bfb1d85402a51a9cd",
+  "scope": "audit-only correction from event-count weighting to wall-time weighting",
+  "scientific_workload_changed": false,
+  "token_timestamp_semantics_changed": false,
+  "policy_semantics_changed": false,
+  "accepted_run_keys": [
+    "static_m4_calibration_event_phasegate2to0_r00_a01",
+    "static_m4_calibration_event_fixed0_r01_a01"
+  ],
+  "excluded_duplicate_run_keys": [
+    "static_m4_calibration_event_phasegate2to0_r00_a02",
+    "static_m4_calibration_event_fixed0_r01_a02"
+  ],
+  "premeasurement_retry_authorizations": [
+    {
+      "policy": "phasegate4to0",
+      "repeat": 0,
+      "max_attempt": 4,
+      "reason": "attempts 1 through 3 ended before measurement at sentinel_before; no policy performance was observed; attempt 4 conditions the same fresh process before measurement",
+      "environmental_correction": "126.589 seconds of long-context conditioning",
+      "post_correction_sentinel_ms": 1796.8593749974389,
+      "frozen_reference_ms": 1796.5945000032661,
+      "relative_deviation": 0.00014743170713948928
+    }
+  ],
+  "corrected_audit": {
+    "static_m4_calibration_event_phasegate2to0_r00_a01": {
+      "prefill_cap_wall_time_fraction": 0.9999621422595143,
+      "decode_cap_wall_time_fraction": 0.9961643170771542,
+      "decode_admitted_queries": 0,
+      "query_accounting_exact": true,
+      "admissions_within_cap": true,
+      "corrected_policy_cap_applied": true
+    },
+    "static_m4_calibration_event_fixed0_r01_a01": {
+      "prefill_cap_wall_time_fraction": 1.0,
+      "decode_cap_wall_time_fraction": 1.0,
+      "decode_admitted_queries": 0,
+      "query_accounting_exact": true,
+      "admissions_within_cap": true,
+      "corrected_policy_cap_applied": true
+    }
+  },
+  "selection_rule": "retain the first attempt without inspecting policy performance; exclude the automatically triggered duplicate second attempt",
+  "raw_rows_modified": false
+}

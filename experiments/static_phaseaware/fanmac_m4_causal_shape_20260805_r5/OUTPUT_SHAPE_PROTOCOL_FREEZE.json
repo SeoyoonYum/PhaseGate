@@ -1,0 +1,367 @@
+{
+  "created_utc": "2026-08-06T19:50:20.555805+00:00",
+  "repository_commit": "3744f06ba2d919f6aab9d7d2a65b5d802065ed04",
+  "context_tokens": 2048,
+  "observer_mode": "event",
+  "fixed_policy": "fixed1",
+  "phasegate_policy": "phasegate4to1",
+  "baseline_repeats": 3,
+  "paired_repeats": 5,
+  "measured_requests": 100,
+  "fresh_process_per_block": true,
+  "reuse_128_heldout": false,
+  "lengths": [
+    {
+      "output_tokens": 64,
+      "baseline": [
+        {
+          "repeat": 0,
+          "prompt_seed": 3900000017,
+          "query_seed": 3900500020
+        },
+        {
+          "repeat": 1,
+          "prompt_seed": 3900010024,
+          "query_seed": 3900510027
+        },
+        {
+          "repeat": 2,
+          "prompt_seed": 3900020031,
+          "query_seed": 3900520034
+        }
+      ],
+      "pairs": [
+        {
+          "repeat": 0,
+          "prompt_seed": 3901000017,
+          "query_seed": 3901500020,
+          "order": [
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            },
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            }
+          ]
+        },
+        {
+          "repeat": 1,
+          "prompt_seed": 3901010024,
+          "query_seed": 3901510027,
+          "order": [
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            }
+          ]
+        },
+        {
+          "repeat": 2,
+          "prompt_seed": 3901020031,
+          "query_seed": 3901520034,
+          "order": [
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            }
+          ]
+        },
+        {
+          "repeat": 3,
+          "prompt_seed": 3901030038,
+          "query_seed": 3901530041,
+          "order": [
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            },
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            }
+          ]
+        },
+        {
+          "repeat": 4,
+          "prompt_seed": 3901040045,
+          "query_seed": 3901540048,
+          "order": [
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            },
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "output_tokens": 128,
+      "baseline": [
+        {
+          "repeat": 0,
+          "prompt_seed": 3910000017,
+          "query_seed": 3910500020
+        },
+        {
+          "repeat": 1,
+          "prompt_seed": 3910010024,
+          "query_seed": 3910510027
+        },
+        {
+          "repeat": 2,
+          "prompt_seed": 3910020031,
+          "query_seed": 3910520034
+        }
+      ],
+      "pairs": [
+        {
+          "repeat": 0,
+          "prompt_seed": 3911000017,
+          "query_seed": 3911500020,
+          "order": [
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            }
+          ]
+        },
+        {
+          "repeat": 1,
+          "prompt_seed": 3911010024,
+          "query_seed": 3911510027,
+          "order": [
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            },
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            }
+          ]
+        },
+        {
+          "repeat": 2,
+          "prompt_seed": 3911020031,
+          "query_seed": 3911520034,
+          "order": [
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            },
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            }
+          ]
+        },
+        {
+          "repeat": 3,
+          "prompt_seed": 3911030038,
+          "query_seed": 3911530041,
+          "order": [
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            },
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            }
+          ]
+        },
+        {
+          "repeat": 4,
+          "prompt_seed": 3911040045,
+          "query_seed": 3911540048,
+          "order": [
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            },
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "output_tokens": 512,
+      "baseline": [
+        {
+          "repeat": 0,
+          "prompt_seed": 3920000017,
+          "query_seed": 3920500020
+        },
+        {
+          "repeat": 1,
+          "prompt_seed": 3920010024,
+          "query_seed": 3920510027
+        },
+        {
+          "repeat": 2,
+          "prompt_seed": 3920020031,
+          "query_seed": 3920520034
+        }
+      ],
+      "pairs": [
+        {
+          "repeat": 0,
+          "prompt_seed": 3921000017,
+          "query_seed": 3921500020,
+          "order": [
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            }
+          ]
+        },
+        {
+          "repeat": 1,
+          "prompt_seed": 3921010024,
+          "query_seed": 3921510027,
+          "order": [
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            },
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            }
+          ]
+        },
+        {
+          "repeat": 2,
+          "prompt_seed": 3921020031,
+          "query_seed": 3921520034,
+          "order": [
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            },
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            }
+          ]
+        },
+        {
+          "repeat": 3,
+          "prompt_seed": 3921030038,
+          "query_seed": 3921530041,
+          "order": [
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            },
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            }
+          ]
+        },
+        {
+          "repeat": 4,
+          "prompt_seed": 3921040045,
+          "query_seed": 3921540048,
+          "order": [
+            {
+              "name": "phasegate4to1",
+              "family": "phasegate",
+              "high": 4,
+              "low": 1
+            },
+            {
+              "name": "fixed1",
+              "family": "fixed",
+              "high": 1,
+              "low": 1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "interpretation": "policies frozen at 128-token calibration; no per-length recalibration"
+}

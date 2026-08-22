@@ -1,0 +1,9 @@
+{
+  "created_utc": "2026-08-07T12:12:45.412356+00:00",
+  "repository_commit": "9d0e8dcb9d6b87f84b047e83553a6a62f78e7be6",
+  "passed_baseline_set": "B",
+  "valid_blocks": 12,
+  "invalid_attempts_preserved": 0,
+  "frozen_K_hi": 2,
+  "cap4_interpretation": "diagnostic-only"
+}

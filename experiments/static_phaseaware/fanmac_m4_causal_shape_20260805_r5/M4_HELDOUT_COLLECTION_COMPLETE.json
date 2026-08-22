@@ -1,0 +1,25 @@
+{
+  "completed_utc": "2026-08-06T14:32:26.828394+00:00",
+  "repository_commit": "72bcef3a1516d6100ec1c975d7678abc48d0ffda",
+  "valid_paired_repeats": 7,
+  "policies": [
+    {
+      "name": "fixed1",
+      "family": "fixed",
+      "high": 1,
+      "low": 1
+    },
+    {
+      "name": "phasegate4to1",
+      "family": "phasegate",
+      "high": 4,
+      "low": 1
+    },
+    {
+      "name": "timegate4to1",
+      "family": "timegate",
+      "high": 4,
+      "low": 1
+    }
+  ]
+}

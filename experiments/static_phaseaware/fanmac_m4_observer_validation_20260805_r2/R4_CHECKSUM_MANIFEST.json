@@ -1,0 +1,8 @@
+{
+  "source_path": "/Users/m1/kv-uma-research-m4-20260805/experiments/static_phaseaware/fanmac_m4_causal_shape_20260805_r4",
+  "file_count": 64,
+  "total_bytes": 391619438,
+  "aggregate_method": "relative-path sorted shasum stream",
+  "aggregate_sha256": "463498729aaeed423a20896a23927d34bdf38224f27dfb5ffe6b415402a9a544",
+  "immutability_rule": "r4 remains read-only and is never pooled with this validation or r5"
+}

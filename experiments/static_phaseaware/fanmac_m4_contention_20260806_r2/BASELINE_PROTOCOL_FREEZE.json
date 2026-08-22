@@ -1,0 +1,84 @@
+{
+  "created_utc": "2026-08-07T05:01:50.746149+00:00",
+  "repository_commit": "9d0e8dcb9d6b87f84b047e83553a6a62f78e7be6",
+  "source": "r2 protocol with newly frozen 300-request traces",
+  "trace_sets": {
+    "A": [
+      {
+        "repeat": 0,
+        "prompt_seed": 2026087200,
+        "query_seed": 2026092200
+      },
+      {
+        "repeat": 1,
+        "prompt_seed": 2026097200,
+        "query_seed": 2026102200
+      },
+      {
+        "repeat": 2,
+        "prompt_seed": 2026107200,
+        "query_seed": 2026112200
+      },
+      {
+        "repeat": 3,
+        "prompt_seed": 2026117200,
+        "query_seed": 2026122200
+      },
+      {
+        "repeat": 4,
+        "prompt_seed": 2026127200,
+        "query_seed": 2026132200
+      }
+    ],
+    "B": [
+      {
+        "repeat": 0,
+        "prompt_seed": 2026091200,
+        "query_seed": 2026096200
+      },
+      {
+        "repeat": 1,
+        "prompt_seed": 2026101200,
+        "query_seed": 2026106200
+      },
+      {
+        "repeat": 2,
+        "prompt_seed": 2026111200,
+        "query_seed": 2026116200
+      },
+      {
+        "repeat": 3,
+        "prompt_seed": 2026121200,
+        "query_seed": 2026126200
+      },
+      {
+        "repeat": 4,
+        "prompt_seed": 2026131200,
+        "query_seed": 2026136200
+      }
+    ]
+  },
+  "workload": {
+    "context_tokens": 2048,
+    "output_tokens": 128,
+    "observer_mode": "event",
+    "memory_sample_interval_s": 1,
+    "warmup_s": 2,
+    "block_cooldown_s": 10,
+    "fresh_process_per_block": true,
+    "faiss_omp_threads": 1,
+    "max_workers": 4,
+    "queries_per_task": 4096,
+    "chunk": 16,
+    "ef_search": 128,
+    "top_k": 10,
+    "mlx_memory_limit_gb": 5.5,
+    "measured_requests": 300,
+    "valid_repeats": 5
+  },
+  "gate": {
+    "definition": "every run's p95 TPOT and TTFT within +/-3% of its set median; zero swap growth; normal memory pressure and thermal state; pageout is a soft flag",
+    "max_revalidation_sets": 1,
+    "set_B_requires_documented_environmental_correction": true
+  }
+}

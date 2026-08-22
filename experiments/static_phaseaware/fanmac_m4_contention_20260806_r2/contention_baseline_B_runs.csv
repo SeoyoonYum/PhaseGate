@@ -1,0 +1,6 @@
+baseline_set,repeat,run_key,p95_tpot_ms,tpot_abs_deviation,p95_ttft_ms,ttft_abs_deviation,within_3pct_both,pageouts_delta,swap_used_delta_bytes,memory_pressure_clean,duration_s,observer_mode,observer_subprocess_count,request_count_exact,token_count_exact,event_reconstruction_exact
+B,0,static_contention_baseline_B_event_llm-only_r00_a01,12.710587494366338,0.00875495692949646,1783.248597320926,0.01159054659918135,True,31,0,True,974.2991762500023,event,0,True,True,True
+B,1,static_contention_baseline_B_event_llm-only_r01_a01,12.257473453646526,0.02720569672503015,1804.3599059456028,0.00011091614114655535,True,5,0,True,981.9934173340152,event,0,True,True,True
+B,2,static_contention_baseline_B_event_llm-only_r02_a01,12.60027265001554,0.0,1803.6498149027466,0.00028266930767351095,True,1,0,True,981.0213635409891,event,0,True,True,True
+B,3,static_contention_baseline_B_event_llm-only_r03_a01,12.315651608951155,0.02258848272335079,1804.1597955030738,0.0,True,2,0,True,981.0815328750177,event,0,True,True,True
+B,4,static_contention_baseline_B_event_llm-only_r04_a01,12.837592411960943,0.01883449418414851,1804.6268431076896,0.00025887263743484823,True,4,0,True,981.183808583999,event,0,True,True,True

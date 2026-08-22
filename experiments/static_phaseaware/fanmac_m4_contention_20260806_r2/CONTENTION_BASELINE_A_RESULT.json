@@ -1,0 +1,16 @@
+{
+  "created_utc": "2026-08-07T06:29:11.693160+00:00",
+  "baseline_set": "A",
+  "passed": false,
+  "median_p95_tpot_ms": 12.61480913293781,
+  "median_p95_ttft_ms": 1803.7945440941257,
+  "run_keys": [
+    "static_contention_baseline_A_event_llm-only_r00_a01",
+    "static_contention_baseline_A_event_llm-only_r01_a01",
+    "static_contention_baseline_A_event_llm-only_r02_a01",
+    "static_contention_baseline_A_event_llm-only_r03_a01",
+    "static_contention_baseline_A_event_llm-only_r04_a01"
+  ],
+  "pageout_soft_flag_blocks": 4,
+  "gate": "all five runs within +/-3% around set medians; zero swap growth; normal pressure/thermal state; pageout soft"
+}

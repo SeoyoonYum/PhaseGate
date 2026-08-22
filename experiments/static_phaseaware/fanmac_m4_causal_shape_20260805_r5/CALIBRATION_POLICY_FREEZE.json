@@ -1,0 +1,230 @@
+{
+  "created_utc": "2026-08-06T01:16:53.446399+00:00",
+  "repository_commit": "89ce6c0730112c7a7986e0f7ff615568d3cef391",
+  "observer_mode": "event",
+  "cap4_valid_and_memory_safe": true,
+  "candidates": [
+    {
+      "family": "fixed",
+      "prefill_cap": 0,
+      "decode_cap": 0
+    },
+    {
+      "family": "fixed",
+      "prefill_cap": 1,
+      "decode_cap": 1
+    },
+    {
+      "family": "fixed",
+      "prefill_cap": 2,
+      "decode_cap": 2
+    },
+    {
+      "family": "fixed",
+      "prefill_cap": 4,
+      "decode_cap": 4
+    },
+    {
+      "family": "phasegate",
+      "prefill_cap": 2,
+      "decode_cap": 0
+    },
+    {
+      "family": "phasegate",
+      "prefill_cap": 2,
+      "decode_cap": 1
+    },
+    {
+      "family": "phasegate",
+      "prefill_cap": 4,
+      "decode_cap": 0
+    },
+    {
+      "family": "phasegate",
+      "prefill_cap": 4,
+      "decode_cap": 1
+    },
+    {
+      "family": "phasegate",
+      "prefill_cap": 4,
+      "decode_cap": 2
+    }
+  ],
+  "slo_grid": [
+    1.1,
+    1.15,
+    1.2,
+    1.25,
+    1.3,
+    1.35,
+    1.4,
+    1.45
+  ],
+  "workload": {
+    "context_tokens": 2048,
+    "output_tokens": 128,
+    "measured_requests": 100,
+    "valid_repeats": 3,
+    "max_workers": 4,
+    "fresh_process_per_block": true
+  },
+  "repeats": [
+    {
+      "repeat": 0,
+      "prompt_seed": 3710000011,
+      "query_seed": 3710500014,
+      "order": [
+        {
+          "family": "phasegate",
+          "prefill_cap": 4,
+          "decode_cap": 1
+        },
+        {
+          "family": "fixed",
+          "prefill_cap": 0,
+          "decode_cap": 0
+        },
+        {
+          "family": "phasegate",
+          "prefill_cap": 4,
+          "decode_cap": 2
+        },
+        {
+          "family": "phasegate",
+          "prefill_cap": 2,
+          "decode_cap": 1
+        },
+        {
+          "family": "fixed",
+          "prefill_cap": 4,
+          "decode_cap": 4
+        },
+        {
+          "family": "phasegate",
+          "prefill_cap": 2,
+          "decode_cap": 0
+        },
+        {
+          "family": "phasegate",
+          "prefill_cap": 4,
+          "decode_cap": 0
+        },
+        {
+          "family": "fixed",
+          "prefill_cap": 1,
+          "decode_cap": 1
+        },
+        {
+          "family": "fixed",
+          "prefill_cap": 2,
+          "decode_cap": 2
+        }
+      ]
+    },
+    {
+      "repeat": 1,
+      "prompt_seed": 3710010018,
+      "query_seed": 3710510021,
+      "order": [
+        {
+          "family": "fixed",
+          "prefill_cap": 4,
+          "decode_cap": 4
+        },
+        {
+          "family": "phasegate",
+          "prefill_cap": 2,
+          "decode_cap": 0
+        },
+        {
+          "family": "phasegate",
+          "prefill_cap": 2,
+          "decode_cap": 1
+        },
+        {
+          "family": "phasegate",
+          "prefill_cap": 4,
+          "decode_cap": 0
+        },
+        {
+          "family": "phasegate",
+          "prefill_cap": 4,
+          "decode_cap": 1
+        },
+        {
+          "family": "phasegate",
+          "prefill_cap": 4,
+          "decode_cap": 2
+        },
+        {
+          "family": "fixed",
+          "prefill_cap": 2,
+          "decode_cap": 2
+        },
+        {
+          "family": "fixed",
+          "prefill_cap": 0,
+          "decode_cap": 0
+        },
+        {
+          "family": "fixed",
+          "prefill_cap": 1,
+          "decode_cap": 1
+        }
+      ]
+    },
+    {
+      "repeat": 2,
+      "prompt_seed": 3710020025,
+      "query_seed": 3710520028,
+      "order": [
+        {
+          "family": "phasegate",
+          "prefill_cap": 4,
+          "decode_cap": 0
+        },
+        {
+          "family": "fixed",
+          "prefill_cap": 4,
+          "decode_cap": 4
+        },
+        {
+          "family": "phasegate",
+          "prefill_cap": 4,
+          "decode_cap": 2
+        },
+        {
+          "family": "phasegate",
+          "prefill_cap": 4,
+          "decode_cap": 1
+        },
+        {
+          "family": "fixed",
+          "prefill_cap": 0,
+          "decode_cap": 0
+        },
+        {
+          "family": "fixed",
+          "prefill_cap": 1,
+          "decode_cap": 1
+        },
+        {
+          "family": "phasegate",
+          "prefill_cap": 2,
+          "decode_cap": 1
+        },
+        {
+          "family": "phasegate",
+          "prefill_cap": 2,
+          "decode_cap": 0
+        },
+        {
+          "family": "fixed",
+          "prefill_cap": 2,
+          "decode_cap": 2
+        }
+      ]
+    }
+  ],
+  "selection_rule": "all 3 repeats jointly feasible; maximize median QPS, then lower normalized TPOT, TTFT, max cap, lexicographic name"
+}

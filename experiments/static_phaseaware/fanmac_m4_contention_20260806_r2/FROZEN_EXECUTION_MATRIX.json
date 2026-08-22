@@ -1,0 +1,119 @@
+{
+  "created_utc": "2026-08-07T05:01:50.746253+00:00",
+  "repository_commit": "9d0e8dcb9d6b87f84b047e83553a6a62f78e7be6",
+  "campaign_scope": "diagnostic contention only; no calibration, PhaseGate, TimeGate, held-out, or output-length sweep",
+  "workload": {
+    "context_tokens": 2048,
+    "output_tokens": 128,
+    "observer_mode": "event",
+    "memory_sample_interval_s": 1,
+    "warmup_s": 2,
+    "block_cooldown_s": 10,
+    "fresh_process_per_block": true,
+    "faiss_omp_threads": 1,
+    "max_workers": 4,
+    "queries_per_task": 4096,
+    "chunk": 16,
+    "ef_search": 128,
+    "top_k": 10,
+    "mlx_memory_limit_gb": 5.5,
+    "measured_requests": 300,
+    "valid_repeats": 3
+  },
+  "policies": [
+    {
+      "policy": "llm-only",
+      "cap": 0
+    },
+    {
+      "policy": "fixed",
+      "cap": 1
+    },
+    {
+      "policy": "fixed",
+      "cap": 2
+    },
+    {
+      "policy": "fixed",
+      "cap": 4
+    }
+  ],
+  "repeats": [
+    {
+      "repeat": 0,
+      "prompt_seed": 2026087300,
+      "query_seed": 2026092300,
+      "order": [
+        {
+          "policy": "llm-only",
+          "cap": 0
+        },
+        {
+          "policy": "fixed",
+          "cap": 2
+        },
+        {
+          "policy": "fixed",
+          "cap": 1
+        },
+        {
+          "policy": "fixed",
+          "cap": 4
+        }
+      ]
+    },
+    {
+      "repeat": 1,
+      "prompt_seed": 2026097300,
+      "query_seed": 2026102300,
+      "order": [
+        {
+          "policy": "fixed",
+          "cap": 2
+        },
+        {
+          "policy": "fixed",
+          "cap": 1
+        },
+        {
+          "policy": "fixed",
+          "cap": 4
+        },
+        {
+          "policy": "llm-only",
+          "cap": 0
+        }
+      ]
+    },
+    {
+      "repeat": 2,
+      "prompt_seed": 2026107300,
+      "query_seed": 2026112300,
+      "order": [
+        {
+          "policy": "fixed",
+          "cap": 1
+        },
+        {
+          "policy": "fixed",
+          "cap": 4
+        },
+        {
+          "policy": "llm-only",
+          "cap": 0
+        },
+        {
+          "policy": "fixed",
+          "cap": 2
+        }
+      ]
+    }
+  ],
+  "cap_interpretation": {
+    "cap_1": "low-cap condition",
+    "cap_2": "campaign-frozen K_hi",
+    "cap_4": "diagnostic-only; cannot change K_hi or future policy caps"
+  },
+  "frozen_K_hi": 2,
+  "normalization": "official TTFT/TPOT use the passed five-run baseline-set medians; within-repeat LLM-only normalization is supplementary; never compare raw QPS across devices"
+}

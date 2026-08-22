@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-08-07T01:46:20.383188+00:00",
+  "campaign_id": "fanmac_m4_causal_shape_20260805_r5",
+  "device_scope": "fan-cooled base Apple M4 Mac mini; not M4 Pro",
+  "repository": {
+    "branch": "exp/m4-harness-stabilization-20260805",
+    "bundle_source_head": "d5868e14e7e7dccc04dd5215dc76619891398da3"
+  },
+  "machine": {
+    "model_name": "Mac mini",
+    "model_identifier": "Mac16,10",
+    "model_number": "MU9D3FN/A",
+    "chip": "Apple M4",
+    "total_cpu_cores": 10,
+    "performance_cores": 4,
+    "efficiency_cores": 6,
+    "gpu_cores": 10,
+    "unified_memory": "16 GB"
+  },
+  "macos": {
+    "product_version": "26.5",
+    "build_version": "25F71"
+  },
+  "python": "3.13.14",
+  "packages": {
+    "mlx": "0.31.2",
+    "mlx-lm": "0.31.3",
+    "numpy": "2.4.6",
+    "faiss-cpu": "1.14.3",
+    "matplotlib": "3.11.0"
+  },
+  "model": {
+    "identifier": "mlx-community/Qwen2.5-1.5B-Instruct-4bit",
+    "revision": "8b403126fc14f14cfc99bb4cfa72ecbc129ea677",
+    "quantization": "4-bit"
+  },
+  "index": {
+    "backend": "faiss-hnsw",
+    "dimensions": 384,
+    "ef_construction": 80,
+    "graph_degree": 32,
+    "index_bytes": 180820834,
+    "seed": 20260728,
+    "vectors": 100000,
+    "file_size": 180820834,
+    "sha256": "4c65bde676235523dbba2f1dc78a44de3f447470d38105488586d7ca486a51f0"
+  },
+  "mlx_memory_limit_gb": 5.5,
+  "observer_mode": "event",
+  "observer_semantics": {
+    "phase_event_driven": true,
+    "memory_sampling_max_hz": 1,
+    "production_subprocess_polling": false,
+    "token_timestamp_semantics_unchanged_from_r4": true
+  },
+  "workload": {
+    "context_tokens": 2048,
+    "primary_output_tokens": 128,
+    "shape_output_tokens": [
+      64,
+      128,
+      512
+    ],
+    "heldout_pairs": 7,
+    "shape_pairs_per_length": 5
+  },
+  "frozen_selection": {
+    "primary_B": 1.25,
+    "fixed": "fixed1",
+    "phasegate": "phasegate4to1",
+    "timegate": "timegate4to1",
+    "K_hi": 4
+  },
+  "primary_results": {
+    "phasegate_vs_fixed_median_gain": 1.0088277071243539,
+    "phasegate_vs_fixed_ci95": [
+      1.0081380076865747,
+      1.0107127486217102
+    ],
+    "phasegate_vs_timegate_median_gain": 0.02361125970551714,
+    "phasegate_vs_timegate_ci95": [
+      0.017726675472440112,
+      0.025723813767986714
+    ],
+    "joint_slo_passes": {
+      "fixed1": 7,
+      "phasegate4to1": 7,
+      "timegate4to1": 0
+    }
+  },
+  "memory_audit": {
+    "heldout_swap_growth_blocks": 0,
+    "heldout_warning_or_critical_memory_pressure_blocks": 0,
+    "completely_pageout_free_triplets": 1,
+    "heldout_triplets": 7
+  },
+  "output_shape": {
+    "64": {
+      "fixed_qps": 811.0106665997895,
+      "phasegate_qps": 1869.4675596903733,
+      "gain": 1.3038810846063607,
+      "ci_low": 1.3014843685292523,
+      "ci_high": 1.3119088131145968,
+      "prefill_fraction": 0.6907565423650975,
+      "fixed_slo": 5,
+      "phasegate_slo": 5,
+      "pair_gains": [
+        1.3014843685292523,
+        1.3026466083165587,
+        1.3119088131145968,
+        1.3070623108754313,
+        1.3038810846063607
+      ]
+    },
+    "128": {
+      "fixed_qps": 782.0693094721449,
+      "phasegate_qps": 1573.290547599112,
+      "gain": 1.0136993487654418,
+      "ci_low": 1.011003158682883,
+      "ci_high": 1.0159138652044937,
+      "prefill_fraction": 0.5160496176637327,
+      "fixed_slo": 5,
+      "phasegate_slo": 5,
+      "pair_gains": [
+        1.0159138652044937,
+        1.0136993487654418,
+        1.0149286770993124,
+        1.0110608485729156,
+        1.011003158682883
+      ]
+    },
+    "512": {
+      "fixed_qps": 726.013300958494,
+      "phasegate_qps": 1041.0247608742739,
+      "gain": 0.43288878330048375,
+      "ci_low": 0.432164659781233,
+      "ci_high": 0.43689015065606496,
+      "prefill_fraction": 0.20652029099504968,
+      "fixed_slo": 5,
+      "phasegate_slo": 5,
+      "pair_gains": [
+        0.43689015065606496,
+        0.43288878330048375,
+        0.432331879883743,
+        0.432164659781233,
+        0.43362426965258116
+      ]
+    }
+  },
+  "source_freezes": [
+    "R5_BASELINE_FREEZE.json",
+    "K_HI_FREEZE.json",
+    "CALIBRATION_POLICY_FREEZE.json",
+    "frozen_m4_selection.json",
+    "timegate_schedule_freeze.json",
+    "HELDOUT_PROTOCOL_FREEZE.json",
+    "OUTPUT_SHAPE_PROTOCOL_FREEZE.json"
+  ],
+  "raw_data_policy": "raw request/timeline data retained in campaign tree but excluded from Git and bundle"
+}

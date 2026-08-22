@@ -1,0 +1,6 @@
+{
+  "fresh_median_p95_tpot_ms": 12.323232914641265,
+  "fresh_median_p95_ttft_ms": 1797.5898122080253,
+  "tpot_relative_drift": 0.022995079046072897,
+  "ttft_relative_drift": -0.0008617703895320572
+}
