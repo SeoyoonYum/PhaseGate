@@ -46,6 +46,6 @@ individual requests are not treated as independent experimental repeats.
 
 ## Camera-ready release (2026-10-01)
 
-The release adds the named-author PDF, buildable LaTeX source, paper figures, calibration and transition-audit CSVs, and a standard-library calibration check. The main text and evidence are aligned with the accepted camera-ready revision. Downloadable PDF/source assets are listed in the [versioned release](https://github.com/SeoyoonYum/kv-uma-research/releases/tag/camera-ready-2026-10-01).
+The release adds the named-author PDF, buildable LaTeX source, paper figures, calibration and transition-audit CSVs, and a standard-library calibration check. The main text and evidence are aligned with the accepted camera-ready revision. Downloadable PDF/source assets are listed in the [versioned release](https://github.com/SeoyoonYum/PhaseGate/releases/tag/camera-ready-2026-10-01).
 
 This publication keeps the existing raw-data boundary: multi-GB event timelines remain in offline archives. No raw-data download is implied by the paper's repository link. Full trace recomputation requires those archives, whereas the calibration check works directly from public processed tables. Model weights and HNSW indexes are external inputs specified by the campaign manifests.

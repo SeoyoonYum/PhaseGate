@@ -4,7 +4,7 @@
 
 Seoyoon Yum and Sehoon Kim (KAIST)
 
-[Camera-ready paper](paper/camera_ready/PhaseGate_CameraReady.pdf) · [LaTeX source and validation](paper/camera_ready/) · [Versioned release](https://github.com/SeoyoonYum/kv-uma-research/releases/tag/camera-ready-2026-10-01)
+[Camera-ready paper](paper/camera_ready/PhaseGate_CameraReady.pdf) · [LaTeX source and validation](paper/camera_ready/) · [Versioned release](https://github.com/SeoyoonYum/PhaseGate/releases/tag/camera-ready-2026-10-01)
 
 PhaseGate is a phase-aware CPU admission policy for on-device LLM systems with
 unified memory. It allows more concurrent retrieval work while the LLM processes
@@ -100,6 +100,6 @@ Large raw event timelines remain outside Git. The public artifact includes code,
   author = {Yum, Seoyoon and Kim, Sehoon},
   booktitle = {NeurIPS 2026 Workshop on On-Device Intelligence: Foundation Models under Real-World Constraints},
   year = {2026},
-  url = {https://github.com/SeoyoonYum/kv-uma-research}
+  url = {https://github.com/SeoyoonYum/PhaseGate}
 }
 ```
