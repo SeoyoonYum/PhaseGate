@@ -10,6 +10,8 @@ These tables were computed from the original recorded runs; no new performance e
 
 An active call has been admitted but has not completed. Service time excludes queue waiting. Drain time measures the delay after decode entry until at most one call is active and the count remains within that cap for the rest of decode. Completion of all calls active at decode entry is a separate initial-set statistic. Reported tail values are medians of per-run p95s, not a pooled percentile. Observed maxima are empirical measurements, not guarantees.
 
+- `clarification_evidence.json`: source paths and checked values for output-length feasibility, TimeGate replay, device caps, bootstrap precision, and pageout sensitivity.
+
 ## Source provenance
 
 The primary M4 campaign's preserved implementation is in `experiments/static_phaseaware/fanmac_m4_causal_shape_20260805_r5/implementation/`. Its README records source commit `d5868e14e7e7dccc04dd5215dc76619891398da3`. The preserved GPU worker matches the separately archived contention implementation (SHA-256 `e9ed4714042aafb658ba84f38bda119c69da3a5b37bc2458852bb9b425cfb6eb`). We corroborated synthetic execution details with these preserved sources and campaign records; the earlier exact execution commit `72bcef3a1516d6100ec1c975d7678abc48d0ffda` was not available as a local Git object during this check.

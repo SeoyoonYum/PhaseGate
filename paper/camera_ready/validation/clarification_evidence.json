@@ -1,0 +1,113 @@
+{
+  "scope": "Clarifications verified against existing measurements; no new performance experiments.",
+  "m4_output_length": {
+    "source": "experiments/static_phaseaware/fanmac_m4_causal_shape_20260805_r5/m4_output_length_summary.csv",
+    "budget": 1.25,
+    "baseline": "Length-matched no-retrieval baseline; selected caps unchanged.",
+    "rows": [
+      {
+        "output_tokens": "64",
+        "policy": "fixed1",
+        "valid_repeats": "5",
+        "joint_slo_pass_count": "5",
+        "median_aggregate_prefill_fraction": "0.6749757945671474"
+      },
+      {
+        "output_tokens": "64",
+        "policy": "phasegate4to1",
+        "valid_repeats": "5",
+        "joint_slo_pass_count": "5",
+        "median_aggregate_prefill_fraction": "0.6907565423650975"
+      },
+      {
+        "output_tokens": "128",
+        "policy": "fixed1",
+        "valid_repeats": "5",
+        "joint_slo_pass_count": "5",
+        "median_aggregate_prefill_fraction": "0.5093963156245147"
+      },
+      {
+        "output_tokens": "128",
+        "policy": "phasegate4to1",
+        "valid_repeats": "5",
+        "joint_slo_pass_count": "5",
+        "median_aggregate_prefill_fraction": "0.5160496176637327"
+      },
+      {
+        "output_tokens": "512",
+        "policy": "fixed1",
+        "valid_repeats": "5",
+        "joint_slo_pass_count": "5",
+        "median_aggregate_prefill_fraction": "0.2045231922373391"
+      },
+      {
+        "output_tokens": "512",
+        "policy": "phasegate4to1",
+        "valid_repeats": "5",
+        "joint_slo_pass_count": "5",
+        "median_aggregate_prefill_fraction": "0.20652029099504968"
+      }
+    ]
+  },
+  "m2_output_length": {
+    "source": "experiments/static_phaseaware/fanmac_m2mini_replication_20260805/m2_output512_runs.csv",
+    "baseline_code": "scripts/analyze_m2mini_replication.py",
+    "budget": 1.25,
+    "policies": [
+      "fixed1",
+      "phasegate4to1"
+    ],
+    "passing_runs_128": 5,
+    "passing_runs_512": 3,
+    "baseline": "Length-matched no-retrieval baseline."
+  },
+  "figure_2b_prefill_fraction": "Median of per-run prefill/(prefill+decode) time under PhaseGate 4-to-1.",
+  "timegate": {
+    "source": "experiments/static_phaseaware/fanmac_m4_causal_shape_20260805_r5/timegate_schedule_freeze.json",
+    "controller": "experiments/static_phaseaware/fanmac_m4_causal_shape_20260805_r5/implementation/src/phaseguard/policies.py",
+    "total_intervals": 600,
+    "high_intervals": 300,
+    "low_intervals": 300,
+    "median_high_s": 1.84028,
+    "median_low_s": 1.738176,
+    "replay_period_s": 1073.235083,
+    "offset": "Uniform circular offsets frozen per repetition",
+    "lifetime": "Starts before retrieval warmup, runs across requests without phase input or request resets."
+  },
+  "m2pro_caps": {
+    "source": "experiments/static_phaseaware/fanmac_slo_goodput_tail_apple_m2_pro_20260803_headless_single_index_main/evaluation_summary_by_slo.csv",
+    "budget": 1.1,
+    "fixed": 1,
+    "phasegate": [
+      4,
+      1
+    ]
+  },
+  "duty_bootstrap_intervals": {
+    "source": "experiments/static_phaseaware/fanmac_m4_bursty_hnsw_20260822_r3/bursty_load_summary.csv",
+    "rows": [
+      {
+        "demand_duty_pct": "5",
+        "phasegate_fixed_ratio_ci_low": "1.8325220461475438",
+        "phasegate_fixed_ratio_ci_high": "2.0387551817430896"
+      },
+      {
+        "demand_duty_pct": "25",
+        "phasegate_fixed_ratio_ci_low": "1.9710895690946117",
+        "phasegate_fixed_ratio_ci_high": "2.052361866808229"
+      },
+      {
+        "demand_duty_pct": "100",
+        "phasegate_fixed_ratio_ci_low": "1.9866952147089496",
+        "phasegate_fixed_ratio_ci_high": "1.9925786118137718"
+      }
+    ]
+  },
+  "pageout_sensitivity": {
+    "sources": [
+      "experiments/static_phaseaware/fanmac_m4_causal_shape_20260805_r5/m4_pageout_leave_one_out.csv",
+      "experiments/static_phaseaware/fanmac_m4_causal_shape_20260805_r5/M4_PAGEOUT_REPORT.md"
+    ],
+    "interpretation": "One matched comparison omitted at a time; not exclusion of all pageout-affected runs. Swap growth was zero in 21 valid policy blocks."
+  }
+}

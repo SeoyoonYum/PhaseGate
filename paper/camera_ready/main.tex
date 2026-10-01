@@ -64,7 +64,7 @@ An on-device assistant also uses the CPU for retrieval, contextual-memory lookup
 Representative agentic applications spend substantial time in CPU-side tools~\cite{raj2025cpu}, and on-device vector-search systems must coordinate interactive queries with background ingestion and index maintenance~\cite{zhao2026muse}.
 
 Server accelerators stream model state from GPU-local high-bandwidth memory (HBM), separate from host DRAM used by CPU tools~\cite{nvidia2022h100,zhong2024distserve}.
-Apple Silicon instead exposes CPU and GPU to unified memory~\cite{apple2020m1}, making CPU pointer chasing and GPU weight streaming compete for memory service.
+Apple Silicon gives the CPU and GPU access to a shared memory pool~\cite{apple2020m1}, making CPU pointer chasing and GPU weight streaming compete for memory service.
 LLM inference has two phases: prefill processes prompt tokens in parallel and reuses weight loads, while decode emits one token at a time and repeatedly streams model state.
 
 BWLOCK++ regulates CPU memory traffic during GPU execution using profiled bandwidth budgets~\cite{ali2018bwlock}.
@@ -72,12 +72,13 @@ FusionML splits prefill computation across the Apple-Silicon CPU and GPU while k
 We study a different control target: phase-dependent admission of independent CPU retrieval while keeping LLM execution on the GPU.
 
 We use FAISS with a Hierarchical Navigable Small World (HNSW) index for approximate nearest-neighbor search~\cite{johnson2021faiss,malkov2020hnsw}.
-HNSW performs irregular graph traversal; our saturated queue measures capacity for retrieval independent of the concurrent generation, with 5\%, 25\%, and 100\% retrieval-active time.
-On a fanless M4 MacBook Air, four HNSW workers increase p95 time-to-first-token (TTFT), our prefill-sensitive metric, by 5.7\%, but time-per-output-token (TPOT), our decode metric, by 61\%; a fan-cooled base-M4 Mini preserves the direction.
+HNSW performs irregular graph traversal.
+Retrieval runs independently of the active LLM request; its queue stays backlogged during active periods to measure capacity under LLM latency limits.
+On a fanless M4 MacBook Air, four HNSW workers increase p95 time-to-first-token (TTFT), our prefill-sensitive metric, by 5.7\%, but time-per-output-token (TPOT), our decode metric, by 61\%; a fan-cooled base-M4 Mac mini shows the same asymmetry.
 
 A conventional retrieval pool uses one maximum concurrency throughout an LLM request.
 We write Fixed-$n$ for a phase-oblivious concurrency cap of $n$, and $p\!\rightarrow\!d$ for \system's prefill and decode admission caps.
-On the primary M4, Fixed-1 meets both latency limits, while the faster Fixed-2 violates output-token latency.
+On the primary M4, Fixed-1 meets both latency limits, while the higher-throughput Fixed-2 violates output-token latency.
 \system calibrates separate caps (Figure~\ref{fig:overview}), selecting 4$\rightarrow$1 on this configuration.
 This pair is deployment-specific, and we compare it with a phase-blind timer that alternates the same limits without observing LLM phase.
 
@@ -87,7 +88,7 @@ This pair is deployment-specific, and we compare it with a phase-blind timer tha
   \caption{(a) A discrete-GPU server's CPU search and GPU LLM use separate memory pools, whereas Apple Silicon shares unified memory.
 (b) On the measured base-M4 configuration, explicit PASS/FAIL labels show the tradeoff: Fixed-1 meets both latency limits but restricts retrieval, while Fixed-2 retrieves more but violates the output-token limit.
 \system raises its admission cap during prefill and lowers it during decode; in-flight work may cross the boundary.
-Schematic; PASS denotes measured compliance under the evaluated conditions.}
+Schematic bars denote admission caps; PASS means both latency limits are met at $B=1.25$.}
   \label{fig:overview}
 \end{figure}
 
@@ -113,7 +114,7 @@ Lower admission during decode can delay individual searches, especially for long
   \centering
   \includegraphics[width=\linewidth]{mechanism_and_sensitivity.pdf}
 \caption{(a) Four concurrent HNSW workers show the same p95 asymmetry on a fanless M4 Air and fan-cooled base-M4 Mini; each Mini bar is the median of three runs with 300 LLM requests per run.
-(b) On the base-M4 Mini, \system/Fixed throughput falls with output length (five pairs per length); the right axis shows the M4 prefill fraction.}
+(b) On the base-M4 Mini, \system/Fixed throughput falls with output length (five pairs per length); the right axis shows the median prefill fraction measured under \gate{4}{1}.}
   \label{fig:mechanism}
 \end{figure}
 \FloatBarrier
@@ -145,17 +146,15 @@ Phase labels do not measure current contention: compliance under the evaluated c
 Material changes to hardware, model, sequence lengths, retrieval, or load require recalibration.
 
 \paragraph{Runtime.}
-Our instrumented MLX-LM harness emits prefill and decode events; \system admits a queued CPU workload (e.g., a search) only while the active count is below that phase's limit.
-Already-running CPU workloads are not preempted: when the phase limit decreases, they finish while new work waits until the active count falls below the new limit.
+Our instrumented MLX-LM harness emits prefill and decode events; \system admits a queued retrieval call only while the active-call count is below that phase's limit.
+Calls already running are not preempted: when the phase limit decreases, they finish while new calls wait until the active count falls below the new limit.
 The decode cap is thus an admission threshold, not an instantaneous bound on active work.
 Effective isolation requires residual work to drain quickly relative to decode; jobs comparable to prefill duration are more likely to cross the boundary, and long or variable jobs can interfere well into decode.
 We request no core affinity or thread-priority (QoS) override.
 
-\paragraph{Control Target and Evaluation.}
-\system controls the number of admitted retrieval calls, while LLM execution remains on the GPU.
-We measure how phase-dependent admission changes retrieval throughput under LLM latency constraints.
-Fixed caps provide a constant-concurrency comparison, while TimeGate uses the same two caps and a calibration-matched schedule to isolate the effect of phase alignment within this admission design.
-Appendix~\ref{sec:related} discusses the broader literature.
+\paragraph{Evaluation.}
+We compare \system with fixed-concurrency policies and a time-matched, phase-blind control, TimeGate, to measure the effect of phase alignment.
+Appendix~\ref{sec:related} discusses related work.
 
 \section{Experiments}
 
@@ -185,15 +184,15 @@ All maximum TTFT ratios are $<1.1$; bold policies are selected.}
   \setlength{\tabcolsep}{2.2pt}
   \begin{tabular}{
     >{\centering\arraybackslash}m{0.95cm}
-    >{\centering\arraybackslash}m{2.10cm}
-    >{\centering\arraybackslash}m{2.45cm}
+    >{\centering\arraybackslash}m{2.35cm}
+    >{\centering\arraybackslash}m{2.20cm}
     @{\hspace{7pt}\vrule width 0.45pt\hspace{7pt}}
     >{\centering\arraybackslash}m{1.85cm}
-    >{\centering\arraybackslash}m{2.10cm}
-    >{\centering\arraybackslash}m{2.45cm}
+    >{\centering\arraybackslash}m{2.35cm}
+    >{\centering\arraybackslash}m{2.20cm}
   }
     \toprule
-    \shortstack{Fixed\\cap} & \shortstack{CPU throughput\\(kQPS) $\uparrow$} & \shortstack{Worst TPOT $\downarrow$\\($\times$ baseline)} & \shortstack{\system\\caps} & \shortstack{CPU throughput\\(kQPS) $\uparrow$} & \shortstack{Worst TPOT $\downarrow$\\($\times$ baseline)} \\
+    \shortstack{Fixed\\cap} & \shortstack{Retrieval\\throughput\\(kQPS) $\uparrow$} & \shortstack{Worst p95\\TPOT $\downarrow$\\($\times$ baseline)} & \shortstack{\system\\caps} & \shortstack{Retrieval\\throughput\\(kQPS) $\uparrow$} & \shortstack{Worst p95\\TPOT $\downarrow$\\($\times$ baseline)} \\
     \midrule
     0 & 0 & 1.021 & 2$\rightarrow$0 & 0.79 & 1.265$\dagger$ \\
     \textbf{1} & \textbf{0.78} & \textbf{1.247} & 2$\rightarrow$1 & 1.1 & 1.225 \\
@@ -205,20 +204,20 @@ All maximum TTFT ratios are $<1.1$; bold policies are selected.}
 \end{table}
 
 Table~\ref{tab:calibration} exposes the central tradeoff.
-Raising a constant cap from one to two or four increases CPU throughput from 0.78 to 1.4 or 2.1~kQPS, but worst TPOT rises to $1.393\times$ or $1.690\times$ baseline, exceeding $B$.
+Raising a constant cap from one to two or four increases retrieval throughput from 0.78 to 1.4 or 2.1~kQPS, but worst TPOT rises to $1.393\times$ or $1.690\times$ baseline, exceeding $B$.
 \gate{4}{1} reaches 1.6~kQPS at $1.177\times$ worst TPOT; raising its decode cap to two reaches 1.8~kQPS but violates $B$ at $1.384\times$.
 Calibration therefore selects \fixed{1} and \gate{4}{1}, the highest-throughput eligible policy in each family.
-The zero-decode-cap policies have higher TPOT than their one-cap counterparts in all three runs.
+The zero-decode-cap policies have higher TPOT than the corresponding policies with a decode cap of one in all three runs.
 The cause is unresolved; calibration evaluates each candidate directly without assuming monotonicity (Appendix~\ref{app:calibration-audit}).
 
 We hold those choices fixed and evaluate them in seven paired randomized comparisons with 250 LLM requests per policy.
-\fixed{1} and \gate{4}{1} meet both latency limits in all seven runs, but \gate{4}{1} reaches 1.6~kQPS versus 0.78~kQPS by increasing concurrency only during prefill (Table~\ref{tab:primary}).
+\fixed{1} and \gate{4}{1} meet both latency limits in all seven runs, but \gate{4}{1} reaches 1.6~kQPS versus 0.78~kQPS by raising the admission cap only during prefill (Table~\ref{tab:primary}).
 
 \newpage
 \subsection{Additional Analysis}
 
 \paragraph{Phase-Blind Control.}
-Higher average concurrency alone could explain the throughput increase, so we designed a phase-blind control called TimeGate.
+To test whether the throughput--latency tradeoff depends on alignment with LLM phase, we compare \system with a phase-blind control, TimeGate.
 TimeGate replays a wall-clock schedule with the same high and low caps.
 Its high-cap time fraction and switching rate match \system's calibration schedule; it does not observe runtime LLM phase.
 TimeGate reaches a similar 1.5~kQPS, yet raises p95 TPOT by 60\% and meets both latency limits in 0/7 runs.
@@ -244,7 +243,7 @@ Latency, throughput, and transition rows report medians across seven paired rand
     Runs meeting both limits & 7/7 & 7/7 & 0/7 \\
     p95 \tpot increase (\%) & 17 & 18 & 60 \\
     p95 \ttft increase (\%) & 0.61 & 4.6 & 4.3 \\
-    CPU throughput (kQPS) & 0.78 & \textbf{1.6} & 1.5 \\
+    Retrieval throughput (kQPS) & 0.78 & \textbf{1.6} & 1.5 \\
     p95 transition gap (ms) & 18 & 23 & 24 \\
     \bottomrule
   \end{tabular}
@@ -253,22 +252,23 @@ Latency, throughput, and transition rows report medians across seven paired rand
 
 \paragraph{Intermittent Retrieval Demand.}
 We make retrieval active for 5\%, 25\%, or 100\% of wall-clock time, retaining a backlog during each active burst (five matched three-policy comparisons per duty; Appendix~\ref{app:duty}).
-The median full-wall-clock \system/Fixed throughput ratio remains $2.0\times$ at all three duties.
+The median full-wall-clock \system/Fixed throughput ratio remains $2.0\times$ at all three retrieval duty cycles.
 \fixed{1} and \system each meet both limits in all 15 runs, while TimeGate passes none; at 5\% duty, idle time lowers the absolute throughput to 79 versus 40~QPS without erasing the ratio.
 
 \paragraph{Output-Length Sensitivity.}
 We keep each device's selected caps fixed while varying output length to change the balance between prefill and decode.
 On M4, \system/Fixed throughput falls from $2.3\times$ at 64 tokens to $2.0\times$ at 128 and $1.4\times$ at 512 as prefill's share of LLM processing time falls from 69\% to 52\% and 21\% (Figure~\ref{fig:mechanism}b).
+At each M4 output length, both policies meet both $B=1.25$ limits in all five runs, using a no-retrieval baseline measured at that length.
 The M2 Mini shows the same decreasing direction, from $1.8\times$ at 128 tokens to $1.4\times$ at 512 (see Appendix~\ref{app:m2-length}); devices are analyzed separately and the association is descriptive.
 
 \paragraph{Cross-Device Replication.}
 Table~\ref{tab:crossdevice} summarizes the device-specific comparisons.
 M2 and M2 Pro summarize each request's token gaps by their mean, while M4 uses their p95.
 The run-level p95 therefore tests different latency criteria on these devices (Appendix~\ref{app:metrics}).
-The M2 Pro comparison uses a tighter budget and yields $2.5\times$, but lacks TimeGate and pageout-free pairs, so it supports only the policy ordering.
+The M2 Pro comparison uses a tighter budget and yields $2.5\times$, but includes neither a TimeGate comparison nor any pageout-free matched pairs, so it supports only the policy ordering.
 
 \begin{table}[h]
-  \caption{Mac mini evaluations. Throughput entries are median paired run ratios of \system to each control (two significant digits); passing runs meet both device-specific latency criteria (Appendix~\ref{app:metrics}), and ``--'' denotes an unevaluated control.}
+  \caption{Mac mini evaluations, each comparing \fixed{1} and \gate{4}{1}. Throughput entries are median paired run ratios of \system to each control (two significant digits); passing runs meet both device-specific latency criteria (Appendix~\ref{app:metrics}), and ``--'' denotes an unevaluated control.}
   \label{tab:crossdevice}
   \centering
   \small
@@ -298,8 +298,8 @@ The M2 Pro comparison uses a tighter budget and yields $2.5\times$, but lacks Ti
 \label{sec:transition}
 
 \paragraph{Retrieval That Continues into Decode.}
-When \system switches from the prefill cap of four to the decode cap of one, calls already admitted continue.
-We examine this remaining work in the seven held-out \gate{4}{1} traces, counting a call as active from admission to completion.
+Calls admitted under the prefill cap of four may continue after the cap falls to one at decode entry.
+We examine this work in seven held-out \gate{4}{1} traces, counting calls as active from admission to completion.
 
 \emph{Drain time} measures the delay from decode entry until the active count falls to at most one and stays there for the rest of decode.
 It is zero if the count never exceeds one during decode.
@@ -313,17 +313,16 @@ Appendix~\ref{app:transition-audit} gives the trace-accounting details.
 \small
 \begin{tabular}{lrr}
 \toprule
-Measure & Median run p95 (ms) & Observed maximum (ms) \\
+Measure & \shortstack{Median of per-run\\p95s (ms)} & Observed maximum (ms) \\
 \midrule
-16-query chunk service time & 27.7 & 34.3 \\
+16-query call service time & 27.7 & 34.3 \\
 Drain time to at most one active call & 26.6 & 31.5 \\
 Completion of all calls active at decode entry & 29.0 & 32.2 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The median per-run p95 drain time is 26.6~ms; the longest observed drain is 31.5~ms.
-These delays are short relative to median phase durations of 1857~ms for prefill and 1739~ms for decode (medians of per-run medians).
+The median per-run p95 drain of 26.6~ms and maximum of 31.5~ms are short relative to median phase durations of 1857~ms for prefill and 1739~ms for decode (medians of per-run medians).
 
 Active calls exceed one during 1.06\% of decode time, although the requested cap is four during only 0.003\% (both medians across runs).
 This difference reflects calls that continue after the admission cap falls.
@@ -332,11 +331,12 @@ Such workloads, or shorter phases, require new calibration and service-time-tail
 \FloatBarrier
 
 \paragraph{GPU Transition and Memory Costs.}
-An in-memory monotonic clock records token and phase timestamps without a monitoring process, allowing us to measure the gap from prefill completion to the first decoded token and two tail token-gap metrics.
+We record token and phase timestamps in memory using a monotonic clock, without a monitoring process, to measure the prefill-to-first-token gap and two tail token-gap metrics.
 The median paired increase in per-run p95 transition gap over Fixed-1 is 5.2~ms (0.29\% of baseline p95 TTFT).
 The p99 inter-token gap and p95 per-request maximum token gap rise by less than 1\% (median paired changes).
-CPU drain times describe residual admitted work; GPU token gaps describe delays in model execution.
-No swap occurs and memory pressure remains normal; pageouts remain a caveat, but removing any matched comparison still yields $2.0\times$.
+No swap growth was observed, and memory pressure remained normal.
+Small system-wide pageouts remain a potential confound.
+The median paired throughput ratio remains $2.0\times$ in every leave-one-pair-out comparison.
 
 \paragraph{Validity Checks.}
 Fresh no-retrieval baselines vary by about 1.0\% within the continuous and duty-sweep M4 studies.
@@ -346,7 +346,7 @@ All planned policy runs yield valid measurements, and invalid attempts remain in
 \section{Limitations and Conclusion}
 
 \textbf{Limitations.}
-The full protocol uses one base-M4 Mini; narrower tests use one each of M2 Mini, M2 Pro Mini, M4 Air, and M1 Air.
+The full protocol uses one base-M4 Mini; narrower evaluations use one each of M2 Mini, M2 Pro Mini, and M4 Air.
 We evaluate one 1.5B 4-bit LLM with 2,048-token inputs; synthetic token traces do not test natural-language generation or sampling.
 Scheduler and HNSW tests use read-only HNSW and device-specific caps.
 The duty sweep uses backlogged bursts rather than random arrivals or full agent workflows.
@@ -354,7 +354,8 @@ Protocol and pageout differences prevent us from isolating cooling effects or ru
 We do not evaluate long non-preemptive jobs, retrieval waiting-time tails, or online adjustment of the caps under changing background contention.
 
 \textbf{Conclusion.}
-Across the three synthetic duties, \system delivers $2.0\times$ the median aggregate retrieval throughput of Fixed-1 while meeting the measured LLM latency budgets.
+On the base-M4 Mini, \system achieves $2.0\times$ the retrieval throughput of the best tested feasible fixed policy, meeting both LLM latency limits in all seven held-out runs.
+The gain persists under intermittent demand and narrows as longer outputs increase the decode fraction.
 TimeGate's similar throughput and greater decode slowdown support phase as a useful admission signal under these conditions.
 
 \clearpage
@@ -448,7 +449,7 @@ Policy & Median & \multicolumn{3}{c}{p95 TPOT / baseline} & Max TTFT & Eligible 
 \end{tabular}
 \end{table}
 
-The zero-decode-cap policies have higher TPOT than their one-cap counterparts in all three repetitions (Table~\ref{tab:calibration-audit}); rounding does not explain the ordering.
+The zero-decode-cap policies have higher TPOT than the corresponding policies with a decode cap of one in all three repetitions (Table~\ref{tab:calibration-audit}); rounding does not explain the ordering.
 The cause remains unresolved, so calibration measures each candidate directly without assuming monotonicity or attributing the differences solely to noise.
 Fixed-1's maximum ratio of 1.247 is close to the 1.25 threshold; its seven passing held-out runs support this configuration, not robustness to arbitrary background load.
 
@@ -456,13 +457,13 @@ Fixed-1's maximum ratio of 1.247 is close to the 1.25 threshold; its seven passi
 \subsection{M2 Output-Length Replication}
 \label{app:m2-length}
 
-Table~\ref{tab:crossdevice} summarizes the device comparisons in the main text.
-The M2 Mini uses its separately calibrated baseline and the same fixed policies at both output lengths.
+The M2 Mini uses the same selected policies, with unchanged caps, at both output lengths.
 The median \system/Fixed throughput ratio decreases from $1.8\times$ across five pairs at 128 output tokens to $1.4\times$ across three pairs at 512 tokens.
+Both policies meet both $B=1.25$ limits in all five 128-token runs and all three 512-token runs, using length-matched no-retrieval baselines.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.58\linewidth]{m2_output_length.pdf}
+  \includegraphics[width=0.48\linewidth]{m2_output_length.pdf}
   \caption{M2 Mini output-length replication with unchanged \gate{4}{1} and \fixed{1} caps.
 The 128-token point summarizes five pairs and the 512-token point summarizes three; M2 is analyzed separately from M4.}
   \label{fig:m2-length}
@@ -473,10 +474,10 @@ The 128-token point summarizes five pairs and the 512-token point summarizes thr
 \label{app:duty}
 At 5\% and 25\% duty, 2.0-s backlogged bursts are separated by mean idle gaps of 38~s and 6.0~s, respectively.
 Each duty, including continuous demand, uses five matched three-policy comparisons.
-The rounded 95\% paired-bootstrap intervals for the full-wall-clock \system/Fixed throughput ratio are [1.8, 2.0], [2.0, 2.1], and [2.0, 2.0], respectively.
+The 95\% paired-bootstrap intervals for the full-wall-clock \system/Fixed throughput ratio are [1.833, 2.039], [1.971, 2.052], and [1.987, 1.993], respectively (rounded to three decimals).
 These experiments vary availability of queued work, not a distribution of individual request arrivals or deadlines.
 
-\subsection{CPU Trace Accounting}
+\subsection{Trace Accounting and TimeGate Schedule}
 \label{app:transition-audit}
 
 Section~\ref{sec:transition} reports the CPU service and drain measurements.
@@ -484,12 +485,17 @@ The M4 calibration, mechanism, and scheduler evaluations use single-threaded FAI
 A cap counts concurrent calls, and throughput counts completed vector queries.
 The feeder groups 4,096 queries per task; its task-level latency field is not individual-query response time.
 
-Active calls are admitted calls that have not completed; we verify their count against every logged event.
-Chunk service time runs from its recorded start to completion and excludes queue waiting.
-Service-time statistics include chunks whose start and completion fall within the interval from the first request start to the last request completion.
-For each decode entry, the drain statistic in Table~\ref{tab:transition-audit} includes any later increase above the cap within the same decode interval: the count must fall to at most one and remain there.
-Completion of all calls active at decode entry is a separate statistic, tracking only that initial set through its last completion; it is zero when that set is empty.
-For both statistics, we compute the p95 separately within each run, report the median across seven runs, and separately report the largest observation across all seven traces.
+We verify the active-call count against every logged event.
+Call service time excludes queue waiting; statistics include calls that start and finish between the first request start and last request completion.
+Drain time in Table~\ref{tab:transition-audit} includes later increases within the same decode interval: the count must fall to at most one and remain there.
+Completion of calls active at decode entry tracks only that initial set through its last completion; it is zero for an empty set.
+For both statistics, we report the median of seven per-run p95s and the maximum across all traces.
+
+\paragraph{TimeGate schedule.}
+For the primary M4 evaluation, TimeGate cyclically replays 600 calibration-derived alternating high- and low-cap intervals (median durations 1.840/1.738~s; total period 1073.235~s).
+Each repetition uses a uniformly sampled circular start offset, frozen before evaluation.
+The wall-clock controller starts before retrieval warmup and runs across requests without resets or LLM-phase input.
+
 
 \clearpage
 \section{Related Work}
@@ -498,7 +504,7 @@ For both statistics, we compute the p95 separately within each run, report the m
 \paragraph{Phase-Structured LLM Serving.}
 Server systems exploit the different resource profiles of prefill and decode inside the inference stack.
 Splitwise and DistServe assign the phases to separately provisioned GPU pools, Sarathi-Serve chunks prefills to avoid stalling ongoing decodes, and speculative decoding reduces sequential decode work~\cite{patel2024splitwise,zhong2024distserve,agrawal2024sarathi,leviathan2023speculative}.
-\system is complementary: it leaves LLM execution unchanged on one on-device GPU and uses the phase boundary to regulate an independent CPU retrieval workload.
+\system is complementary: it leaves LLM execution unchanged on a single on-device GPU and uses the phase boundary to regulate an independent CPU retrieval workload.
 
 \paragraph{Shared-Memory Interference.}
 BWLOCK++ activates CPU memory-traffic throttling around GPU execution and profiles bandwidth budgets to protect integrated-GPU kernels~\cite{ali2018bwlock}.

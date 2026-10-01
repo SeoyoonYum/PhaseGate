@@ -56,6 +56,8 @@ sched.set_xlim(0, 12.8)
 sched.set_ylim(0, 4.65)
 sched.axis("off")
 sched.set_title("(b) Phase-aware admission moves the tradeoff", fontsize=9.2, pad=1)
+sched.text(6.4, 4.30, r"Bars: retrieval admission cap    |    Latency budget $B=1.25$",
+           ha="center", va="center", fontsize=6.6)
 x0, split, x1 = 2.05, 5.15, 10.45
 
 def gpu_lane(y):
