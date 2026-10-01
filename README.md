@@ -1,5 +1,11 @@
 # PhaseGate
 
+**Accepted at the NeurIPS 2026 Workshop on On-Device Intelligence.**
+
+Seoyoon Yum and Sehoon Kim (KAIST)
+
+[Camera-ready paper](paper/camera_ready/PhaseGate_CameraReady.pdf) · [LaTeX source and validation](paper/camera_ready/) · [Versioned release](https://github.com/SeoyoonYum/kv-uma-research/releases/tag/camera-ready-2026-10-01)
+
 PhaseGate is a phase-aware CPU admission policy for on-device LLM systems with
 unified memory. It allows more concurrent retrieval work while the LLM processes
 the prompt (prefill), then lowers retrieval concurrency while the LLM generates
@@ -10,8 +16,8 @@ The central comparison is against the strongest fixed concurrency that satisfies
 the same p95 time-per-output-token (TPOT) and time-to-first-token (TTFT) limits.
 On the fan-cooled base-M4 Mac mini, PhaseGate delivers 2.01x the retrieval
 throughput of Fixed-1 while both satisfy the latency limits in all seven held-out
-comparisons. A phase-blind control that replays the same high/low cap durations
-has similar raw retrieval throughput but violates the TPOT limit in all seven.
+comparisons. A phase-blind control that uses the same two caps on a calibration-derived schedule
+has similar aggregate retrieval throughput but violates the TPOT limit in all seven.
 
 ## What Is Included
 
@@ -33,8 +39,8 @@ throughput while both pass the frozen SLO; the phase-blind control passes none.
 
 ## Repository Guide
 
-- [`paper/submission_v21`](paper/submission_v21/) contains the current anonymous
-  workshop-paper PDF, self-contained LaTeX source, figures, and build notes.
+- [`paper/camera_ready`](paper/camera_ready/) contains the accepted paper with author information, self-contained LaTeX source, figures, and camera-ready validation tables. The main text is six pages; references and appendices are additional.
+- [`paper/submission_v21`](paper/submission_v21/) preserves the earlier anonymous submission for history.
 - [`experiments/static_phaseaware`](experiments/static_phaseaware/) contains
   protocol freezes, processed measurements, reports, audits, and figures.
 - [`scripts`](scripts/) and [`src/phaseguard`](src/phaseguard/) contain the main
@@ -66,9 +72,34 @@ they document how the project reached the phase-aware scheduling question.
 
 ## Scope
 
+The LLM workload uses controlled token IDs and forward passes; it does not evaluate natural-language output quality. Admission is non-preemptive, so calls already admitted can continue into decode.
+
 The reported throughput is HNSW retrieval throughput under offered work, not
 end-to-end assistant throughput. Gains depend on the device, model, prompt and
 output lengths, retrieval configuration, and demand. The bursty sweep supports
 robustness to three synthetic duty levels; it does not establish a typical-user
 arrival distribution or generalize to embedding, indexing, file, or network
 tools.
+
+## Recheck the camera-ready calibration
+
+From a normal clone, without MLX or model weights:
+
+```bash
+python3 paper/camera_ready/validation/audit_calibration_and_chunks.py \
+  --summary-only --output-dir /tmp/phasegate-calibration-audit
+```
+
+Large raw event timelines remain outside Git. The public artifact includes code, experiment scripts, processed measurements, and frozen demand traces; see [ARTIFACTS.md](ARTIFACTS.md) for the exact coverage. Camera-ready source archives omit private editing notes and intermediate build logs.
+
+## Citation
+
+```bibtex
+@inproceedings{yum2026phasegate,
+  title = {PhaseGate: Phase-Aware CPU Retrieval Scheduling for On-Device LLMs on Unified Memory},
+  author = {Yum, Seoyoon and Kim, Sehoon},
+  booktitle = {NeurIPS 2026 Workshop on On-Device Intelligence: Foundation Models under Real-World Constraints},
+  year = {2026},
+  url = {https://github.com/SeoyoonYum/kv-uma-research}
+}
+```

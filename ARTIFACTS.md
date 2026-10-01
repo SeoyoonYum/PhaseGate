@@ -14,7 +14,7 @@ figures, analysis code, frozen demand traces, and final reports.
 - The bursty-demand campaign was imported from its checksum-verified result
   bundle. Its exact implementation snapshot is stored under the campaign's
   `implementation/` directory.
-- The current paper artifact is `paper/submission_v21/`.
+- The current paper artifact is [`paper/camera_ready/`](paper/camera_ready/), updated for the six-page camera-ready allowance. `paper/submission_v21/` remains a historical submission snapshot.
 
 The device campaigns evolved on separate branches. They are therefore retained
 as campaign-scoped artifacts rather than silently replacing one campaign's
@@ -43,3 +43,9 @@ Raw attempts remain append-only in the offline archives. Invalid attempts and
 unfavorable valid outcomes are not deleted from the audit tables. Confidence
 intervals use matched run-level comparisons as described in each final report;
 individual requests are not treated as independent experimental repeats.
+
+## Camera-ready release (2026-10-01)
+
+The release adds the named-author PDF, buildable LaTeX source, paper figures, calibration and transition-audit CSVs, and a standard-library calibration check. The main text and evidence are aligned with the accepted camera-ready revision. Downloadable PDF/source assets are listed in the [versioned release](https://github.com/SeoyoonYum/kv-uma-research/releases/tag/camera-ready-2026-10-01).
+
+This publication keeps the existing raw-data boundary: multi-GB event timelines remain in offline archives. No raw-data download is implied by the paper's repository link. Full trace recomputation requires those archives, whereas the calibration check works directly from public processed tables. Model weights and HNSW indexes are external inputs specified by the campaign manifests.

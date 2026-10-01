@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this artifact, please cite the PHASEGATE workshop paper."
+title: "PhaseGate: Phase-Aware CPU Retrieval Scheduling for On-Device LLMs on Unified Memory"
+type: software
+authors:
+  - family-names: Yum
+    given-names: Seoyoon
+    affiliation: KAIST
+  - family-names: Kim
+    given-names: Sehoon
+    affiliation: KAIST
+version: camera-ready-2026-10-01
+date-released: '2026-10-01'
+repository-code: 'https://github.com/SeoyoonYum/kv-uma-research'
+url: 'https://github.com/SeoyoonYum/kv-uma-research'
